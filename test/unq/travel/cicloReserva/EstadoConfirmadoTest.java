@@ -2,12 +2,15 @@ package unq.travel.cicloReserva;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-import java.awt.List;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import unq.travel.traslado.Reserva;
 
 class EstadoConfirmadoTest {
 	
@@ -27,7 +30,7 @@ class EstadoConfirmadoTest {
 		item = mock(ItemCatalogo.class);
 		reserva = mock(Reserva.class);
 		
-		estado = new EstadoPendiente(reserva);
+		estado = new EstadoConfirmado(reserva);
 		
 	}
 	
@@ -37,7 +40,7 @@ class EstadoConfirmadoTest {
 		estado.agregarItem(item, items);
 		
 		verify(items, never()).add(any(ItemCatalogo.class));
-		verify(reserva).cambiarEstado(any(PedidoException.class));
+		verify(reserva).cambiarEstado(any(ReservaException.class));
 		
 	}
 	
@@ -47,23 +50,23 @@ class EstadoConfirmadoTest {
 		estado.quitarItem(item, items);
 		
 		verify(items, never()).remove(any(ItemCatalogo.class));
-		verify(reserva).cambiarEstado(any(PedidoException.class));
+		verify(reserva).cambiarEstado(any(ReservaException.class));
 		
 	}
 	
 	@Test
 	void testConfirmar() {
 		
-		estado.confirmar(items);
+		estado.confirmar();
 		
-		verify(reserva).cambiarEstado(any(PedidoException.class));
+		verify(reserva).cambiarEstado(any(ReservaException.class));
 		
 	}
 	
 	@Test
 	void testCheckin() {
 		
-		estado.checkin(items);
+		estado.checkin();
 		
 		verify(reserva).cambiarEstado(any(EstadoEnCheckin.class));
 		
@@ -72,25 +75,25 @@ class EstadoConfirmadoTest {
 	@Test
 	void testEjecutar() {
 		
-		estado.ejecutar(items);
+		estado.ejecutar();
 		
-		verify(reserva).cambiarEstado(any(PedidoException.class));
+		verify(reserva).cambiarEstado(any(ReservaException.class));
 		
 	}
 	
 	@Test
 	void testCompletar() {
 		
-		estado.completar(items);
+		estado.completar();
 		
-		verify(reserva).cambiarEstado(any(PedidoException.class));
+		verify(reserva).cambiarEstado(any(ReservaException.class));
 		
 	}
 	
 	@Test
 	void testCancelar() {
 		
-		estado.cancelar(items);
+		estado.cancelar();
 		
 		verify(reserva).cambiarEstado(any(EstadoCancelado.class));
 		
@@ -99,16 +102,16 @@ class EstadoConfirmadoTest {
 	@Test
 	void testNotificarPorEmail() {
 		
-		when(cliente.getDireccionEmail()).thenReturn("testmail@test.domain");
+		when(cliente.getDireccionDeEmail()).thenReturn("testmail@test.domain");
 		when(reserva.getCliente()).thenReturn(cliente);
 		
 		estado.notificarPorEmail(reserva,mailSender);
 		
-		verify(mailServer).enviarMail(
-				cliente.getDireccionDeEmail()
-				,"Reserva confirmada"
-				, "Se ha confirmado vuestra reserva"
-				, null);
+		verify(mailSender).enviarMail(
+				  eq(reserva.getCliente().getDireccionDeEmail())
+				, eq("Reserva confirmada")
+				, eq("Se ha confirmado vuestra reserva")
+				, eq(null));
 		
 	}
 	
@@ -117,7 +120,7 @@ class EstadoConfirmadoTest {
 		
 		estado.generarFactura(reserva);
 		
-		verify(reserva, never());
+		verify(reserva, never()).getCliente();
 		
 	}
 	
