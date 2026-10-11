@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.awt.List;
+import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,8 +17,9 @@ class ReservaTest {
 	private EstrategiaTraslado estrategia;
 	
 	@BeforeEach
-	void setUp() {
+	void setUp() throws Exception {
 		
+		estrategia = mock(EstrategiaTraslado.class);
 		direccion = mock(Direccion.class);
 		estado = mock(EstadoReserva.class);
 		reserva = new Reserva(direccion, estrategia);
@@ -63,7 +65,7 @@ class ReservaTest {
 	}
 	
 	@Test
-	void cancelarReserva() {
+	void testCancelarReserva() {
 		
 		reserva.cancelarReserva();
 		
@@ -87,7 +89,7 @@ class ReservaTest {
 		
 		reserva.agregarServicio(dummy);
 		
-		verify(estado).agregarServicio(dummy, any(List.class));
+		verify(estado).agregarServicio(eq(dummy), any(ArrayList.class));
 		
 	}
 	
@@ -98,7 +100,7 @@ class ReservaTest {
 		
 		reserva.quitarServicio(dummy);
 		
-		verify(estado).quitarServicio(dummy, any(List.class));
+		verify(estado).quitarServicio(eq(dummy), any(ArrayList.class));
 		
 	}
 	
