@@ -91,4 +91,31 @@ class EstadoEnCheckin {
 		
 	}
 	
+	@Test
+	void testNotificarPorEmail() {
+		
+		estado.notificarPorEmail(reserva,mailSender);
+		
+		verify(mailServer, never()).enviarMail(any(),any(),any(),any());
+		
+	}
+	
+	@Test
+	void testGenerarFactura() {
+		
+		estado.generarFactura(reserva);
+		
+		verify(reserva, never());
+		
+	}
+	
+	@Test
+	void testFidelizar() {
+		
+		estado.fidelizar(reserva, mailSender);
+		
+		verify(reserva, never());
+		
+	}
+	
 }

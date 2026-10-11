@@ -91,4 +91,38 @@ class EstadoEnCursoTest {
 		
 	}
 	
+	@Test
+	void testNotificarPorEmail() {
+		
+		when(cliente.getDireccionEmail()).thenReturn("testmail@test.domain");
+		when(reserva.getCliente()).thenReturn(cliente);
+		
+		estado.notificarPorEmail(reserva,mailSender);
+		
+		verify(mailServer).enviarMail(
+				cliente.getDireccionDeEmail()
+				,"Reserva en curso"
+				, "Se ha ejecutado vuestra reserva"
+				, null);
+		
+	}
+	
+	@Test
+	void testGenerarFactura() {
+		
+		estado.generarFactura(reserva);
+		
+		verify(reserva, never());
+		
+	}
+	
+	@Test
+	void testFidelizar() {
+		
+		estado.fidelizar(reserva, mailSender);
+		
+		verify(reserva, never());
+		
+	}
+	
 }

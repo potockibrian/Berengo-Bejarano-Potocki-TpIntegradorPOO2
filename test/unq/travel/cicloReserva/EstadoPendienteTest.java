@@ -13,6 +13,7 @@ class EstadoPendienteTest {
 	private EstadoReserva estado;
 	private ItemCatalogo item;
 	private List<ItemCatalogo> items;
+	private MailSenderI mailSender;
 	
 	@BeforeEach
 	void setUp() {
@@ -20,6 +21,8 @@ class EstadoPendienteTest {
 		items = mock(List.class);
 		item = mock(ItemCatalogo.class);
 		reserva = mock(Reserva.class);
+		mailSender = mock(MailSenderI.class);
+		
 		estado = new EstadoPendiente(reserva);
 		
 	}
@@ -86,6 +89,33 @@ class EstadoPendienteTest {
 		estado.cancelar();
 		
 		verify(reserva).cambiarEstado(any(EstadoCancelado.class));
+		
+	}
+	
+	@Test
+	void testNotificarPorEmail() {
+		
+		estado.notificarPorEmail(reserva,mailSender);
+		
+		verify(mailServer, never()).enviarMail(any(),any(),any(),any());
+		
+	}
+	
+	@Test
+	void testGenerarFactura() {
+		
+		estado.generarFactura(reserva);
+		
+		verify(reserva, never());
+		
+	}
+	
+	@Test
+	void testFidelizar() {
+		
+		estado.fidelizar(reserva, mailSender);
+		
+		verify(reserva, never());
 		
 	}
 	

@@ -15,13 +15,18 @@ class EstadoConfirmadoTest {
 	private EstadoReserva estado;
 	private ItemCatalogo item;
 	private List<ItemCatalogo> items;
+	private Cliente cliente;
+	private MailSenderI mailSender;
 	
 	@BeforeEach
 	void setUp() {
 		
+		mailSender = mock(MailSenderI.class);
+		cliente = mock(Cliente.class);
 		items = mock(List.class);
 		item = mock(ItemCatalogo.class);
 		reserva = mock(Reserva.class);
+		
 		estado = new EstadoPendiente(reserva);
 		
 	}
@@ -88,6 +93,40 @@ class EstadoConfirmadoTest {
 		estado.cancelar(items);
 		
 		verify(reserva).cambiarEstado(any(EstadoCancelado.class));
+		
+	}
+	
+	@Test
+	void testNotificarPorEmail() {
+		
+		when(cliente.getDireccionEmail()).thenReturn("testmail@test.domain");
+		when(reserva.getCliente()).thenReturn(cliente);
+		
+		estado.notificarPorEmail(reserva,mailSender);
+		
+		verify(mailServer).enviarMail(
+				cliente.getDireccionDeEmail()
+				,"Reserva confirmada"
+				, "Se ha confirmado vuestra reserva"
+				, null);
+		
+	}
+	
+	@Test
+	void testGenerarFactura() {
+		
+		estado.generarFactura(reserva);
+		
+		verify(reserva, never());
+		
+	}
+	
+	@Test
+	void testFidelizar() {
+		
+		estado.fidelizar(reserva, mailSender);
+		
+		verify(reserva, never());
 		
 	}
 	

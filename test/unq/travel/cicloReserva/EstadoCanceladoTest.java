@@ -15,13 +15,18 @@ class EstadoCanceladoTest {
 	private EstadoReserva estado;
 	private ItemCatalogo item;
 	private List<ItemCatalogo> items;
+	private MailSenderI mailSender;
+	private Cliente cliente;
 	
 	@BeforeEach
 	void setUp() {
 		
+		cliente = mock(Cliente.class);
+		mailSender = mock(MailSenderI.class);
 		items = mock(List.class);
 		item = mock(ItemCatalogo.class);
 		reserva = mock(Reserva.class);
+		
 		estado = new EstadoPendiente(reserva);
 		
 	}
@@ -88,6 +93,39 @@ class EstadoCanceladoTest {
 		estado.cancelar(items);
 		
 		verify(reserva).cambiarEstado(any(PedidoException.class));
+		
+	}
+	
+	@Test
+	void testNotificarPorEmail() {
+		
+		estado.notificarPorEmail(reserva,mailSender);
+		
+		verify(mailServer, never()).enviarMail(any(),any(),any(),any());
+		
+	}
+	
+	@Test
+	void testGenerarFactura() {
+		
+		estado.generarFactura(reserva);
+		
+		verify(reserva, never());
+		
+	}
+	
+	@Test
+	void testFidelizar() {
+		
+		when(cliente.getDireccionDeEmail()).thenRespond("testmail@test.domain");
+		
+		estado.fidelizar(reserva, mailSender);
+		
+		verify(mailSender).enviarMail(
+				cliente.getDireccionDeEmail()
+				,"Reserva cancelada"
+				, "Se ha cancelado vuestra reserva"
+				, any(Cupon.class));
 		
 	}
 	
