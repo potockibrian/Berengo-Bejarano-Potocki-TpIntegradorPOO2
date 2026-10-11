@@ -4,24 +4,29 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-import java.awt.List;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class EstadoEnCheckin {
+import unq.travel.traslado.Reserva;
+
+class EstadoEnCheckinTest {
 	
 	private Reserva reserva;
-	private EstadoReserva estado;
+	private EstadoDeReserva estado;
 	private ItemCatalogo item;
 	private List<ItemCatalogo> items;
+	private MailSenderI mailSender;
 	
 	@BeforeEach
 	void setUp() {
 		
+		mailSender = mock(MailSenderI.class);
 		items = mock(List.class);
 		item = mock(ItemCatalogo.class);
 		reserva = mock(Reserva.class);
+		
 		estado = new EstadoEnCheckin(reserva);
 		
 	}
@@ -32,7 +37,7 @@ class EstadoEnCheckin {
 		estado.agregarItem(item, items);
 		
 		verify(items, never()).add(any(ItemCatalogo.class));
-		verify(reserva).cambiarEstado(any(PedidoException.class));
+		verify(reserva).cambiarEstado(any(ReservaException.class));
 		
 	}
 	
@@ -42,32 +47,32 @@ class EstadoEnCheckin {
 		estado.quitarItem(item, items);
 		
 		verify(items, never()).remove(any(ItemCatalogo.class));
-		verify(reserva).cambiarEstado(any(PedidoException.class));
+		verify(reserva).cambiarEstado(any(ReservaException.class));
 		
 	}
 	
 	@Test
 	void testConfirmar() {
 		
-		estado.confirmar(items);
+		estado.confirmar();
 		
-		verify(reserva).cambiarEstado(any(PedidoException.class));
+		verify(reserva).cambiarEstado(any(ReservaException.class));
 		
 	}
 	
 	@Test
 	void testCheckin() {
 		
-		estado.checkin(items);
+		estado.checkin();
 		
-		verify(reserva).cambiarEstado(any(PedidoException.class));
+		verify(reserva).cambiarEstado(any(ReservaException.class));
 		
 	}
 	
 	@Test
 	void testEjecutar() {
 		
-		estado.ejecutar(items);
+		estado.ejecutar();
 		
 		verify(reserva).cambiarEstado(any(EstadoEnCurso.class));
 		
@@ -76,16 +81,16 @@ class EstadoEnCheckin {
 	@Test
 	void testCompletar() {
 		
-		estado.completar(items);
+		estado.completar();
 		
-		verify(reserva).cambiarEstado(any(PedidoException.class));
+		verify(reserva).cambiarEstado(any(ReservaException.class));
 		
 	}
 	
 	@Test
 	void testCancelar() {
 		
-		estado.cancelar(items);
+		estado.cancelar();
 		
 		verify(reserva).cambiarEstado(any(EstadoCancelado.class));
 		
@@ -96,7 +101,7 @@ class EstadoEnCheckin {
 		
 		estado.notificarPorEmail(reserva,mailSender);
 		
-		verify(mailServer, never()).enviarMail(any(),any(),any(),any());
+		verify(mailSender, never()).enviarMail(any(),any(),any(),any());
 		
 	}
 	
@@ -105,7 +110,7 @@ class EstadoEnCheckin {
 		
 		estado.generarFactura(reserva);
 		
-		verify(reserva, never());
+		verify(reserva, never()).getCliente();
 		
 	}
 	

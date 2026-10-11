@@ -4,11 +4,11 @@ import java.util.List;
 
 import unq.travel.traslado.Reserva;
 
-public abstract class EstadoReserva {
+public abstract class EstadoDeReserva {
 
 	protected Reserva reserva;
 
-	public EstadoReserva(Reserva reserva) {
+	public EstadoDeReserva(Reserva reserva) {
 		
 		this.reserva = reserva;
 		
