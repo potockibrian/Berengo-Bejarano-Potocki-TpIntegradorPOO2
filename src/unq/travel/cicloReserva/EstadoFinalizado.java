@@ -1,0 +1,91 @@
+package unq.travel.cicloReserva;
+
+import static org.mockito.ArgumentMatchers.eq;
+
+import java.util.List;
+
+import unq.travel.traslado.Reserva;
+import unq.travel.traslado.Voucher;
+
+public class EstadoFinalizado extends EstadoDeReserva {
+
+	public EstadoFinalizado(Reserva reserva) {
+		super(reserva);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public void agregarItem(ItemCatalogo item, List<ItemCatalogo> items) {
+
+		reserva.cambiarEstado(new ReservaException(reserva));
+		
+	}
+
+	@Override
+	public void quitarItem(ItemCatalogo item, List<ItemCatalogo> items) {
+
+		reserva.cambiarEstado(new ReservaException(reserva));
+		
+	}
+
+	@Override
+	public void confirmar() {
+
+		reserva.cambiarEstado(new ReservaException(reserva));
+		
+	}
+
+	@Override
+	public void checkin() {
+
+		reserva.cambiarEstado(new ReservaException(reserva));
+		
+	}
+
+	@Override
+	public void ejecutar() {
+
+		reserva.cambiarEstado(new ReservaException(reserva));
+		
+	}
+
+	@Override
+	public void completar() {
+
+		reserva.cambiarEstado(new ReservaException(reserva));
+		
+	}
+
+	@Override
+	public void cancelar() {
+
+		reserva.cambiarEstado(new ReservaException(reserva));
+		
+	}
+
+	@Override
+	public void notificarPorEmail(Reserva reserva, MailSenderI mailSender) {
+		
+		mailSender.enviarMail(
+			  reserva.getCliente().getDireccionDeEmail()
+			, "Reserva finalizada"
+			, "Se ha finalizado vuestra reserva"
+			, null);
+		
+	}
+
+	@Override
+	public void generarFactura(Reserva reserva) {
+
+		reserva.getCliente().añadirComprobante(new Comprobante());;
+		reserva.getCliente().añadirVoucher(new Voucher());		
+		
+	}
+
+	@Override
+	public void fidelizar(Reserva reserva, MailSenderI mailSender) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}
