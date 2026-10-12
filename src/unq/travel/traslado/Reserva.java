@@ -1,23 +1,30 @@
 package unq.travel.traslado;
 
-import java.awt.List;
+import java.util.List;
 import java.util.ArrayList;
+
+import unq.travel.cicloReserva.Cliente;
+import unq.travel.cicloReserva.EstadoPendiente;
+import unq.travel.cicloReserva.EstadoDeReserva;
+import unq.travel.cicloReserva.ItemCatalogo;
 
 public class Reserva {
 
-	private EstadoReserva estado;
+	private EstadoDeReserva estado;
 	private EstrategiaTraslado estrategia;
-	private ArrayList<ItemCatalogo> items;
+	private List<ItemCatalogo> items;
+	private Cliente cliente;
 
-	public Reserva(Direccion direccion, EstrategiaTraslado estrategia) {
+	public Reserva(Cliente cliente, Direccion direccion, EstrategiaTraslado estrategia) {
 
 		this.estrategia = estrategia;
-		this.items = new ArrayList<ItemCatalogo>();
 		this.estado = new EstadoPendiente(this);
+		this.cliente = cliente;
+		this.items = new ArrayList<ItemCatalogo>();
 		
 	}
 
-	public void cambiarEstado(EstadoReserva estado) {
+	public void cambiarEstado(EstadoDeReserva estado) {
 
 		this.estado = estado;
 		
@@ -25,7 +32,7 @@ public class Reserva {
 
 	public void confirmarReserva() {
 
-		estado.confirmar();
+		estado.confirmar(items);
 		
 	}
 
@@ -43,13 +50,13 @@ public class Reserva {
 
 	public void finalizarReserva() {
 
-		estado.finalizar();
+		estado.completar();
 		
 	}
 
 	public void cancelarReserva() {
 
-		estado.cancelar();
+		estado.cancelar(items);
 		
 	}
 
@@ -61,13 +68,27 @@ public class Reserva {
 
 	public void agregarServicio(ItemCatalogo dummy) {
 
-		estado.agregarServicio(dummy, items);
+		estado.agregarItem(dummy, items);
 		
 	}
 
 	public void quitarServicio(ItemCatalogo dummy) {
 
-		estado.quitarServicio(dummy, items);
+		estado.quitarItem(dummy, items);
+		
+	}
+
+	public Cliente getCliente() {
+
+		return cliente;
+		
+	}
+
+	public float getPrecioTotalServicios() {
+		
+		return (float) items.stream()
+				.mapToDouble(i -> i.calcularPrecioFinal())
+				.sum();
 		
 	}
 

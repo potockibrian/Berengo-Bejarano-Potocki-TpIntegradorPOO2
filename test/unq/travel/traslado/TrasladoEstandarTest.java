@@ -18,6 +18,17 @@ class TrasladoEstandarTest {
 	}
 	
 	@Test
-	void test() {}
+	void testCostoTraslado() {
+		
+		assertNotEquals(estrategia.costoTraslado(), 0);
+		
+	}
+	
+	@Test
+	void testHayDisponibilidad() {
+		
+		assertTrue(estrategia.hayDisponibilidad());
+		
+	}
 	
 }

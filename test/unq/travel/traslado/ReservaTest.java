@@ -3,27 +3,35 @@ package unq.travel.traslado;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.awt.List;
+import java.util.List;
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import unq.travel.cicloReserva.Cliente;
+import unq.travel.cicloReserva.EstadoDeReserva;
+import unq.travel.cicloReserva.ItemCatalogo;
+
 class ReservaTest {
 	
 	private Reserva reserva;
 	private Direccion direccion;
-	private EstadoReserva estado;
+	private EstadoDeReserva estado;
 	private EstrategiaTraslado estrategia;
+	private Cliente cliente;
+	private List<ItemCatalogo> items;
 	
 	@BeforeEach
 	void setUp() throws Exception {
 		
+		cliente = mock(Cliente.class);
 		estrategia = mock(EstrategiaTraslado.class);
 		direccion = mock(Direccion.class);
-		estado = mock(EstadoReserva.class);
-		reserva = new Reserva(direccion, estrategia);
+		estado = mock(EstadoDeReserva.class);
+		items = mock(List.class);
 		
+		reserva = new Reserva(cliente, direccion, estrategia);
 		reserva.cambiarEstado(estado);
 		
 	}
@@ -33,7 +41,7 @@ class ReservaTest {
 		
 		reserva.confirmarReserva();
 		
-		verify(estado).confirmar();
+		verify(estado).confirmar(any(List.class));
 		
 	}
 	
@@ -60,7 +68,7 @@ class ReservaTest {
 		
 		reserva.finalizarReserva();
 		
-		verify(estado).finalizar();
+		verify(estado).completar();
 		
 	}
 	
@@ -69,7 +77,7 @@ class ReservaTest {
 		
 		reserva.cancelarReserva();
 		
-		verify(estado).cancelar();
+		verify(estado).cancelar(any(List.class));
 		
 	}
 	
@@ -89,7 +97,7 @@ class ReservaTest {
 		
 		reserva.agregarServicio(dummy);
 		
-		verify(estado).agregarServicio(eq(dummy), any(ArrayList.class));
+		verify(estado).agregarItem(eq(dummy), any(ArrayList.class));
 		
 	}
 	
@@ -100,8 +108,22 @@ class ReservaTest {
 		
 		reserva.quitarServicio(dummy);
 		
-		verify(estado).quitarServicio(eq(dummy), any(ArrayList.class));
+		verify(estado).quitarItem(eq(dummy), any(ArrayList.class));
 		
 	}
 	
+	@Test
+	void testCliente() {
+		
+		assertEquals(reserva.getCliente(), cliente);
+		
+	}
+	
+	@Test
+	void testPrecioTotalServicios() {
+		
+		reserva.getPrecioTotalServicios();
+		
+	}
+
 }

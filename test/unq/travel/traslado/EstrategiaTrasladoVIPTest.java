@@ -6,7 +6,7 @@ import static org.mockito.Mockito.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class TrasladoVIPTest {
+class EstrategiaTrasladoVIPTest {
 	
 	private EstrategiaTraslado estrategia;
 	private Reserva reserva;
@@ -15,7 +15,7 @@ class TrasladoVIPTest {
 	void setUp() {
 		
 		reserva = mock(Reserva.class);
-		estrategia = new TrasladoVIP(reserva);
+		estrategia = new EstrategiaTrasladoVIP(reserva);
 		
 	}
 	
@@ -25,6 +25,13 @@ class TrasladoVIPTest {
 		estrategia.costoTraslado();
 		
 		verify(reserva).getPrecioTotalServicios();
+		
+	}
+	
+	@Test
+	void testHayDisponibilidad() {
+		
+		assertTrue(estrategia.hayDisponibilidad());
 		
 	}
 	

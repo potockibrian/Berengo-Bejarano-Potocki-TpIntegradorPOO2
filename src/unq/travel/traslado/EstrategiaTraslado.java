@@ -4,4 +4,6 @@ public interface EstrategiaTraslado {
 	
 	public float costoTraslado();
 	
+	public boolean hayDisponibilidad();
+	
 }

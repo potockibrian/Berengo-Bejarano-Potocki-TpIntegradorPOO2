@@ -144,7 +144,7 @@ class EstadoPendienteTest {
 		
 		estado.fidelizar(reserva, mailSender);
 		
-		verify(reserva, never());
+		verify(reserva, never()).getCliente();
 		
 	}
 	
