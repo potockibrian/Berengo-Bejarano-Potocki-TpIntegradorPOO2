@@ -4,12 +4,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import unq.travel.traslado.Reserva;
+import unq.travel.traslado.Voucher;
 
 class EstadoEnCheckinTest {
 	
@@ -18,6 +20,7 @@ class EstadoEnCheckinTest {
 	private ItemCatalogo item;
 	private List<ItemCatalogo> items;
 	private MailSenderI mailSender;
+	private Cliente cliente;
 	
 	@BeforeEach
 	void setUp() {
@@ -26,6 +29,7 @@ class EstadoEnCheckinTest {
 		items = mock(List.class);
 		item = mock(ItemCatalogo.class);
 		reserva = mock(Reserva.class);
+		cliente = mock(Cliente.class);
 		
 		estado = new EstadoEnCheckin(reserva);
 		
@@ -54,7 +58,7 @@ class EstadoEnCheckinTest {
 	@Test
 	void testConfirmar() {
 		
-		estado.confirmar();
+		estado.confirmar(items);
 		
 		verify(reserva).cambiarEstado(any(ReservaException.class));
 		
@@ -90,8 +94,20 @@ class EstadoEnCheckinTest {
 	@Test
 	void testCancelar() {
 		
-		estado.cancelar();
+		// TODO: testear e implementar el reembolso y la liberacion de cupos
 		
+		when(reserva.getCliente()).thenReturn(cliente);
+		List<ItemCatalogo> itemsLocal = new ArrayList<ItemCatalogo>();
+		ItemCatalogo item1 = mock(ItemCatalogo.class);
+		ItemCatalogo item2 = mock(ItemCatalogo.class);
+		itemsLocal.add(item1);
+		itemsLocal.add(item2);
+		
+		estado.cancelar(itemsLocal);
+		
+		verify(item1).incrementarCupo();
+		verify(item2).incrementarCupo();
+		verify(cliente).añadirVoucher(any(Voucher.class));
 		verify(reserva).cambiarEstado(any(EstadoCancelado.class));
 		
 	}
@@ -119,7 +135,7 @@ class EstadoEnCheckinTest {
 		
 		estado.fidelizar(reserva, mailSender);
 		
-		verify(reserva, never());
+		verify(reserva, never()).getCliente();
 		
 	}
 	

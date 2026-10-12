@@ -25,7 +25,7 @@ public class ReservaException extends EstadoDeReserva{
 	}
 
 	@Override
-	public void confirmar() {
+	public void confirmar(List<ItemCatalogo> items) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -49,7 +49,7 @@ public class ReservaException extends EstadoDeReserva{
 	}
 
 	@Override
-	public void cancelar() {
+	public void cancelar(List<ItemCatalogo> items) {
 		// TODO Auto-generated method stub
 		
 	}

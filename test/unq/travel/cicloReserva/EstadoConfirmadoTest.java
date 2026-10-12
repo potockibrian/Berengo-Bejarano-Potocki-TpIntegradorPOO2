@@ -57,7 +57,7 @@ class EstadoConfirmadoTest {
 	@Test
 	void testConfirmar() {
 		
-		estado.confirmar();
+		estado.confirmar(items);
 		
 		verify(reserva).cambiarEstado(any(ReservaException.class));
 		
@@ -93,7 +93,7 @@ class EstadoConfirmadoTest {
 	@Test
 	void testCancelar() {
 		
-		estado.cancelar();
+		estado.cancelar(items);
 		
 		verify(reserva).cambiarEstado(any(EstadoCancelado.class));
 		
@@ -129,7 +129,7 @@ class EstadoConfirmadoTest {
 		
 		estado.fidelizar(reserva, mailSender);
 		
-		verify(reserva, never());
+		verify(reserva, never()).getCliente();
 		
 	}
 	

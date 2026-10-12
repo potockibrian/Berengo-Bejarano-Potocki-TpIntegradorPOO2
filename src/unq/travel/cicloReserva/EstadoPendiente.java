@@ -15,7 +15,15 @@ public class EstadoPendiente extends EstadoDeReserva {
 	@Override
 	public void agregarItem(ItemCatalogo item, List<ItemCatalogo> items) {
 
-		items.add(item);
+		if (item.tieneDisponibilidad()) {
+			
+			items.add(item);
+			
+		} else {
+			
+			throw new RuntimeException();
+			
+		}
 		
 	}
 
@@ -27,9 +35,11 @@ public class EstadoPendiente extends EstadoDeReserva {
 	}
 
 	@Override
-	public void confirmar() {
+	public void confirmar(List<ItemCatalogo> items) {
 
 		// TODO: Testear e Implementar lógica de disponibilidad
+		
+		items.stream().forEach(i -> i.decrementarCupo());
 		
 		reserva.cambiarEstado(new EstadoConfirmado(reserva));
 		
@@ -57,7 +67,7 @@ public class EstadoPendiente extends EstadoDeReserva {
 	}
 
 	@Override
-	public void cancelar() {
+	public void cancelar(List<ItemCatalogo> items) {
 
 		reserva.cambiarEstado(new EstadoCancelado(reserva));
 		

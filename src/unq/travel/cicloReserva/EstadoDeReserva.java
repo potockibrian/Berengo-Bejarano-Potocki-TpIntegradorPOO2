@@ -18,7 +18,7 @@ public abstract class EstadoDeReserva {
 
 	public abstract void quitarItem(ItemCatalogo item, List<ItemCatalogo> items) ;
 
-	public abstract void confirmar() ;
+	public abstract void confirmar(List<ItemCatalogo> items) ;
 
 	public abstract void checkin() ;
 
@@ -26,7 +26,7 @@ public abstract class EstadoDeReserva {
 
 	public abstract void completar() ;
 
-	public abstract void cancelar() ;
+	public abstract void cancelar(List<ItemCatalogo> items) ;
 
 	public abstract void notificarPorEmail(Reserva reserva, MailSenderI mailSender) ;
 

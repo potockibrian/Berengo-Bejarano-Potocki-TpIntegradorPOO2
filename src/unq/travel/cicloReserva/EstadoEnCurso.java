@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import java.util.List;
 
 import unq.travel.traslado.Reserva;
+import unq.travel.traslado.Voucher;
 
 public class EstadoEnCurso extends EstadoDeReserva {
 
@@ -28,7 +29,7 @@ public class EstadoEnCurso extends EstadoDeReserva {
 	}
 
 	@Override
-	public void confirmar() {
+	public void confirmar(List<ItemCatalogo> items) {
 
 		reserva.cambiarEstado(new ReservaException(reserva));
 		
@@ -56,8 +57,9 @@ public class EstadoEnCurso extends EstadoDeReserva {
 	}
 
 	@Override
-	public void cancelar() {
+	public void cancelar(List<ItemCatalogo> items) {
 
+		reserva.getCliente().añadirVoucher(new Voucher());
 		reserva.cambiarEstado(new EstadoCancelado(reserva));
 		
 	}

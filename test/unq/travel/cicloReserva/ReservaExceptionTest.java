@@ -44,7 +44,7 @@ class ReservaExceptionTest {
 	@Test
 	void testConfirmar() {
 		
-		estado.confirmar();
+		estado.confirmar(items);
 		
 		verify(reserva, never()).cambiarEstado(any());
 		
@@ -80,7 +80,7 @@ class ReservaExceptionTest {
 	@Test
 	void testCancelar() {
 		
-		estado.cancelar();
+		estado.cancelar(items);
 		
 		verify(reserva, never()).cambiarEstado(any());
 		
@@ -109,7 +109,7 @@ class ReservaExceptionTest {
 		
 		estado.fidelizar(reserva, mailSender);
 		
-		verify(reserva, never());
+		verify(reserva, never()).getCliente();
 		
 	}
 	

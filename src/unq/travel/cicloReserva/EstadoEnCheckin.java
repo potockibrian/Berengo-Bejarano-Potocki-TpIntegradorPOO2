@@ -3,6 +3,7 @@ package unq.travel.cicloReserva;
 import java.util.List;
 
 import unq.travel.traslado.Reserva;
+import unq.travel.traslado.Voucher;
 
 public class EstadoEnCheckin extends EstadoDeReserva {
 
@@ -26,7 +27,7 @@ public class EstadoEnCheckin extends EstadoDeReserva {
 	}
 
 	@Override
-	public void confirmar() {
+	public void confirmar(List<ItemCatalogo> items) {
 
 		reserva.cambiarEstado(new ReservaException(reserva));
 		
@@ -54,8 +55,12 @@ public class EstadoEnCheckin extends EstadoDeReserva {
 	}
 
 	@Override
-	public void cancelar() {
+	public void cancelar(List<ItemCatalogo> items) {
 
+	items.stream().forEach(i -> i.incrementarCupo());
+	
+	reserva.getCliente().añadirVoucher(new Voucher());
+	
 	reserva.cambiarEstado(new EstadoCancelado(reserva));
 		
 	}

@@ -60,7 +60,7 @@ class EstadoCanceladoTest {
 	@Test
 	void testConfirmar() {
 		
-		estado.confirmar();
+		estado.confirmar(items);
 		
 		verify(reserva).cambiarEstado(any(ReservaException.class));
 		
@@ -96,7 +96,7 @@ class EstadoCanceladoTest {
 	@Test
 	void testCancelar() {
 		
-		estado.cancelar();
+		estado.cancelar(items);
 		
 		verify(reserva).cambiarEstado(any(ReservaException.class));
 		

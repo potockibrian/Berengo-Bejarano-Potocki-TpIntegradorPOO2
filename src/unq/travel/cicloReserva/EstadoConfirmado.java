@@ -28,7 +28,7 @@ public class EstadoConfirmado extends EstadoDeReserva {
 	}
 
 	@Override
-	public void confirmar() {
+	public void confirmar(List<ItemCatalogo> items) {
 
 		reserva.cambiarEstado(new ReservaException(reserva));
 		
@@ -56,7 +56,7 @@ public class EstadoConfirmado extends EstadoDeReserva {
 	}
 
 	@Override
-	public void cancelar() {
+	public void cancelar(List<ItemCatalogo> items) {
 
 		reserva.cambiarEstado(new EstadoCancelado(reserva));
 		

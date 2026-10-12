@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import unq.travel.traslado.Reserva;
+import unq.travel.traslado.Voucher;
 
 class EstadoEnCursoTest {
 	
@@ -56,7 +57,7 @@ class EstadoEnCursoTest {
 	@Test
 	void testConfirmar() {
 		
-		estado.confirmar();
+		estado.confirmar(items);
 		
 		verify(reserva).cambiarEstado(any(ReservaException.class));
 		
@@ -92,8 +93,13 @@ class EstadoEnCursoTest {
 	@Test
 	void testCancelar() {
 		
-		estado.cancelar();
+		// TODO: testear e implementar el reembolso con voucher
 		
+		when(reserva.getCliente()).thenReturn(cliente);
+		
+		estado.cancelar(items);
+		
+		verify(cliente).añadirVoucher(any(Voucher.class));
 		verify(reserva).cambiarEstado(any(EstadoCancelado.class));
 		
 	}
@@ -128,7 +134,7 @@ class EstadoEnCursoTest {
 		
 		estado.fidelizar(reserva, mailSender);
 		
-		verify(reserva, never());
+		verify(reserva, never()).getCliente();
 		
 	}
 	
