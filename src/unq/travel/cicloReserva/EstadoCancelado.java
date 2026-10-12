@@ -4,7 +4,7 @@ import java.util.List;
 
 import unq.travel.traslado.Reserva;
 
-public class EstadoCancelado extends EstadoReserva {
+public class EstadoCancelado extends EstadoDeReserva {
 
 	public EstadoCancelado(Reserva reserva) {
 

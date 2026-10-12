@@ -16,7 +16,7 @@ import unq.travel.traslado.Voucher;
 class EstadoCanceladoTest {
 	
 	private Reserva reserva;
-	private EstadoReserva estado;
+	private EstadoDeReserva estado;
 	private ItemCatalogo item;
 	private List<ItemCatalogo> items;
 	private MailSenderI mailSender;
@@ -27,7 +27,7 @@ class EstadoCanceladoTest {
 		
 		cliente = mock(Cliente.class);
 		mailSender = mock(MailSenderI.class);
-		items = new ArrayList<ItemCatalogo>();
+		items = mock(List.class);
 		item = mock(ItemCatalogo.class);
 		reserva = mock(Reserva.class);
 		
@@ -40,8 +40,8 @@ class EstadoCanceladoTest {
 		
 		estado.agregarItem(item, items);
 		
-		//verify(items, never()).add(any(ItemCatalogo.class));
-		assertEquals(items.size(), 0);
+		verify(items, never()).add(any(ItemCatalogo.class));
+		//assertEquals(items.size(), 0);
 		verify(reserva).cambiarEstado(any(ReservaException.class));
 		
 	}
@@ -51,8 +51,8 @@ class EstadoCanceladoTest {
 		
 		estado.quitarItem(item, items);
 		
-		//verify(items, never()).remove(any(ItemCatalogo.class));
-		assertEquals(items.size(), 0);
+		verify(items, never()).remove(any(ItemCatalogo.class));
+		//assertEquals(items.size(), 0);
 		verify(reserva).cambiarEstado(any(ReservaException.class));
 		
 	}

@@ -15,7 +15,7 @@ import unq.travel.traslado.Reserva;
 class EstadoConfirmadoTest {
 	
 	private Reserva reserva;
-	private EstadoReserva estado;
+	private EstadoDeReserva estado;
 	private ItemCatalogo item;
 	private List<ItemCatalogo> items;
 	private Cliente cliente;

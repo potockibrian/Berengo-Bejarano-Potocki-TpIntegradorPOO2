@@ -4,7 +4,7 @@ import java.util.List;
 
 import unq.travel.traslado.Reserva;
 
-public class ReservaException extends EstadoReserva{
+public class ReservaException extends EstadoDeReserva{
 
 	public ReservaException(Reserva reserva) {
 		

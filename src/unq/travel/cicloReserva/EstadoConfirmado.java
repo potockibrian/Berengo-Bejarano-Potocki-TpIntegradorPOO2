@@ -6,7 +6,7 @@ import java.util.List;
 
 import unq.travel.traslado.Reserva;
 
-public class EstadoConfirmado extends EstadoReserva {
+public class EstadoConfirmado extends EstadoDeReserva {
 
 	public EstadoConfirmado(Reserva reserva) {
 		super(reserva);
