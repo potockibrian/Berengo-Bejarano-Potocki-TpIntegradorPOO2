@@ -4,13 +4,17 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import unq.travel.traslado.Reserva;
 
 class EstadoPendienteTest {
 	
 	private Reserva reserva;
-	private EstadoReserva estado;
+	private EstadoDeReserva estado;
 	private ItemCatalogo item;
 	private List<ItemCatalogo> items;
 	private MailSenderI mailSender;
@@ -33,7 +37,7 @@ class EstadoPendienteTest {
 		estado.agregarItem(item, items);
 		
 		verify(items).add(any(ItemCatalogo.class));
-		verify(reserva, never()).cambiarEstado(any(PedidoException.class));
+		verify(reserva, never()).cambiarEstado(any(ReservaException.class));
 		
 	}
 	
@@ -43,14 +47,16 @@ class EstadoPendienteTest {
 		estado.quitarItem(item, items);
 		
 		verify(items).remove(any(ItemCatalogo.class));
-		verify(reserva, never()).cambiarEstado(any(PedidoException.class));
+		verify(reserva, never()).cambiarEstado(any(ReservaException.class));
 		
 	}
 	
 	@Test
 	void testConfirmar() {
 		
-		estado.confirmar(items);
+		// TODO: Testear e implementar la lógica de disponibilidad
+		
+		estado.confirmar();
 		
 		verify(reserva).cambiarEstado(any(EstadoConfirmado.class));
 		
@@ -61,7 +67,7 @@ class EstadoPendienteTest {
 		
 		estado.checkin();
 		
-		verify(reserva).cambiarEstado(any(PedidoException.class));
+		verify(reserva).cambiarEstado(any(ReservaException.class));
 		
 	}
 	
@@ -70,7 +76,7 @@ class EstadoPendienteTest {
 		
 		estado.ejecutar();
 		
-		verify(reserva).cambiarEstado(any(PedidoException.class));
+		verify(reserva).cambiarEstado(any(ReservaException.class));
 		
 	}
 	
@@ -79,7 +85,7 @@ class EstadoPendienteTest {
 		
 		estado.completar();
 		
-		verify(reserva).cambiarEstado(any(PedidoException.class));
+		verify(reserva).cambiarEstado(any(ReservaException.class));
 		
 	}
 	
@@ -97,7 +103,7 @@ class EstadoPendienteTest {
 		
 		estado.notificarPorEmail(reserva,mailSender);
 		
-		verify(mailServer, never()).enviarMail(any(),any(),any(),any());
+		verify(mailSender, never()).enviarMail(any(),any(),any(),any());
 		
 	}
 	
@@ -106,7 +112,7 @@ class EstadoPendienteTest {
 		
 		estado.generarFactura(reserva);
 		
-		verify(reserva, never());
+		verify(reserva, never()).getCliente();
 		
 	}
 	
