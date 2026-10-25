@@ -7,6 +7,7 @@ import unq.travel.cicloReserva.Cliente;
 import unq.travel.cicloReserva.EstadoPendiente;
 import unq.travel.cicloReserva.EstadoDeReserva;
 import unq.travel.cicloReserva.ItemCatalogo;
+import unq.travel.notificaciones.Suscriptor;
 
 public class Reserva {
 
@@ -14,19 +15,24 @@ public class Reserva {
 	private EstrategiaTraslado estrategia;
 	private List<ItemCatalogo> items;
 	private Cliente cliente;
+	private List<Suscriptor> suscriptores;
 
-	public Reserva(Cliente cliente, Direccion direccion, EstrategiaTraslado estrategia) {
+	public Reserva(Cliente cliente, Direccion direccion, EstrategiaTraslado estrategia, List<Suscriptor> suscriptores) {
 
 		this.estrategia = estrategia;
 		this.estado = new EstadoPendiente(this);
 		this.cliente = cliente;
 		this.items = new ArrayList<ItemCatalogo>();
+		this.suscriptores = suscriptores;
 		
 	}
 
 	public void cambiarEstado(EstadoDeReserva estado) {
 
 		this.estado = estado;
+		
+		suscriptores.stream()
+			.forEach(s -> s.notify(this, estado));
 		
 	}
 

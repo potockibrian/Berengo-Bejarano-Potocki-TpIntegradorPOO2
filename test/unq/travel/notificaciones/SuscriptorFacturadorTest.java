@@ -6,11 +6,15 @@ import static org.mockito.Mockito.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import unq.travel.cicloReserva.Cliente;
+import unq.travel.cicloReserva.EstadoDeReserva;
+import unq.travel.traslado.Reserva;
+
 class SuscriptorFacturadorTest {
 
 	private EstadoDeReserva estado;
 	private Reserva reserva;
-	private Suscritor suscriptor;
+	private Suscriptor suscriptor;
 	private Cliente cliente;
 	
 	@BeforeEach
@@ -20,7 +24,7 @@ class SuscriptorFacturadorTest {
 		estado = mock(EstadoDeReserva.class);
 		reserva = mock(Reserva.class);
 		
-		suscriptor = new SuscriptorFacturador(mailSender);
+		suscriptor = new SuscriptorFacturador();
 	
 	}
 

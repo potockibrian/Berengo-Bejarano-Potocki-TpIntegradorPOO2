@@ -6,12 +6,17 @@ import static org.mockito.Mockito.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import unq.travel.cicloReserva.Cliente;
+import unq.travel.cicloReserva.EstadoDeReserva;
+import unq.travel.cicloReserva.MailSenderI;
+import unq.travel.traslado.Reserva;
+
 class SuscriptorCorreoTest {
 
 	private EstadoDeReserva estado;
 	private Reserva reserva;
 	private MailSenderI mailSender;
-	private Suscritor suscriptor;
+	private Suscriptor suscriptor;
 	private Cliente cliente;
 	
 	@BeforeEach
