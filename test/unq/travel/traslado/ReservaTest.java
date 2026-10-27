@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import unq.travel.cicloReserva.Cliente;
 import unq.travel.cicloReserva.EstadoDeReserva;
 import unq.travel.cicloReserva.ItemCatalogo;
+import unq.travel.notificaciones.Suscriptor;
 
 class ReservaTest {
 	
@@ -21,6 +22,10 @@ class ReservaTest {
 	private EstrategiaTraslado estrategia;
 	private Cliente cliente;
 	private List<ItemCatalogo> items;
+	private Suscriptor suscriptorCorreo;
+	private Suscriptor suscriptorFacturador;
+	private Suscriptor suscriptorFidelizador;
+	private List<Suscriptor> suscriptores;
 	
 	@BeforeEach
 	void setUp() throws Exception {
@@ -30,8 +35,12 @@ class ReservaTest {
 		direccion = mock(Direccion.class);
 		estado = mock(EstadoDeReserva.class);
 		items = mock(List.class);
+		suscriptorCorreo = mock(Suscriptor.class);
+		suscriptorFacturador = mock(Suscriptor.class);
+		suscriptorFidelizador = mock(Suscriptor.class);
+		suscriptores = List.of(suscriptorCorreo, suscriptorFacturador, suscriptorFidelizador);
 		
-		reserva = new Reserva(cliente, direccion, estrategia);
+		reserva = new Reserva(cliente, direccion, estrategia, suscriptores);
 		reserva.cambiarEstado(estado);
 		
 	}
@@ -123,6 +132,17 @@ class ReservaTest {
 	void testPrecioTotalServicios() {
 		
 		reserva.getPrecioTotalServicios();
+		
+	}
+	
+	@Test
+	void testCambiarEstado() {
+		
+		// .cambiarEstado(estado) se ejectuta en el setUp
+		
+		verify(suscriptorCorreo).notify(reserva, estado);
+		verify(suscriptorFacturador).notify(reserva, estado);
+		verify(suscriptorFidelizador).notify(reserva, estado);
 		
 	}
 
