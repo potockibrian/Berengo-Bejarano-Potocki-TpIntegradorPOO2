@@ -1,7 +1,10 @@
 package unq.travel.catalogo;
 
 import java.util.ArrayList;
+
 import java.util.List;
+
+import unq.travel.reportes.Visitor;
 
 public class PaqueteTuristico extends ItemCatalogo {
 
@@ -105,6 +108,15 @@ public class PaqueteTuristico extends ItemCatalogo {
 			item.incrementarCupo();
 		}
 
+	}
+	
+	@Override
+	public void aceptar(Visitor visitor) {
+		visitor.visitar(this);
+	}
+	
+	public List<ItemCatalogo> getItems() {
+		return new ArrayList<>(items);
 	}
 
 }

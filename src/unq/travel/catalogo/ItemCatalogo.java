@@ -1,5 +1,7 @@
 package unq.travel.catalogo;
 
+import unq.travel.reportes.Visitor;
+
 public abstract class ItemCatalogo {
 
 	private String nombre;
@@ -63,5 +65,7 @@ public abstract class ItemCatalogo {
 	public abstract void decrementarCupo();
 
 	public abstract void incrementarCupo();
+	
+	public abstract void aceptar(Visitor visitor);
 
 }

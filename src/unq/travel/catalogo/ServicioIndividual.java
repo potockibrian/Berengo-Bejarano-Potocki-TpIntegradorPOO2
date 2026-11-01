@@ -2,6 +2,7 @@ package unq.travel.catalogo;
 
 import java.util.ArrayList;
 import java.util.List;
+import unq.travel.reportes.Visitor;
 
 public class ServicioIndividual extends ItemCatalogo {
 
@@ -144,6 +145,11 @@ public class ServicioIndividual extends ItemCatalogo {
 		}
 		throw new AtributoInexistenteException("El atributo " + nombre + " no esta definido");
 
+	}
+	
+	@Override
+	public void aceptar(Visitor visitor) {
+		visitor.visitar(this);
 	}
 
 }
