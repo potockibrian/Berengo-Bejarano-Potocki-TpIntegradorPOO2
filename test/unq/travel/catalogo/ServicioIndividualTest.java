@@ -72,33 +72,109 @@ class ServicioIndividualTest {
 	}
 
 	@Test
-	void testAlRestarLaUltimaUnidadDejaDeTenerDisponibilidad() {
+	void testAlDecrementarElUltimoCupoDejaDeTenerDisponibilidad() {
 
 		ServicioIndividual hotel = this.crearHotelConStock(1);
 
-		hotel.restarUnidadStock();
+		hotel.decrementarCupo();
 
 		assertFalse(hotel.tieneDisponibilidad());
 
 	}
 
 	@Test
-	void testAlSumarUnaUnidadVuelveATenerDisponibilidad() {
+	void testAlIncrementarElCupoVuelveATenerDisponibilidad() {
 
 		ServicioIndividual hotel = this.crearHotelConStock(0);
 
-		hotel.sumarUnidadStock();
+		hotel.incrementarCupo();
 
 		assertTrue(hotel.tieneDisponibilidad());
 
 	}
 
 	@Test
-	void testRestarStockSinDisponibilidadLanzaExcepcion() {
+	void testDecrementarCupoSinDisponibilidadLanzaExcepcion() {
 
 		ServicioIndividual hotelSinStock = this.crearHotelConStock(0);
 
-		assertThrows(SinStockException.class, () -> hotelSinStock.restarUnidadStock());
+		assertThrows(SinStockException.class, () -> hotelSinStock.decrementarCupo());
+
+	}
+
+	@Test
+	void testNoSePuedeCrearConDescuentoMayorAUno() {
+
+		assertThrows(IllegalArgumentException.class, () -> new ServicioIndividual("Noche de Hotel Central",
+				"Habitación doble con desayuno", "HTL-001", "Hoteles Centro SA", Categoria.ALOJAMIENTO, 15000f, 20f, 10));
+
+	}
+
+	@Test
+	void testNoSePuedeCrearConDescuentoNegativo() {
+
+		assertThrows(IllegalArgumentException.class, () -> new ServicioIndividual("Noche de Hotel Central",
+				"Habitación doble con desayuno", "HTL-001", "Hoteles Centro SA", Categoria.ALOJAMIENTO, 15000f, -0.10f, 10));
+
+	}
+
+	@Test
+	void testNoSePuedeCrearConStockNegativo() {
+
+		assertThrows(IllegalArgumentException.class, () -> this.crearHotelConStock(-1));
+
+	}
+
+	@Test
+	void testNoSePuedeDefinirDosVecesElMismoAtributo() {
+
+		hotelSinDescuento.definirAtributo("CapacidadMaxima", true, new TipoNumerico());
+
+		assertThrows(IllegalArgumentException.class,
+				() -> hotelSinDescuento.definirAtributo("CapacidadMaxima", false, new TipoTexto()));
+
+	}
+
+	@Test
+	void testNoSePuedeCrearConPrecioBaseNegativo() {
+
+		assertThrows(IllegalArgumentException.class, () -> new ServicioIndividual("Noche de Hotel Central",
+				"Habitación doble con desayuno", "HTL-001", "Hoteles Centro SA", Categoria.ALOJAMIENTO, -500f, 0f, 10));
+
+	}
+
+	@Test
+	void testNoSePuedeDefinirUnAtributoSinNombre() {
+
+		assertThrows(IllegalArgumentException.class,
+				() -> hotelSinDescuento.definirAtributo(null, false, new TipoTexto()));
+
+	}
+
+	@Test
+	void testDevuelveSuNombreYSuDescripcion() {
+
+		assertEquals("Noche de Hotel Central", hotelSinDescuento.getNombre());
+		assertEquals("Habitación doble con desayuno", hotelSinDescuento.getDescripcion());
+
+	}
+
+	@Test
+	void testDevuelveSuProveedor() {
+
+		assertEquals("Hoteles Centro SA", hotelSinDescuento.getProveedor());
+
+	}
+
+	@Test
+	void testDevuelveElValorDeUnAtributoQueNoEsElPrimeroDefinido() {
+
+		hotelSinDescuento.definirAtributo("PoliticaMascotas", false, new TipoBooleano());
+		hotelSinDescuento.definirAtributo("CapacidadMaxima", true, new TipoNumerico());
+
+		hotelSinDescuento.asignarValor("CapacidadMaxima", 4);
+
+		assertEquals(4, hotelSinDescuento.getValor("CapacidadMaxima"));
 
 	}
 

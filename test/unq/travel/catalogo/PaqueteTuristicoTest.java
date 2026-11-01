@@ -173,6 +173,68 @@ class PaqueteTuristicoTest {
 
 	}
 
+	@Test
+	void testAlDecrementarElCupoDecrementaElDeCadaItem() {
+
+		ServicioIndividual hotelConUnCupo = this.crearServicioConCupo("Noche de Hotel Central", 1);
+		PaqueteTuristico paquete = new PaqueteTuristico("Paquete", "Hotel con un cupo", 0.10f);
+		paquete.agregarItem(hotelConUnCupo);
+
+		paquete.decrementarCupo();
+
+		assertFalse(hotelConUnCupo.tieneDisponibilidad());
+
+	}
+
+	@Test
+	void testAlIncrementarElCupoIncrementaElDeCadaItem() {
+
+		ServicioIndividual hotelSinCupo = this.crearServicioSinStock("Noche de Hotel Central", Categoria.ALOJAMIENTO);
+		PaqueteTuristico paquete = new PaqueteTuristico("Paquete", "Hotel sin cupo", 0.10f);
+		paquete.agregarItem(hotelSinCupo);
+
+		paquete.incrementarCupo();
+
+		assertTrue(hotelSinCupo.tieneDisponibilidad());
+
+	}
+
+	@Test
+	void testDecrementarCupoSinDisponibilidadLanzaExcepcionYNoModificaNingunItem() {
+
+		ServicioIndividual hotelConUnCupo = this.crearServicioConCupo("Noche de Hotel Central", 1);
+		PaqueteTuristico paquete = new PaqueteTuristico("Paquete", "Hotel y auto agotado", 0.10f);
+		paquete.agregarItem(hotelConUnCupo);
+		paquete.agregarItem(this.crearServicioSinStock("Alquiler de Auto", Categoria.ALQUILER_AUTO));
+
+		assertThrows(SinStockException.class, () -> paquete.decrementarCupo());
+
+		assertTrue(hotelConUnCupo.tieneDisponibilidad());
+
+	}
+
+	@Test
+	void testDecrementarCupoConUnServicioRepetidoSinCupoSuficienteNoPierdeCupo() {
+
+		ServicioIndividual hotelConUnCupo = this.crearServicioConCupo("Noche de Hotel Central", 1);
+		PaqueteTuristico dosNoches = new PaqueteTuristico("Dos noches de hotel", "Hotel dos noches", 0.10f);
+		dosNoches.agregarItem(hotelConUnCupo);
+		dosNoches.agregarItem(hotelConUnCupo);
+
+		assertThrows(SinStockException.class, () -> dosNoches.decrementarCupo());
+
+		assertTrue(hotelConUnCupo.tieneDisponibilidad());
+
+	}
+
+	@Test
+	void testNoSePuedeCrearConDescuentoFueraDeRango() {
+
+		assertThrows(IllegalArgumentException.class, () -> new PaqueteTuristico("Paquete", "Descuento invalido", 1.5f));
+		assertThrows(IllegalArgumentException.class, () -> new PaqueteTuristico("Paquete", "Descuento invalido", -0.1f));
+
+	}
+
 	private ServicioIndividual crearServicio(String nombre, Categoria categoria, float precio, float descuento) {
 		return new ServicioIndividual(nombre, "Descripcion de " + nombre, "COD-" + nombre,
 				"Operador SA", categoria, precio, descuento, 10);
@@ -181,6 +243,11 @@ class PaqueteTuristicoTest {
 	private ServicioIndividual crearServicioSinStock(String nombre, Categoria categoria) {
 		return new ServicioIndividual(nombre, "Descripcion de " + nombre, "COD-" + nombre,
 				"Operador SA", categoria, 1000f, 0f, 0);
+	}
+
+	private ServicioIndividual crearServicioConCupo(String nombre, int cupo) {
+		return new ServicioIndividual(nombre, "Descripcion de " + nombre, "COD-" + nombre,
+				"Operador SA", Categoria.ALOJAMIENTO, 1000f, 0f, cupo);
 	}
 
 }
