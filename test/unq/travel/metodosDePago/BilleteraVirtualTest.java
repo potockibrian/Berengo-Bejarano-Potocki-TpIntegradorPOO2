@@ -2,6 +2,7 @@ package unq.travel.metodosDePago;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.anyFloat;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 class BilleteraVirtualTest {
 
-	private MetodoDePago metodo;
+	private BilleteraVirtual metodo;
 	private BilleteraVirtualAPI api;
 	
 	@BeforeEach
@@ -23,39 +24,32 @@ class BilleteraVirtualTest {
     @Test
     void testPagoSinSaldoSuficienteLanzaExcepcion() {
     	
-    	when(api.validarSaldoSuficiente(any())).thenReturn(false);
+    	when(api.validarSaldoSuficiente(anyFloat()))
+    		.thenReturn(false);
         
-        assertThrows(RuntimeException.class, () -> metodo.pagar(3000f));
+        assertThrows(
+        		IllegalArgumentException.class, 
+        		() -> metodo.pagar(3000f));
         
-        verify(api).validarSaldoSuficiente(any());
-    
+        verify(api).validarSaldoSuficiente(anyFloat());
+        verify(api, never()).bloquearSaldo();
+        verify(api, never()).acreditarAlVendedor();
+        verify(api, never()).notificarPush(any());
     }
 	
     @Test
-    void testPagoCuandoHaySaldoValidaLosDatosYSeBloqueaElSaldo() {
+    void testPagoConSaldoSuficienteBloqueaAcreditaYNotifica() {
+    	when(api.validarSaldoSuficiente(anyFloat()))
+    		.thenReturn(true);
+    	when(api.acreditarAlVendedor()).thenReturn("OP-789");
     	
-    	when(api.validarSaldoSuficiente(any())).thenReturn(true);
+    	metodo.pagar(3000f);
     	
-        metodo.pagar(3000f);
-        
-        verify(api).validarSaldoSuficiente(any());
-        verify(api).bloquearSaldo();
-        verify(api, never()).desbloquearSaldo();
-    
+    	verify(api).validarSaldoSuficiente(anyFloat());
+    	verify(api).bloquearSaldo();
+    	verify(api).acreditarAlVendedor();
+    	verify(api).notificarPush("OP-789");
+    	
+    	assertEquals("OP-789", metodo.getCodigoTransaccion());
     }
-    
-	@Test
-	void testPagoCuandoHaySaldoYSeConfirmaSeDesbloqueaElSaldoSeAcreditaAlVendedorYSeNotifica() {
-		
-		when(api.validarSaldoSuficiente(any())).thenReturn(true);
-		
-		metodo.pagar(3000f);
-		metodo.confirmar();
-		
-		verify(api).desbloquearSaldo();
-		verify(api).acreditarAlVendedor();
-		verify(api).notificar();
-		
-	}
-
 }
