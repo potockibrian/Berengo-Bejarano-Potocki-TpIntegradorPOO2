@@ -20,7 +20,7 @@ class TrasladoRecepcionTest {
 		estrategia = new TrasladoRecepcion(sucursal);
 		
 	}
-	
+	/*
 	@Test
 	void testHayDisponibilidadCuandoSucursalNoTieneDisponibilidad() {
 		
@@ -38,11 +38,22 @@ class TrasladoRecepcionTest {
 		assertTrue(estrategia.hayDisponibilidad());
 		
 	}
-	
+	*/
 	@Test
-	void testCostoTraslado() {
+	void testCostoTrasladoConDisponibilidad() {
+		
+		when(sucursal.hayDisponibilidad()).thenReturn(true);
 		
 		assertEquals(0, estrategia.costoTraslado(reserva));
+		
+	}
+	
+	@Test
+	void testCostoTrasladoSinDisponibilidad() {
+		
+		when(sucursal.hayDisponibilidad()).thenReturn(false);
+		
+		assertThrows(NoHayDisponibilidadException.class, () -> estrategia.costoTraslado(reserva));
 		
 	}
 	

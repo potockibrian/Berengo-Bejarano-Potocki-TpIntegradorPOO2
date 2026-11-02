@@ -20,12 +20,12 @@ public class EstrategiaTrasladoVIP implements EstrategiaTraslado {
 		return libreria.calcularCosto(reserva.getPrecioTotalServicios());
 
 	}
-
+/*
 	@Override
 	public boolean hayDisponibilidad() {
 
 		return true;
 
 	}
-
+*/
 }

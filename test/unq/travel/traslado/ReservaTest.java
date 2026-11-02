@@ -46,6 +46,20 @@ class ReservaTest {
 	}
 	
 	@Test
+	void testDireccion() {
+		
+		assertEquals(reserva.direccion(), direccion);
+		
+	}
+	
+	@Test
+	void testCantidadPasajeros() {
+		
+		assertEquals(reserva.cantidadPasajeros(), 1);
+		
+	}
+	
+	@Test
 	void testConfirmarReserva() {
 		
 		reserva.confirmarReserva();

@@ -12,18 +12,11 @@ public class TrasladoRecepcion implements EstrategiaTraslado {
 
 	@Override
 	public float costoTraslado(Reserva reserva) {
-
+		
+		if (!sucursal.hayDisponibilidad()) throw new NoHayDisponibilidadException();
+		
 		return 0;
 		
-	}
-
-	@Override
-	public boolean hayDisponibilidad() {
-		
-		return sucursal.hayDisponibilidad();
-
-	}
-	
-	
+	}	
 
 }
