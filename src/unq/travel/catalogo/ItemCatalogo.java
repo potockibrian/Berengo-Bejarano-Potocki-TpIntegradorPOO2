@@ -44,7 +44,7 @@ public abstract class ItemCatalogo {
 
 	}
 
-	protected void validarDescuento(float descuento) {
+	protected static void validarDescuento(float descuento) {
 
 		if (descuento < 0 || descuento > 1) {
 			throw new IllegalArgumentException("El descuento debe estar entre 0 y 1");
@@ -65,7 +65,7 @@ public abstract class ItemCatalogo {
 	public abstract void decrementarCupo();
 
 	public abstract void incrementarCupo();
-	
+
 	public abstract void aceptar(Visitor visitor);
 
 }

@@ -1,7 +1,6 @@
 package unq.travel.catalogo;
 
 import java.util.ArrayList;
-
 import java.util.List;
 
 import unq.travel.reportes.Visitor;
@@ -14,7 +13,7 @@ public class PaqueteTuristico extends ItemCatalogo {
 	public PaqueteTuristico(String nombre, String descripcion, float descuento) {
 
 		super(nombre, descripcion);
-		this.validarDescuento(descuento);
+		validarDescuento(descuento);
 		this.descuento = descuento;
 		this.items = new ArrayList<ItemCatalogo>();
 
@@ -109,14 +108,18 @@ public class PaqueteTuristico extends ItemCatalogo {
 		}
 
 	}
-	
+
 	@Override
 	public void aceptar(Visitor visitor) {
+
 		visitor.visitar(this);
+
 	}
-	
+
 	public List<ItemCatalogo> getItems() {
-		return new ArrayList<>(items);
+
+		return new ArrayList<ItemCatalogo>(items);
+
 	}
 
 }

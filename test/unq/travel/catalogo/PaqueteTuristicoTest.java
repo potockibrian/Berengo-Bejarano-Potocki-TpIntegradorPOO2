@@ -2,6 +2,8 @@ package unq.travel.catalogo;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -232,6 +234,22 @@ class PaqueteTuristicoTest {
 
 		assertThrows(IllegalArgumentException.class, () -> new PaqueteTuristico("Paquete", "Descuento invalido", 1.5f));
 		assertThrows(IllegalArgumentException.class, () -> new PaqueteTuristico("Paquete", "Descuento invalido", -0.1f));
+
+	}
+
+	@Test
+	void testDevuelveSusItemsEnElOrdenAgregado() {
+
+		assertEquals(List.of(hotel, museo, traslado), packEscapadaUrbana.getItems());
+
+	}
+
+	@Test
+	void testModificarLaListaDeItemsDevueltaNoModificaElPaquete() {
+
+		packEscapadaUrbana.getItems().clear();
+
+		assertEquals(3, packEscapadaUrbana.getItems().size());
 
 	}
 

@@ -2,6 +2,7 @@ package unq.travel.catalogo;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import unq.travel.reportes.Visitor;
 
 public class ServicioIndividual extends ItemCatalogo {
@@ -18,7 +19,7 @@ public class ServicioIndividual extends ItemCatalogo {
 			Categoria categoria, float precioBase, float descuentoPromocional, int stock) {
 
 		super(nombre, descripcion);
-		this.validarDescuento(descuentoPromocional);
+		validarDescuento(descuentoPromocional);
 		if (precioBase < 0) {
 			throw new IllegalArgumentException("El precio base no puede ser negativo");
 		}
@@ -146,10 +147,12 @@ public class ServicioIndividual extends ItemCatalogo {
 		throw new AtributoInexistenteException("El atributo " + nombre + " no esta definido");
 
 	}
-	
+
 	@Override
 	public void aceptar(Visitor visitor) {
+
 		visitor.visitar(this);
+
 	}
 
 }
