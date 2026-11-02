@@ -3,8 +3,8 @@ package unq.travel.notificaciones;
 import unq.travel.cicloReserva.EstadoDeReserva;
 import unq.travel.traslado.Reserva;
 
-public abstract class Suscriptor {
+public interface Suscriptor {
 
-	public abstract void notify(Reserva reserva, EstadoDeReserva estado);
+	public abstract void notify(Reserva reserva, EstadoDeReserva estadoAnterior, EstadoDeReserva nuevoEstado);
 	
 }

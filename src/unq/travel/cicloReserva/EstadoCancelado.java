@@ -76,8 +76,8 @@ public class EstadoCancelado extends EstadoDeReserva {
 		
 	}
 
-	@Override
-	public void notificarPorEmail(Reserva reserva, MailSenderI mailSender) {
+	/*@Override
+	public void notificarPorEmail(Reserva reserva, MailSender mailSender) {
 		
 		return;
 		
@@ -90,13 +90,13 @@ public class EstadoCancelado extends EstadoDeReserva {
 	}
 
 	@Override
-	public void fidelizar(Reserva reserva, MailSenderI mailSender) {
+	public void fidelizar(Reserva reserva, MailSender mailSender) {
 
 		mailSender.enviarMail(reserva.getCliente().getDireccionDeEmail()
 				, "Reserva cancelada"
 				, "Se ha cancelado vuestra reserva"
 				, new Cupon());
 				
-	}
+	}*/
 
 }

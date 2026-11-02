@@ -20,14 +20,14 @@ class EstrategiaTrasladoVIPTest {
 		
 		reserva = mock(Reserva.class);
 		libreria = mock(TrasladoVIP.class);
-		estrategia = new EstrategiaTrasladoVIP(reserva, libreria);
+		estrategia = new EstrategiaTrasladoVIP(libreria);
 		
 	}
 	
 	@Test
 	void testCostoTraslado() {
 		
-		when(reserva.getPrecioTotalServicios()).thenReturn(1000f);
+		when(reserva.costoTotalServicios()).thenReturn(1000f);
 		
 		estrategia.costoTraslado(reserva);
 

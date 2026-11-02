@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import unq.travel.cicloReserva.Cliente;
 import unq.travel.cicloReserva.EstadoDeReserva;
+import unq.travel.cicloReserva.EstadoPendiente;
 import unq.travel.catalogo.ItemCatalogo;
 import unq.travel.notificaciones.Suscriptor;
 
@@ -107,9 +108,9 @@ class ReservaTest {
 	@Test
 	void testCostoTraslado() {
 		
-		reserva.costoTraslado();
+		when(estrategia.costoTraslado(reserva)).thenReturn(1000f);
 		
-		verify(estrategia).costoTraslado(reserva);
+		assertEquals(1000f, reserva.costoTraslado());
 	
 	}
 	
@@ -143,20 +144,32 @@ class ReservaTest {
 	}
 	
 	@Test
-	void testPrecioTotalServicios() {
+	void testCostoTotalServicios() {
 		
-		reserva.getPrecioTotalServicios();
+		reserva.cambiarEstado(new EstadoPendiente(reserva));
+		ItemCatalogo item = mock(ItemCatalogo.class);
+		when(item.tieneDisponibilidad()).thenReturn(true);
+		when(item.getPrecioFinal()).thenReturn(1000f);
+		reserva.agregarServicio(item);
+		
+		assertEquals(1000f, reserva.costoTotalServicios());
+
+		verify(item).getPrecioFinal();
 		
 	}
 	
 	@Test
 	void testCambiarEstado() {
 		
-		// .cambiarEstado(estado) se ejectuta en el setUp
+		// cambiarEstado(estado) se ejectuta en el setUp
 		
-		verify(suscriptorCorreo).notify(reserva, estado);
-		verify(suscriptorFacturador).notify(reserva, estado);
-		verify(suscriptorFidelizador).notify(reserva, estado);
+		EstadoDeReserva estadoNuevo = mock(EstadoDeReserva.class);
+		
+		reserva.cambiarEstado(estadoNuevo);
+		
+		verify(suscriptorCorreo).notify(reserva, estado, estadoNuevo);
+		verify(suscriptorFacturador).notify(reserva, estado, estadoNuevo);
+		verify(suscriptorFidelizador).notify(reserva, estado, estadoNuevo);
 		
 	}
 

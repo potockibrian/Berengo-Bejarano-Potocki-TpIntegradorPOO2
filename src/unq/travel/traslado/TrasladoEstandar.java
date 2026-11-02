@@ -8,11 +8,9 @@ public class TrasladoEstandar implements EstrategiaTraslado {
 	private int cantidadDePasajeros;
 	private PlataformaTransporte libreria;
 
-	public TrasladoEstandar(int cantidadDePasajeros, Direccion direccion, PlataformaTransporte libreria) {
+	public TrasladoEstandar(PlataformaTransporte libreria) {
 	
 		this.libreria = libreria;
-		this.cantidadDePasajeros = cantidadDePasajeros;
-		this.direccion = direccion;
 		
 	}
 

@@ -32,11 +32,11 @@ public class Reserva {
 	}
 
 	public void cambiarEstado(EstadoDeReserva estado) {
-
-		this.estado = estado;
 		
 		suscriptores.stream()
-			.forEach(s -> s.notify(this, estado));
+			.forEach(s -> s.notify(this, this.estado, estado));
+		
+		this.estado = estado;
 		
 	}
 
@@ -70,9 +70,9 @@ public class Reserva {
 		
 	}
 
-	public void costoTraslado() {
+	public float costoTraslado() {
 
-		estrategia.costoTraslado(this);
+		return estrategia.costoTraslado(this);
 		
 	}
 
@@ -94,7 +94,7 @@ public class Reserva {
 		
 	}
 
-	public float getPrecioTotalServicios() {
+	public float costoTotalServicios() {
 		
 		return (float) items.stream()
 				.mapToDouble(i -> i.getPrecioFinal())

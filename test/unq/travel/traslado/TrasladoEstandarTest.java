@@ -22,7 +22,7 @@ class TrasladoEstandarTest {
 		reserva = mock(Reserva.class);
 		direccion = mock(Direccion.class);
 		reserva = mock(Reserva.class);
-		estrategia = new TrasladoEstandar(10, direccion, libreria);
+		estrategia = new TrasladoEstandar(libreria);
 		
 	}
 	

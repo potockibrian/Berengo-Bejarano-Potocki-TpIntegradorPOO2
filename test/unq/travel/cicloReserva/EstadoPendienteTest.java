@@ -19,7 +19,7 @@ class EstadoPendienteTest {
 	private EstadoDeReserva estado;
 	private ItemCatalogo item;
 	private List<ItemCatalogo> items;
-	private MailSenderI mailSender;
+	private MailSender mailSender;
 	
 	@BeforeEach
 	void setUp() {
@@ -27,7 +27,7 @@ class EstadoPendienteTest {
 		items = mock(List.class);
 		item = mock(ItemCatalogo.class);
 		reserva = mock(Reserva.class);
-		mailSender = mock(MailSenderI.class);
+		mailSender = mock(MailSender.class);
 		
 		estado = new EstadoPendiente(reserva);
 		
@@ -68,13 +68,15 @@ class EstadoPendienteTest {
 	}
 	
 	@Test
-	void testConfirmar() {
+	void testConfirmarConCupoParaTodos() {
 		
 		// TODO: Testear e implementar la lógica de disponibilidad
 		
 		List<ItemCatalogo> itemsLocal = new ArrayList<ItemCatalogo>();
 		ItemCatalogo item1 = mock(ItemCatalogo.class);
 		ItemCatalogo item2 = mock(ItemCatalogo.class);
+		when(item1.tieneDisponibilidad()).thenReturn(true);
+		when(item2.tieneDisponibilidad()).thenReturn(true);
 		itemsLocal.add(item1);
 		itemsLocal.add(item2);
 		
@@ -83,6 +85,28 @@ class EstadoPendienteTest {
 		verify(item1).decrementarCupo();
 		verify(item2).decrementarCupo();
 		verify(reserva).cambiarEstado(any(EstadoConfirmado.class));
+		
+	}
+	
+
+	@Test
+	void testConfirmarSinCupoParaTodos() {
+		
+		// TODO: Testear e implementar la lógica de disponibilidad
+		
+		List<ItemCatalogo> itemsLocal = new ArrayList<ItemCatalogo>();
+		ItemCatalogo item1 = mock(ItemCatalogo.class);
+		ItemCatalogo item2 = mock(ItemCatalogo.class);
+		when(item1.tieneDisponibilidad()).thenReturn(false);
+		when(item2.tieneDisponibilidad()).thenReturn(true);
+		itemsLocal.add(item1);
+		itemsLocal.add(item2);
+		
+		assertThrows(NoHayDisponibilidadException.class, () -> estado.confirmar(itemsLocal));
+		
+		verify(item1, never()).decrementarCupo();
+		verify(item2, never()).decrementarCupo();
+		verify(reserva, never()).cambiarEstado(any(EstadoConfirmado.class));
 		
 	}
 	
@@ -128,7 +152,7 @@ class EstadoPendienteTest {
 		
 	}
 	
-	@Test
+	/*@Test
 	void testNotificarPorEmail() {
 		
 		estado.notificarPorEmail(reserva,mailSender);
@@ -153,6 +177,6 @@ class EstadoPendienteTest {
 		
 		verify(reserva, never()).getCliente();
 		
-	}
+	}*/
 	
 }

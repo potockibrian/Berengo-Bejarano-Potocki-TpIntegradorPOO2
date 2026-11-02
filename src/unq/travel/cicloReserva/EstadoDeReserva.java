@@ -29,10 +29,10 @@ public abstract class EstadoDeReserva {
 
 	public abstract void cancelar(List<ItemCatalogo> items) ;
 
-	public abstract void notificarPorEmail(Reserva reserva, MailSenderI mailSender) ;
+	/*public abstract void notificarPorEmail(Reserva reserva, MailSender mailSender) ;
 
 	public abstract void generarFactura(Reserva reserva) ;
 
-	public abstract void fidelizar(Reserva reserva, MailSenderI mailSender) ;
+	public abstract void fidelizar(Reserva reserva, MailSender mailSender) ;*/
 
 }

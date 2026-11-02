@@ -7,36 +7,90 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import unq.travel.cicloReserva.Cliente;
-import unq.travel.cicloReserva.EstadoDeReserva;
-import unq.travel.cicloReserva.MailSenderI;
+import unq.travel.cicloReserva.*;
+import unq.travel.cicloReserva.MailSender;
 import unq.travel.traslado.Reserva;
 
 class SuscriptorCorreoTest {
 
 	private EstadoDeReserva estado;
 	private Reserva reserva;
-	private MailSenderI mailSender;
+	private MailSender mailSender;
 	private Suscriptor suscriptor;
 	private Cliente cliente;
+	private EstadoDeReserva estadoNuevo;
+	private EstadoDeReserva estadoAnterior;
 	
 	@BeforeEach
 	void setUp() throws Exception {
 	
 		cliente = mock(Cliente.class);
-		estado = mock(EstadoDeReserva.class);
 		reserva = mock(Reserva.class);
-		mailSender = mock(MailSenderI.class);
+		estadoAnterior = mock(EstadoDeReserva.class);
+		mailSender = mock(MailSender.class);
+		when(reserva.getCliente()).thenReturn(cliente);
 		
 		suscriptor = new SuscriptorCorreo(mailSender);
 	
 	}
 
 	@Test
-	void testNotify() {
+	void testNotifyEstadoNuevoConfirmado() {
 
-		suscriptor.notify(reserva, estado);
+		estadoNuevo = mock(EstadoConfirmado.class);
 		
-		verify(estado).notificarPorEmail(reserva,mailSender);
+		suscriptor.notify(reserva, estadoAnterior, estadoNuevo);
+		
+		verify(mailSender).enviarMail(
+				  eq(reserva.getCliente().getDireccionDeEmail())
+				, eq("Reserva confirmada")
+				, eq("Se ha confirmado vuestra reserva")
+				, eq(null));
+		
+	}
+
+	@Test
+	void testNotifyEstadoNuevoEnCurso() {
+
+		estadoNuevo = mock(EstadoEnCurso.class);
+		
+		suscriptor.notify(reserva, estadoAnterior, estadoNuevo);
+		
+		verify(mailSender).enviarMail(
+				  eq(reserva.getCliente().getDireccionDeEmail())
+				, eq("Reserva en curso")
+				, eq("Se ha ejecutado vuestra reserva")
+				, eq(null));
+		
+	}
+
+	@Test
+	void testNotifyEstadoNuevoFinalizada() {
+
+		estadoNuevo = mock(EstadoFinalizado.class);
+		
+		suscriptor.notify(reserva, estadoAnterior, estadoNuevo);
+		
+		verify(mailSender).enviarMail(
+				  eq(reserva.getCliente().getDireccionDeEmail())
+				, eq("Reserva finalizada")
+				, eq("Se ha finalizado vuestra reserva")
+				, eq(null));
+		
+	}
+
+	@Test
+	void testNotifyEstadoNuevoNiConfirmadoNiEnCursoNiFinalizado() {
+
+		estadoNuevo = mock(EstadoCancelado.class);
+		
+		suscriptor.notify(reserva, estadoAnterior, estadoNuevo);
+		
+		verify(mailSender, never()).enviarMail(
+				  any()
+				, any()
+				, any()
+				, any());
 		
 	}
 
