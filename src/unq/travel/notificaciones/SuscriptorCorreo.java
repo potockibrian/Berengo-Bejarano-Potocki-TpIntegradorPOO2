@@ -1,23 +1,69 @@
 package unq.travel.notificaciones;
 
+import unq.travel.cicloReserva.EstadoConfirmado;
 import unq.travel.cicloReserva.EstadoDeReserva;
-import unq.travel.cicloReserva.MailSenderI;
+import unq.travel.cicloReserva.EstadoEnCurso;
+import unq.travel.cicloReserva.EstadoFinalizado;
+import unq.travel.cicloReserva.MailSender;
 import unq.travel.traslado.Reserva;
 
-public class SuscriptorCorreo extends Suscriptor {
+public class SuscriptorCorreo implements Suscriptor {
 
-	private MailSenderI mailSender;
+	private MailSender mailSender;
 
-	public SuscriptorCorreo(MailSenderI mailSender) {
+	public SuscriptorCorreo(MailSender mailSender) {
 
 		this.mailSender = mailSender;
 		
 	}
 
 	@Override
-	public void notify(Reserva reserva, EstadoDeReserva estado) {
+	public void notify(Reserva reserva, EstadoDeReserva estadoAnterior, EstadoDeReserva estadoNuevo) {
+		
+		if (esEstadoConfirmado(estadoNuevo)) {
+		
+			mailSender.enviarMail(
+					reserva.getCliente().getDireccionDeEmail()
+					, "Reserva confirmada"
+					, "Se ha confirmado vuestra reserva"
+					, null);
+		}
+		
+		if (esEstadoEnCurso(estadoNuevo)) {
+		
+			mailSender.enviarMail(
+					reserva.getCliente().getDireccionDeEmail()
+					, "Reserva en curso"
+					, "Se ha ejecutado vuestra reserva"
+					, null);
+		}
+		
+		if (esEstadoFinalizado(estadoNuevo)) {
+		
+			mailSender.enviarMail(
+					reserva.getCliente().getDireccionDeEmail()
+					, "Reserva finalizada"
+					, "Se ha finalizado vuestra reserva"
+					, null);
+		}
+		
+	}
 
-		estado.notificarPorEmail(reserva, mailSender);
+	private boolean esEstadoConfirmado(EstadoDeReserva estadoNuevo) {
+		
+		return estadoNuevo.getClass().getName() == EstadoConfirmado.class.getName();
+		
+	}
+
+	private boolean esEstadoEnCurso(EstadoDeReserva estadoNuevo) {
+		
+		return estadoNuevo.getClass().getName() == EstadoEnCurso.class.getName();
+		
+	}
+
+	private boolean esEstadoFinalizado(EstadoDeReserva estadoNuevo) {
+		
+		return estadoNuevo.getClass().getName() == EstadoFinalizado.class.getName();
 		
 	}
 

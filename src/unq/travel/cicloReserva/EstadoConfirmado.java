@@ -69,12 +69,18 @@ public class EstadoConfirmado extends EstadoDeReserva {
 	@Override
 	public void cancelar(List<ItemCatalogo> items) {
 
+		for (int i=0; i<items.size(); i++) {
+			
+			items.get(i).incrementarCupo();
+			
+		}
+		
 		reserva.cambiarEstado(new EstadoCancelado(reserva));
 		
 	}
 
-	@Override
-	public void notificarPorEmail(Reserva reserva, MailSenderI mailSender) {
+	/*@Override
+	public void notificarPorEmail(Reserva reserva, MailSender mailSender) {
 
 		mailSender.enviarMail(
 				  reserva.getCliente().getDireccionDeEmail()
@@ -91,10 +97,10 @@ public class EstadoConfirmado extends EstadoDeReserva {
 	}
 
 	@Override
-	public void fidelizar(Reserva reserva, MailSenderI mailSender) {
+	public void fidelizar(Reserva reserva, MailSender mailSender) {
 		// TODO Auto-generated method stub
 		
-	}
+	}*/
 
 	
 }

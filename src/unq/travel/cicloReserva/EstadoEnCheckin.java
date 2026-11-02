@@ -76,8 +76,8 @@ public class EstadoEnCheckin extends EstadoDeReserva {
 		
 	}
 
-	@Override
-	public void notificarPorEmail(Reserva reserva, MailSenderI mailSender) {
+	/*@Override
+	public void notificarPorEmail(Reserva reserva, MailSender mailSender) {
 		// TODO Auto-generated method stub
 
 	}
@@ -89,9 +89,9 @@ public class EstadoEnCheckin extends EstadoDeReserva {
 	}
 
 	@Override
-	public void fidelizar(Reserva reserva, MailSenderI mailSender) {
+	public void fidelizar(Reserva reserva, MailSender mailSender) {
 		// TODO Auto-generated method stub
 
-	}
+	}*/
 
 }

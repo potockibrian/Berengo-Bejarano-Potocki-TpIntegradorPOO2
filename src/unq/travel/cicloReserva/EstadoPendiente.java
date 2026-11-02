@@ -34,6 +34,8 @@ public class EstadoPendiente extends EstadoDeReserva {
 
 		// TODO: Testear e Implementar lógica de disponibilidad
 		
+		if(!items.stream().allMatch(i -> i.tieneDisponibilidad())) throw new NoHayDisponibilidadException();
+		
 		items.stream().forEach(i -> i.decrementarCupo());
 		
 		reserva.cambiarEstado(new EstadoConfirmado(reserva));
@@ -74,8 +76,8 @@ public class EstadoPendiente extends EstadoDeReserva {
 		
 	}
 
-	@Override
-	public void notificarPorEmail(Reserva reserva, MailSenderI mailSender) {
+	/*@Override
+	public void notificarPorEmail(Reserva reserva, MailSender mailSender) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -87,10 +89,10 @@ public class EstadoPendiente extends EstadoDeReserva {
 	}
 
 	@Override
-	public void fidelizar(Reserva reserva, MailSenderI mailSender) {
+	public void fidelizar(Reserva reserva, MailSender mailSender) {
 		// TODO Auto-generated method stub
 		
-	}
+	}*/
 
 	
 		
