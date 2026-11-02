@@ -10,12 +10,13 @@ class TrasladoRecepcionTest {
 	
 	private EstrategiaTraslado estrategia;
 	private Sucursal sucursal;
+	private Reserva reserva;
 	
 	@BeforeEach
 	void setUp() {
 		
 		sucursal = mock(Sucursal.class);
-		
+		reserva = mock(Reserva.class);
 		estrategia = new TrasladoRecepcion(sucursal);
 		
 	}
@@ -41,7 +42,7 @@ class TrasladoRecepcionTest {
 	@Test
 	void testCostoTraslado() {
 		
-		assertEquals(0, estrategia.costoTraslado());
+		assertEquals(0, estrategia.costoTraslado(reserva));
 		
 	}
 	

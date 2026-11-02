@@ -7,12 +7,21 @@ import unq.travel.traslado.Voucher;
 
 public class Cliente {
 
-	private List<Comprobante> comprobantes = new ArrayList<Comprobante>();
-	private List<Voucher> vouchers = new ArrayList<Voucher>();
+	private List<Comprobante> comprobantes;
+	private List<Voucher> vouchers;
+	private String email;
 
+	public Cliente(String email, List<Comprobante> comprobantes, List<Voucher> vouchers) {
+		
+		this.email = email;
+		this.comprobantes = comprobantes;
+		this.vouchers = vouchers;
+		
+	}
+	
 	public String getDireccionDeEmail() {
 
-		return "";
+		return email;
 		
 	}
 

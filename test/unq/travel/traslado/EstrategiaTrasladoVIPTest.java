@@ -6,25 +6,32 @@ import static org.mockito.Mockito.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import libraries.TrasladoVIP;
+
 class EstrategiaTrasladoVIPTest {
 	
 	private EstrategiaTraslado estrategia;
 	private Reserva reserva;
+	private TrasladoVIP libreria;
+	private Direccion direccion;
 	
 	@BeforeEach
 	void setUp() {
 		
 		reserva = mock(Reserva.class);
-		estrategia = new EstrategiaTrasladoVIP(reserva);
+		libreria = mock(TrasladoVIP.class);
+		estrategia = new EstrategiaTrasladoVIP(reserva, libreria);
 		
 	}
 	
 	@Test
 	void testCostoTraslado() {
 		
-		estrategia.costoTraslado();
+		when(reserva.getPrecioTotalServicios()).thenReturn(1000f);
 		
-		verify(reserva).getPrecioTotalServicios();
+		estrategia.costoTraslado(reserva);
+
+		verify(libreria).calcularCosto(1000f);
 		
 	}
 	

@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.eq;
 
 import java.util.List;
 
+import unq.travel.catalogo.ItemCatalogo;
 import unq.travel.traslado.Reserva;
 
 public class EstadoConfirmado extends EstadoDeReserva {
@@ -16,21 +17,27 @@ public class EstadoConfirmado extends EstadoDeReserva {
 	@Override
 	public void agregarItem(ItemCatalogo item, List<ItemCatalogo> items) {
 
-		reserva.cambiarEstado(new ReservaException(reserva));
+		throw new OperacionInvalidaEstadoException();
+		
+		//reserva.cambiarEstado(new ReservaException(reserva));
 		
 	}
 
 	@Override
 	public void quitarItem(ItemCatalogo item, List<ItemCatalogo> items) {
 
-		reserva.cambiarEstado(new ReservaException(reserva));
+		throw new OperacionInvalidaEstadoException();
+		
+		//reserva.cambiarEstado(new ReservaException(reserva));
 		
 	}
 
 	@Override
 	public void confirmar(List<ItemCatalogo> items) {
 
-		reserva.cambiarEstado(new ReservaException(reserva));
+		throw new OperacionInvalidaEstadoException();
+		
+		//reserva.cambiarEstado(new ReservaException(reserva));
 		
 	}
 
@@ -44,14 +51,18 @@ public class EstadoConfirmado extends EstadoDeReserva {
 	@Override
 	public void ejecutar() {
 
-		reserva.cambiarEstado(new ReservaException(reserva));
+		throw new OperacionInvalidaEstadoException();
+		
+		//reserva.cambiarEstado(new ReservaException(reserva));
 		
 	}
 
 	@Override
 	public void completar() {
 
-		reserva.cambiarEstado(new ReservaException(reserva));
+		throw new OperacionInvalidaEstadoException();
+		
+		//reserva.cambiarEstado(new ReservaException(reserva));
 		
 	}
 
