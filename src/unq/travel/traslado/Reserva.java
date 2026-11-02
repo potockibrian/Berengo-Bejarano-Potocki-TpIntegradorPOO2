@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import unq.travel.cicloReserva.Cliente;
 import unq.travel.cicloReserva.EstadoPendiente;
 import unq.travel.cicloReserva.EstadoDeReserva;
-import unq.travel.cicloReserva.ItemCatalogo;
+import unq.travel.catalogo.ItemCatalogo;
 import unq.travel.notificaciones.Suscriptor;
 
 public class Reserva {
@@ -93,7 +93,7 @@ public class Reserva {
 	public float getPrecioTotalServicios() {
 		
 		return (float) items.stream()
-				.mapToDouble(i -> i.calcularPrecioFinal())
+				.mapToDouble(i -> i.getPrecioFinal())
 				.sum();
 		
 	}

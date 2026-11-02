@@ -2,6 +2,7 @@ package unq.travel.cicloReserva;
 
 import java.util.List;
 
+import unq.travel.catalogo.ItemCatalogo;
 import unq.travel.traslado.Reserva;
 import unq.travel.traslado.Voucher;
 
@@ -15,34 +16,42 @@ public class EstadoEnCheckin extends EstadoDeReserva {
 	@Override
 	public void agregarItem(ItemCatalogo item, List<ItemCatalogo> items) {
 
-		reserva.cambiarEstado(new ReservaException(reserva));
+		throw new OperacionInvalidaEstadoException();
+		
+		//reserva.cambiarEstado(new ReservaException(reserva));
 		
 	}
 
 	@Override
 	public void quitarItem(ItemCatalogo item, List<ItemCatalogo> items) {
 
-		reserva.cambiarEstado(new ReservaException(reserva));
+		throw new OperacionInvalidaEstadoException();
+		
+		//reserva.cambiarEstado(new ReservaException(reserva));
 		
 	}
 
 	@Override
 	public void confirmar(List<ItemCatalogo> items) {
 
-		reserva.cambiarEstado(new ReservaException(reserva));
+		throw new OperacionInvalidaEstadoException();
+		
+		//reserva.cambiarEstado(new ReservaException(reserva));
 		
 	}
 
 	@Override
 	public void checkin() {
 
-		reserva.cambiarEstado(new ReservaException(reserva));
+		throw new OperacionInvalidaEstadoException();
+		
+		//reserva.cambiarEstado(new ReservaException(reserva));
 		
 	}
 
 	@Override
 	public void ejecutar() {
-
+		
 		reserva.cambiarEstado(new EstadoEnCurso(reserva));
 		
 	}
@@ -50,7 +59,9 @@ public class EstadoEnCheckin extends EstadoDeReserva {
 	@Override
 	public void completar() {
 
-		reserva.cambiarEstado(new ReservaException(reserva));
+		throw new OperacionInvalidaEstadoException();
+		
+		//reserva.cambiarEstado(new ReservaException(reserva));
 		
 	}
 

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import unq.travel.cicloReserva.Cliente;
 import unq.travel.cicloReserva.EstadoDeReserva;
-import unq.travel.cicloReserva.ItemCatalogo;
+import unq.travel.catalogo.ItemCatalogo;
 import unq.travel.notificaciones.Suscriptor;
 
 class ReservaTest {

@@ -10,6 +10,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import unq.travel.catalogo.ItemCatalogo;
 import unq.travel.traslado.Reserva;
 
 class EstadoPendienteTest {
@@ -50,7 +51,7 @@ class EstadoPendienteTest {
 		
 		when(item.tieneDisponibilidad()).thenReturn(false);
 		
-		assertThrows(RuntimeException.class, () -> estado.agregarItem(item, items));
+		assertThrows(NoHayDisponibilidadException.class, () -> estado.agregarItem(item, items));
 		
 		verify(items,never()).add(any(ItemCatalogo.class));
 		
@@ -62,7 +63,7 @@ class EstadoPendienteTest {
 		estado.quitarItem(item, items);
 		
 		verify(items).remove(any(ItemCatalogo.class));
-		verify(reserva, never()).cambiarEstado(any(ReservaException.class));
+		//verify(reserva, never()).cambiarEstado(any(ReservaException.class));
 		
 	}
 	
@@ -87,28 +88,34 @@ class EstadoPendienteTest {
 	
 	@Test
 	void testCheckin() {
+
+		RuntimeException e = assertThrows(OperacionInvalidaEstadoException.class, () -> estado.checkin());
 		
-		estado.checkin();
+		//estado.checkin();
 		
-		verify(reserva).cambiarEstado(any(ReservaException.class));
+		//verify(reserva).cambiarEstado(any(ReservaException.class));
 		
 	}
 	
 	@Test
 	void testEjecutar() {
+
+		RuntimeException e = assertThrows(OperacionInvalidaEstadoException.class, () -> estado.ejecutar());
 		
-		estado.ejecutar();
+		//estado.ejecutar();
 		
-		verify(reserva).cambiarEstado(any(ReservaException.class));
+		//verify(reserva).cambiarEstado(any(ReservaException.class));
 		
 	}
 	
 	@Test
 	void testCompletar() {
 		
-		estado.completar();
+		RuntimeException e = assertThrows(OperacionInvalidaEstadoException.class, () -> estado.completar());
 		
-		verify(reserva).cambiarEstado(any(ReservaException.class));
+		//estado.completar();
+		
+		//verify(reserva).cambiarEstado(any(ReservaException.class));
 		
 	}
 	

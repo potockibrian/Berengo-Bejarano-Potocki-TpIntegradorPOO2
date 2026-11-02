@@ -10,6 +10,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import unq.travel.catalogo.ItemCatalogo;
 import unq.travel.traslado.Reserva;
 
 class EstadoConfirmadoTest {
@@ -36,30 +37,36 @@ class EstadoConfirmadoTest {
 	
 	@Test
 	void testAgregarItem() {
+
+		RuntimeException e = assertThrows(OperacionInvalidaEstadoException.class, () -> estado.agregarItem(item, items));
 		
-		estado.agregarItem(item, items);
+		//estado.agregarItem(item, items);
 		
 		verify(items, never()).add(any(ItemCatalogo.class));
-		verify(reserva).cambiarEstado(any(ReservaException.class));
+		//verify(reserva).cambiarEstado(any(ReservaException.class));
 		
 	}
 	
 	@Test
 	void testQuitarItem() {
+
+		RuntimeException e = assertThrows(OperacionInvalidaEstadoException.class, () -> estado.quitarItem(item, items));
 		
-		estado.quitarItem(item, items);
+		//estado.quitarItem(item, items);
 		
 		verify(items, never()).remove(any(ItemCatalogo.class));
-		verify(reserva).cambiarEstado(any(ReservaException.class));
+		//verify(reserva).cambiarEstado(any(ReservaException.class));
 		
 	}
 	
 	@Test
 	void testConfirmar() {
+
+		RuntimeException e = assertThrows(OperacionInvalidaEstadoException.class, () -> estado.confirmar(items));
 		
-		estado.confirmar(items);
+		//estado.confirmar(items);
 		
-		verify(reserva).cambiarEstado(any(ReservaException.class));
+		//verify(reserva).cambiarEstado(any(ReservaException.class));
 		
 	}
 	
@@ -74,19 +81,23 @@ class EstadoConfirmadoTest {
 	
 	@Test
 	void testEjecutar() {
+
+		RuntimeException e = assertThrows(OperacionInvalidaEstadoException.class, () -> estado.ejecutar());
 		
-		estado.ejecutar();
+		//estado.ejecutar();
 		
-		verify(reserva).cambiarEstado(any(ReservaException.class));
+		//verify(reserva).cambiarEstado(any(ReservaException.class));
 		
 	}
 	
 	@Test
 	void testCompletar() {
+
+		RuntimeException e = assertThrows(OperacionInvalidaEstadoException.class, () -> estado.completar());
 		
-		estado.completar();
+		//estado.completar();
 		
-		verify(reserva).cambiarEstado(any(ReservaException.class));
+		//verify(reserva).cambiarEstado(any(ReservaException.class));
 		
 	}
 	

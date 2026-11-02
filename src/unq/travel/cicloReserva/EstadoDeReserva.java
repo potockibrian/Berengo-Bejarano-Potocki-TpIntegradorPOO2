@@ -2,6 +2,7 @@ package unq.travel.cicloReserva;
 
 import java.util.List;
 
+import unq.travel.catalogo.ItemCatalogo;
 import unq.travel.traslado.Reserva;
 
 public abstract class EstadoDeReserva {

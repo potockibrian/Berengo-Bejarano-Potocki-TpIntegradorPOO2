@@ -2,6 +2,7 @@ package unq.travel.cicloReserva;
 
 import java.util.List;
 
+import unq.travel.catalogo.ItemCatalogo;
 import unq.travel.traslado.Reserva;
 
 public class EstadoPendiente extends EstadoDeReserva {
@@ -15,15 +16,9 @@ public class EstadoPendiente extends EstadoDeReserva {
 	@Override
 	public void agregarItem(ItemCatalogo item, List<ItemCatalogo> items) {
 
-		if (item.tieneDisponibilidad()) {
+		if (!item.tieneDisponibilidad()) throw new NoHayDisponibilidadException();
 			
-			items.add(item);
-			
-		} else {
-			
-			throw new RuntimeException();
-			
-		}
+		items.add(item);
 		
 	}
 
@@ -48,21 +43,27 @@ public class EstadoPendiente extends EstadoDeReserva {
 	@Override
 	public void checkin() {
 
-		reserva.cambiarEstado(new ReservaException(reserva));
+		throw new OperacionInvalidaEstadoException();
+		
+		//reserva.cambiarEstado(new ReservaException(reserva));
 		
 	}
 
 	@Override
 	public void ejecutar() {
 
-		reserva.cambiarEstado(new ReservaException(reserva));
+		throw new OperacionInvalidaEstadoException();
+		
+		//reserva.cambiarEstado(new ReservaException(reserva));
 		
 	}
 
 	@Override
 	public void completar() {
 
-		reserva.cambiarEstado(new ReservaException(reserva));
+		throw new OperacionInvalidaEstadoException();
+		
+		//reserva.cambiarEstado(new ReservaException(reserva));
 		
 	}
 
