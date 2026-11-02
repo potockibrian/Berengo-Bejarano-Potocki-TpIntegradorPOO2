@@ -4,6 +4,6 @@ public interface EstrategiaTraslado {
 	
 	public float costoTraslado(Reserva reserva);
 	
-	public boolean hayDisponibilidad();
+	//public boolean hayDisponibilidad();
 	
 }

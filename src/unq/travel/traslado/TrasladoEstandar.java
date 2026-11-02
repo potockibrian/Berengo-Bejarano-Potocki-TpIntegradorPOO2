@@ -23,11 +23,11 @@ public class TrasladoEstandar implements EstrategiaTraslado {
 
 	}
 
-	@Override
+	/*@Override
 	public boolean hayDisponibilidad() {
 
 		return true;
 
-	}
+	}*/
 
 }
