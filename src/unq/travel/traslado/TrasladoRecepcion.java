@@ -11,7 +11,7 @@ public class TrasladoRecepcion implements EstrategiaTraslado {
 	}
 
 	@Override
-	public float costoTraslado() {
+	public float costoTraslado(Reserva reserva) {
 
 		return 0;
 		

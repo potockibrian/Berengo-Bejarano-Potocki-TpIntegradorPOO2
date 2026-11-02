@@ -40,7 +40,7 @@ class ReservaTest {
 		suscriptorFidelizador = mock(Suscriptor.class);
 		suscriptores = List.of(suscriptorCorreo, suscriptorFacturador, suscriptorFidelizador);
 		
-		reserva = new Reserva(cliente, direccion, estrategia, suscriptores);
+		reserva = new Reserva(cliente, direccion, estrategia, suscriptores, 1);
 		reserva.cambiarEstado(estado);
 		
 	}
@@ -95,7 +95,7 @@ class ReservaTest {
 		
 		reserva.costoTraslado();
 		
-		verify(estrategia).costoTraslado();
+		verify(estrategia).costoTraslado(reserva);
 	
 	}
 	

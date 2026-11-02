@@ -16,14 +16,18 @@ public class Reserva {
 	private List<ItemCatalogo> items;
 	private Cliente cliente;
 	private List<Suscriptor> suscriptores;
+	public int cantidadPasajeros;
+	public Direccion direccion;
 
-	public Reserva(Cliente cliente, Direccion direccion, EstrategiaTraslado estrategia, List<Suscriptor> suscriptores) {
+	public Reserva(Cliente cliente, Direccion direccion, EstrategiaTraslado estrategia, List<Suscriptor> suscriptores, int cantidadPasajeros) {
 
 		this.estrategia = estrategia;
 		this.estado = new EstadoPendiente(this);
 		this.cliente = cliente;
 		this.items = new ArrayList<ItemCatalogo>();
 		this.suscriptores = suscriptores;
+		this.direccion = direccion;
+		this.cantidadPasajeros = cantidadPasajeros;
 		
 	}
 
@@ -68,7 +72,7 @@ public class Reserva {
 
 	public void costoTraslado() {
 
-		estrategia.costoTraslado();
+		estrategia.costoTraslado(this);
 		
 	}
 
@@ -95,6 +99,18 @@ public class Reserva {
 		return (float) items.stream()
 				.mapToDouble(i -> i.getPrecioFinal())
 				.sum();
+		
+	}
+
+	public Direccion direccion() {
+
+		return direccion;
+		
+	}
+
+	public int cantidadPasajeros() {
+
+		return cantidadPasajeros;
 		
 	}
 

@@ -5,17 +5,19 @@ import libraries.TrasladoVIP;
 public class EstrategiaTrasladoVIP implements EstrategiaTraslado {
 
 	private Reserva reserva;
+	private libraries.TrasladoVIP libreria;
 
-	public EstrategiaTrasladoVIP(Reserva reserva) {
+	public EstrategiaTrasladoVIP(Reserva reserva, libraries.TrasladoVIP libreria) {
 
+		this.libreria = libreria;
 		this.reserva = reserva;
 		
 	}
 
 	@Override
-	public float costoTraslado() {
+	public float costoTraslado(Reserva reserva) {
 
-		return TrasladoVIP.calcularCostoReserva(reserva.getPrecioTotalServicios());
+		return libreria.calcularCosto(reserva.getPrecioTotalServicios());
 
 	}
 
