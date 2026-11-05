@@ -21,10 +21,12 @@ public class SuscriptorFacturador implements Suscriptor {
 
 	}
 
+	/*
 	private boolean esEstadoFinalizado(EstadoDeReserva estadoNuevo) {
 
 		return estadoNuevo.getClass().getName() == EstadoFinalizado.class.getName();
 		
 	}
+	*/
 
 }
