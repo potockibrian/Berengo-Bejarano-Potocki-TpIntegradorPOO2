@@ -75,6 +75,20 @@ public class EstadoCancelado extends EstadoDeReserva {
 		//reserva.cambiarEstado(new ReservaException(reserva));
 		
 	}
+	
+	@Override
+	public boolean esEstadoCancelado() {
+		
+		return true;
+		
+	}
+	
+	@Override
+	public boolean esEstadoTerminal() {
+		
+		return true;
+		
+	}
 
 	/*@Override
 	public void notificarPorEmail(Reserva reserva, MailSender mailSender) {

@@ -78,6 +78,13 @@ public class EstadoConfirmado extends EstadoDeReserva {
 		reserva.cambiarEstado(new EstadoCancelado(reserva));
 		
 	}
+	
+	@Override
+	public boolean esEstadoConfirmado() {
+		
+		return true;
+		
+	}
 
 	/*@Override
 	public void notificarPorEmail(Reserva reserva, MailSender mailSender) {

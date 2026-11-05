@@ -20,7 +20,7 @@ public class SuscriptorFidelizador implements Suscriptor {
 	@Override
 	public void notify(Reserva reserva, EstadoDeReserva estadoAnterior, EstadoDeReserva estadoNuevo) {
 
-		if (!esEstadoTerminal(estadoAnterior) && esEstadoCancelado(estadoNuevo)) {
+		if (!estadoAnterior.esEstadoTerminal() && estadoNuevo.esEstadoCancelado()) {
 			
 			mailSender.enviarMail(
 					  reserva.getCliente().getDireccionDeEmail()
@@ -31,7 +31,8 @@ public class SuscriptorFidelizador implements Suscriptor {
 		}
 		
 	}
-
+	
+	/*
 	private boolean esEstadoCancelado(EstadoDeReserva estadoNuevo) {
 		
 		return estadoNuevo.getClass().getTypeName() == EstadoCancelado.class.getName();
@@ -44,5 +45,5 @@ public class SuscriptorFidelizador implements Suscriptor {
 				|| estadoAnterior.getClass().getTypeName() == EstadoFinalizado.class.getName();
 		
 	}
-
+ 	*/
 }

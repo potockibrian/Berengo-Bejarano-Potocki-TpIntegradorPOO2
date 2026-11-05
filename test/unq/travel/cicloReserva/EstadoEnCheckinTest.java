@@ -121,6 +121,41 @@ class EstadoEnCheckinTest {
 		verify(cliente).añadirVoucher(any(Voucher.class));
 		verify(reserva).cambiarEstado(any(EstadoCancelado.class));
 		
+	}	
+	
+	@Test
+	void testEstadoTerminal() {
+		
+		assertFalse(estado.esEstadoTerminal());
+		
+	}
+	
+	@Test
+	void testEstadoCancelado() {
+		
+		assertFalse(estado.esEstadoCancelado());
+		
+	}
+	
+	@Test
+	void testEstadoFinalizado() {
+		
+		assertFalse(estado.esEstadoFinalizado());
+		
+	}
+	
+	@Test
+	void testEstadoEnCurso() {
+		
+		assertFalse(estado.esEstadoEnCurso());
+		
+	}
+	
+	@Test
+	void testEstadoConfirmado() {
+		
+		assertFalse(estado.esEstadoConfirmado());
+		
 	}
 	
 	/*@Test

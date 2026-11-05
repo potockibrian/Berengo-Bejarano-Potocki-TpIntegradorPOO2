@@ -114,6 +114,41 @@ class EstadoConfirmadoTest {
 		verify(reserva).cambiarEstado(any(EstadoCancelado.class));
 		verify(item).incrementarCupo();
 		
+	}	
+	
+	@Test
+	void testEstadoTerminal() {
+		
+		assertFalse(estado.esEstadoTerminal());
+		
+	}
+	
+	@Test
+	void testEstadoCancelado() {
+		
+		assertFalse(estado.esEstadoCancelado());
+		
+	}
+	
+	@Test
+	void testEstadoFinalizado() {
+		
+		assertFalse(estado.esEstadoFinalizado());
+		
+	}
+	
+	@Test
+	void testEstadoEnCurso() {
+		
+		assertFalse(estado.esEstadoEnCurso());
+		
+	}
+	
+	@Test
+	void testEstadoConfirmado() {
+		
+		assertTrue(estado.esEstadoConfirmado());
+		
 	}
 	
 	/*@Test

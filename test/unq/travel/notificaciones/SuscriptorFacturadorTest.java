@@ -39,6 +39,7 @@ class SuscriptorFacturadorTest {
 	void testNotifyEstadoNuevoFinalizado() {
 		
 		estadoNuevo = mock(EstadoFinalizado.class);
+		when(estadoNuevo.esEstadoFinalizado()).thenReturn(true);
 		
 		suscriptor.notify(reserva, estadoAnterior, estadoNuevo);
 		

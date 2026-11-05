@@ -42,6 +42,8 @@ class SuscriptorFidelizadorTest {
 
 		EstadoDeReserva estadoAnterior = mock(EstadoConfirmado.class);
 		EstadoDeReserva nuevoEstado = mock(EstadoCancelado.class);
+		when(estadoAnterior.esEstadoTerminal()).thenReturn(false);
+		when(nuevoEstado.esEstadoCancelado()).thenReturn(true);
 		
 		suscriptor.notify(reserva, estadoAnterior, nuevoEstado);
 		

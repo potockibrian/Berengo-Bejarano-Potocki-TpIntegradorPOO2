@@ -20,7 +20,7 @@ public class SuscriptorCorreo implements Suscriptor {
 	@Override
 	public void notify(Reserva reserva, EstadoDeReserva estadoAnterior, EstadoDeReserva estadoNuevo) {
 		
-		if (esEstadoConfirmado(estadoNuevo)) {
+		if (estadoNuevo.esEstadoConfirmado()) {
 		
 			mailSender.enviarMail(
 					reserva.getCliente().getDireccionDeEmail()
@@ -29,7 +29,7 @@ public class SuscriptorCorreo implements Suscriptor {
 					, null);
 		}
 		
-		if (esEstadoEnCurso(estadoNuevo)) {
+		if (estadoNuevo.esEstadoEnCurso()) {
 		
 			mailSender.enviarMail(
 					reserva.getCliente().getDireccionDeEmail()
@@ -38,7 +38,7 @@ public class SuscriptorCorreo implements Suscriptor {
 					, null);
 		}
 		
-		if (esEstadoFinalizado(estadoNuevo)) {
+		if (estadoNuevo.esEstadoFinalizado()) {
 		
 			mailSender.enviarMail(
 					reserva.getCliente().getDireccionDeEmail()
@@ -49,6 +49,7 @@ public class SuscriptorCorreo implements Suscriptor {
 		
 	}
 
+	/*
 	private boolean esEstadoConfirmado(EstadoDeReserva estadoNuevo) {
 		
 		return estadoNuevo.getClass().getName() == EstadoConfirmado.class.getName();
@@ -66,5 +67,6 @@ public class SuscriptorCorreo implements Suscriptor {
 		return estadoNuevo.getClass().getName() == EstadoFinalizado.class.getName();
 		
 	}
+	*/
 
 }

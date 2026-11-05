@@ -38,6 +38,7 @@ class SuscriptorCorreoTest {
 	void testNotifyEstadoNuevoConfirmado() {
 
 		estadoNuevo = mock(EstadoConfirmado.class);
+		when(estadoNuevo.esEstadoConfirmado()).thenReturn(true);
 		
 		suscriptor.notify(reserva, estadoAnterior, estadoNuevo);
 		
@@ -53,6 +54,7 @@ class SuscriptorCorreoTest {
 	void testNotifyEstadoNuevoEnCurso() {
 
 		estadoNuevo = mock(EstadoEnCurso.class);
+		when(estadoNuevo.esEstadoEnCurso()).thenReturn(true);
 		
 		suscriptor.notify(reserva, estadoAnterior, estadoNuevo);
 		
@@ -68,6 +70,7 @@ class SuscriptorCorreoTest {
 	void testNotifyEstadoNuevoFinalizada() {
 
 		estadoNuevo = mock(EstadoFinalizado.class);
+		when(estadoNuevo.esEstadoFinalizado()).thenReturn(true);
 		
 		suscriptor.notify(reserva, estadoAnterior, estadoNuevo);
 		

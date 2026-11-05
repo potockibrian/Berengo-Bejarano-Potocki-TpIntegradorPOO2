@@ -115,7 +115,43 @@ class EstadoCanceladoTest {
 		
 		//verify(reserva).cambiarEstado(any(ReservaException.class));
 		
+	}	
+	
+	@Test
+	void testEstadoTerminal() {
+		
+		assertTrue(estado.esEstadoTerminal());
+		
 	}
+	
+	@Test
+	void testEstadoCancelado() {
+		
+		assertTrue(estado.esEstadoCancelado());
+		
+	}
+	
+	@Test
+	void testEstadoFinalizado() {
+		
+		assertFalse(estado.esEstadoFinalizado());
+		
+	}
+	
+	@Test
+	void testEstadoEnCurso() {
+		
+		assertFalse(estado.esEstadoEnCurso());
+		
+	}
+	
+	@Test
+	void testEstadoConfirmado() {
+		
+		assertFalse(estado.esEstadoConfirmado());
+		
+	}
+	
 	
 	/*@Test
 	void testNotificarPorEmail() {

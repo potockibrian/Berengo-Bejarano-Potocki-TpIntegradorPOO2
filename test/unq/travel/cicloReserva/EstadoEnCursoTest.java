@@ -115,6 +115,41 @@ class EstadoEnCursoTest {
 		
 	}
 	
+	@Test
+	void testEstadoTerminal() {
+		
+		assertFalse(estado.esEstadoTerminal());
+		
+	}
+	
+	@Test
+	void testEstadoCancelado() {
+		
+		assertFalse(estado.esEstadoCancelado());
+		
+	}
+	
+	@Test
+	void testEstadoFinalizado() {
+		
+		assertFalse(estado.esEstadoFinalizado());
+		
+	}
+	
+	@Test
+	void testEstadoEnCurso() {
+		
+		assertTrue(estado.esEstadoEnCurso());
+		
+	}
+	
+	@Test
+	void testEstadoConfirmado() {
+		
+		assertFalse(estado.esEstadoConfirmado());
+		
+	}
+	
 	/*@Test
 	void testNotificarPorEmail() {
 		

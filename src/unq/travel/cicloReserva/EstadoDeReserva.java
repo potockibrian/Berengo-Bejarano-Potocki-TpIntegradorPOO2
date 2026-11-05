@@ -29,6 +29,36 @@ public abstract class EstadoDeReserva {
 
 	public abstract void cancelar(List<ItemCatalogo> items) ;
 
+	public boolean esEstadoTerminal() {
+
+		return false;
+		
+	}
+
+	public boolean esEstadoCancelado() {
+
+		return false;
+		
+	}
+
+	public boolean esEstadoFinalizado() {
+
+		return false;
+		
+	}
+
+	public boolean esEstadoEnCurso() {
+
+		return false;
+		
+	}
+
+	public boolean esEstadoConfirmado() {
+
+		return false;
+		
+	}
+
 	/*public abstract void notificarPorEmail(Reserva reserva, MailSender mailSender) ;
 
 	public abstract void generarFactura(Reserva reserva) ;

@@ -74,6 +74,13 @@ public class EstadoEnCurso extends EstadoDeReserva {
 		reserva.cambiarEstado(new EstadoCancelado(reserva));
 		
 	}
+	
+	@Override
+	public boolean esEstadoEnCurso() {
+		
+		return true;
+		
+	}
 
 	/*@Override
 	public void notificarPorEmail(Reserva reserva, MailSender mailSender) {

@@ -12,7 +12,7 @@ public class SuscriptorFacturador implements Suscriptor {
 	@Override
 	public void notify(Reserva reserva, EstadoDeReserva estadoAnterior, EstadoDeReserva estadoNuevo) {
 
-		if (esEstadoFinalizado(estadoNuevo)) {
+		if (estadoNuevo.esEstadoFinalizado()) {
 			
 			reserva.getCliente().añadirVoucher(new Voucher());
 			reserva.getCliente().añadirComprobante(new Comprobante());
