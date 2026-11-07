@@ -163,7 +163,7 @@ public class Reserva {
 
 	public void doFinalizar() {
 
-		this.cambiarEstado(new EstadoEnCurso(this));
+		this.cambiarEstado(new EstadoFinalizado(this));
 		
 	}
 	
