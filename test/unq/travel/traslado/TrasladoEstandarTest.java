@@ -38,4 +38,11 @@ class TrasladoEstandarTest {
 		
 	}
 	
+	@Test
+	void testHayDisponibilidad() {
+		
+		assertTrue(estrategia.hayDisponibilidad());
+		
+	}
+	
 }

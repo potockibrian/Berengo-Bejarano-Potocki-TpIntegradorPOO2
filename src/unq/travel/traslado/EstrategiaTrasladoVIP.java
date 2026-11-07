@@ -2,7 +2,7 @@ package unq.travel.traslado;
 
 import libraries.TrasladoVIP;
 
-public class EstrategiaTrasladoVIP implements EstrategiaTraslado {
+public class EstrategiaTrasladoVIP extends EstrategiaTraslado {
 
 	private libraries.TrasladoVIP libreria;
 
@@ -18,12 +18,5 @@ public class EstrategiaTrasladoVIP implements EstrategiaTraslado {
 		return libreria.calcularCosto(reserva.costoServicios());
 
 	}
-/*
-	@Override
-	public boolean hayDisponibilidad() {
-
-		return true;
-
-	}
-*/
+	
 }

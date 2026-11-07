@@ -8,23 +8,21 @@ import org.junit.jupiter.api.Test;
 
 class TrasladoRecepcionTest {
 	
-	private EstrategiaTraslado estrategia;
-	private Sucursal sucursal;
+	private TrasladoRecepcion estrategia;
 	private Reserva reserva;
 	
 	@BeforeEach
 	void setUp() {
 		
-		sucursal = mock(Sucursal.class);
 		reserva = mock(Reserva.class);
-		estrategia = new TrasladoRecepcion(sucursal);
+		estrategia = new TrasladoRecepcion(2);
 		
 	}
-	/*
+	
 	@Test
 	void testHayDisponibilidadCuandoSucursalNoTieneDisponibilidad() {
 		
-		when(sucursal.hayDisponibilidad()).thenReturn(false);
+		estrategia.cantidadDeGuias = 0;
 		
 		assertFalse(estrategia.hayDisponibilidad());
 		
@@ -33,27 +31,16 @@ class TrasladoRecepcionTest {
 	@Test
 	void testHayDisponibilidadCuandoSucursalTieneDisponibilidad() {
 		
-		when(sucursal.hayDisponibilidad()).thenReturn(true);
+		estrategia.cantidadDeGuias = 1;
 		
 		assertTrue(estrategia.hayDisponibilidad());
 		
 	}
-	*/
-	@Test
-	void testCostoTrasladoConDisponibilidad() {
-		
-		when(sucursal.hayDisponibilidad()).thenReturn(true);
-		
-		assertEquals(0, estrategia.costoTasasTraslado(reserva));
-		
-	}
 	
 	@Test
-	void testCostoTrasladoSinDisponibilidad() {
+	void testCostoTraslado() {
 		
-		when(sucursal.hayDisponibilidad()).thenReturn(false);
-		
-		assertThrows(NoHayDisponibilidadException.class, () -> estrategia.costoTasasTraslado(reserva));
+		assertEquals(0, estrategia.costoTasasTraslado(reserva));
 		
 	}
 	

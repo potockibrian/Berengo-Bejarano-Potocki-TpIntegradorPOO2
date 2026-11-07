@@ -1,22 +1,27 @@
 package unq.travel.traslado;
 
-public class TrasladoRecepcion implements EstrategiaTraslado {
+public class TrasladoRecepcion extends EstrategiaTraslado {
 
-	private Sucursal sucursal;
+	public int cantidadDeGuias;
 	
-	public TrasladoRecepcion(Sucursal sucursal) {
+	public TrasladoRecepcion(int cantidadDeGuias) {
 
-		this.sucursal = sucursal;
+		this.cantidadDeGuias = cantidadDeGuias;
 		
 	}
 
 	@Override
 	public float costoTasasTraslado(Reserva reserva) {
 		
-		if (!sucursal.hayDisponibilidad()) throw new NoHayDisponibilidadException();
-		
 		return 0;
 		
-	}	
+	}
+	
+	@Override
+	public boolean hayDisponibilidad() {
+		
+		return cantidadDeGuias > 0;
+		
+	}
 
 }

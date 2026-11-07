@@ -52,6 +52,8 @@ public class Reserva {
 
 	public void confirmarReserva() {
 
+		if(!traslado.hayDisponibilidad()) throw new NoHayDisponibilidadException();
+		
 		estado.confirmar();
 		
 	}

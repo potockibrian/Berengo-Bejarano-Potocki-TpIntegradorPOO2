@@ -35,4 +35,11 @@ class EstrategiaTrasladoVIPTest {
 		
 	}
 	
+	@Test
+	void testHayDisponibilidad() {
+		
+		assertTrue(estrategia.hayDisponibilidad());
+		
+	}
+	
 }

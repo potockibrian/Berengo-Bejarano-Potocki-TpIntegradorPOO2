@@ -2,7 +2,7 @@ package unq.travel.traslado;
 
 import libraries.PlataformaTransporte;
 
-public class TrasladoEstandar implements EstrategiaTraslado {
+public class TrasladoEstandar extends EstrategiaTraslado {
 
 	private Direccion direccion;
 	private int cantidadDePasajeros;
@@ -20,12 +20,5 @@ public class TrasladoEstandar implements EstrategiaTraslado {
 		return libreria.estimarTraslado(reserva.cantidadPasajeros(), reserva.direccion());
 
 	}
-
-	/*@Override
-	public boolean hayDisponibilidad() {
-
-		return true;
-
-	}*/
 
 }

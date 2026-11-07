@@ -95,11 +95,24 @@ class ReservaTest {
 	}
 	
 	@Test
-	void testConfirmarReserva() {
-		
+	void testConfirmarReservaConDisponibilidadDeTraslado() {
+
+		when(estrategia.hayDisponibilidad()).thenReturn(true);
+
 		reserva.confirmarReserva();
 		
 		verify(estado).confirmar();
+		
+	}
+	
+	@Test
+	void testConfirmarReservaSinDisponibilidadDeTraslado() {
+		
+		when(estrategia.hayDisponibilidad()).thenReturn(false);
+		
+		assertThrows(NoHayDisponibilidadException.class, () -> reserva.confirmarReserva());
+		
+		verify(estado, never()).confirmar();
 		
 	}
 	
