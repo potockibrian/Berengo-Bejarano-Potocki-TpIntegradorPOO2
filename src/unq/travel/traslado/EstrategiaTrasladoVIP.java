@@ -13,9 +13,9 @@ public class EstrategiaTrasladoVIP implements EstrategiaTraslado {
 	}
 
 	@Override
-	public float costoTraslado(Reserva reserva) {
+	public float costoTasasTraslado(Reserva reserva) {
 
-		return libreria.calcularCosto(reserva.costoTotalServicios());
+		return libreria.calcularCosto(reserva.costoServicios());
 
 	}
 /*

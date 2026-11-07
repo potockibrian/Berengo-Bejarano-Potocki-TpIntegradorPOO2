@@ -1,6 +1,7 @@
 package unq.travel.traslado;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
@@ -10,8 +11,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import unq.travel.cicloReserva.Cliente;
+import unq.travel.cicloReserva.EstadoCancelado;
+import unq.travel.cicloReserva.EstadoConfirmado;
 import unq.travel.cicloReserva.EstadoDeReserva;
+import unq.travel.cicloReserva.EstadoEnCheckin;
+import unq.travel.cicloReserva.EstadoEnCurso;
+import unq.travel.cicloReserva.EstadoFinalizado;
 import unq.travel.cicloReserva.EstadoPendiente;
+import unq.travel.traslado.NoHayDisponibilidadException;
 import unq.travel.catalogo.ItemCatalogo;
 import unq.travel.notificaciones.Suscriptor;
 
@@ -27,6 +34,7 @@ class ReservaTest {
 	private Suscriptor suscriptorFacturador;
 	private Suscriptor suscriptorFidelizador;
 	private List<Suscriptor> suscriptores;
+	private ItemCatalogo item;
 	
 	@BeforeEach
 	void setUp() throws Exception {
@@ -35,14 +43,40 @@ class ReservaTest {
 		estrategia = mock(EstrategiaTraslado.class);
 		direccion = mock(Direccion.class);
 		estado = mock(EstadoDeReserva.class);
-		items = mock(List.class);
+		item = mock(ItemCatalogo.class);
+		items = new ArrayList<ItemCatalogo>();
 		suscriptorCorreo = mock(Suscriptor.class);
 		suscriptorFacturador = mock(Suscriptor.class);
 		suscriptorFidelizador = mock(Suscriptor.class);
-		suscriptores = List.of(suscriptorCorreo, suscriptorFacturador, suscriptorFidelizador);
+		suscriptores = new ArrayList(List.of(suscriptorCorreo, suscriptorFacturador, suscriptorFidelizador));
 		
 		reserva = new Reserva(cliente, direccion, estrategia, suscriptores, 1);
 		reserva.cambiarEstado(estado);
+		
+	}
+	
+	@Test
+	void testCambiarTraslado() {
+		
+		when(estrategia.costoTasasTraslado(reserva)).thenReturn(100f);
+		
+		reserva.elegirTraslado(estrategia);
+		
+		assertEquals(100f, reserva.costoTasasTraslado());
+		
+		verify(estrategia).costoTasasTraslado(reserva);
+		
+	}
+	
+	@Test
+	void testCostoTotalReserva() {
+		
+		when(item.tieneDisponibilidad()).thenReturn(true);
+		reserva.doAgregarItem(item);
+		when(estrategia.costoTasasTraslado(reserva)).thenReturn(100f);
+		when(item.getPrecioFinal()).thenReturn(100f);
+		
+		assertEquals(200f, reserva.costoTotalReserva());
 		
 	}
 	
@@ -65,7 +99,7 @@ class ReservaTest {
 		
 		reserva.confirmarReserva();
 		
-		verify(estado).confirmar(any(List.class));
+		verify(estado).confirmar();
 		
 	}
 	
@@ -101,16 +135,16 @@ class ReservaTest {
 		
 		reserva.cancelarReserva();
 		
-		verify(estado).cancelar(any(List.class));
+		verify(estado).cancelar();
 		
 	}
 	
 	@Test
 	void testCostoTraslado() {
 		
-		when(estrategia.costoTraslado(reserva)).thenReturn(1000f);
+		when(estrategia.costoTasasTraslado(reserva)).thenReturn(1000f);
 		
-		assertEquals(1000f, reserva.costoTraslado());
+		assertEquals(1000f, reserva.costoTasasTraslado());
 	
 	}
 	
@@ -121,7 +155,7 @@ class ReservaTest {
 		
 		reserva.agregarServicio(dummy);
 		
-		verify(estado).agregarItem(eq(dummy), any(ArrayList.class));
+		verify(estado).agregarItem(eq(dummy));
 		
 	}
 	
@@ -132,7 +166,7 @@ class ReservaTest {
 		
 		reserva.quitarServicio(dummy);
 		
-		verify(estado).quitarItem(eq(dummy), any(ArrayList.class));
+		verify(estado).quitarItem(eq(dummy));
 		
 	}
 	
@@ -152,7 +186,7 @@ class ReservaTest {
 		when(item.getPrecioFinal()).thenReturn(1000f);
 		reserva.agregarServicio(item);
 		
-		assertEquals(1000f, reserva.costoTotalServicios());
+		assertEquals(1000f, reserva.costoServicios());
 
 		verify(item).getPrecioFinal();
 		
@@ -170,6 +204,170 @@ class ReservaTest {
 		verify(suscriptorCorreo).notify(reserva, estado, estadoNuevo);
 		verify(suscriptorFacturador).notify(reserva, estado, estadoNuevo);
 		verify(suscriptorFidelizador).notify(reserva, estado, estadoNuevo);
+		
+	}
+	
+	@Test
+	void testSuscribir() {
+		
+		Suscriptor suscriptor = mock(Suscriptor.class);
+		
+		reserva.suscribir(suscriptor);
+		
+		assertTrue(suscriptores.contains(suscriptor));
+		
+	}
+	
+	@Test
+	void testDesuscribir() {
+		
+		Suscriptor suscriptor = mock(Suscriptor.class);
+		
+		reserva.desuscribir(suscriptor);
+		
+		assertFalse(suscriptores.contains(suscriptor));
+		
+	}
+	
+	@Test
+	void testDoConfirmarConCupoParaTodos() {
+		
+		List<ItemCatalogo> itemsLocal = new ArrayList<ItemCatalogo>();
+		ItemCatalogo item1 = mock(ItemCatalogo.class);
+		ItemCatalogo item2 = mock(ItemCatalogo.class);
+		when(item1.tieneDisponibilidad()).thenReturn(true);
+		when(item2.tieneDisponibilidad()).thenReturn(true);
+		reserva.doAgregarItem(item1);
+		reserva.doAgregarItem(item2);
+		
+		reserva.doConfirmar();
+		
+		verify(item1).decrementarCupo();
+		verify(item2).decrementarCupo();
+		
+	}
+	
+	@Test
+	void testDoConfirmarSinCupoParaTodos() {
+		
+		ItemCatalogo item1 = mock(ItemCatalogo.class);
+		ItemCatalogo item2 = mock(ItemCatalogo.class);
+		when(item1.tieneDisponibilidad()).thenReturn(true);
+		when(item2.tieneDisponibilidad()).thenReturn(true);
+		reserva.doAgregarItem(item1);
+		reserva.doAgregarItem(item2);
+		when(item2.tieneDisponibilidad()).thenReturn(false);
+		
+		assertThrows(NoHayDisponibilidadException.class, () -> reserva.doConfirmar());
+		
+		verify(item1, never()).decrementarCupo();
+		verify(item2, never()).decrementarCupo();
+		
+	}
+	
+	@Test
+	void testDoCheckin() {
+		
+		reserva.doCheckin();
+		
+	}
+	
+	@Test
+	void testDoEjecutar() {
+		
+		reserva.doEjecutar();
+		
+	}
+	
+	@Test
+	void testDoFinalizar() {
+		
+		reserva.doFinalizar();
+		
+	}
+
+	@Test
+	void testDoCancelar() {
+		
+		when(item.tieneDisponibilidad()).thenReturn(true);
+		reserva.doAgregarItem(item);
+		
+		reserva.doCancelar();
+		
+		verify(item, never()).incrementarCupo();
+		
+	}
+	
+	@Test
+	void testDoCancelarFromConfirmada() {
+		
+		when(item.tieneDisponibilidad()).thenReturn(true);
+		reserva.doAgregarItem(item);
+		
+		reserva.doCancelarFromConfirmada();
+		
+		verify(item).incrementarCupo();
+		
+	}
+	
+	@Test
+	void testDoCancelarFromCheckin() {
+		
+		when(item.tieneDisponibilidad()).thenReturn(true);
+		when(item.getPrecioFinal()).thenReturn(200f);
+		when(estrategia.costoTasasTraslado(reserva)).thenReturn(1000f);
+		reserva.doAgregarItem(item);
+		
+		reserva.doCancelarFromCheckin();
+
+		verify(cliente).añadirVoucher(argThat(v -> v.getMonto() == 1200f));
+		
+	}
+	
+	@Test
+	void testDoCancelarFromEnCurso() {
+		
+		when(item.tieneDisponibilidad()).thenReturn(true);
+		when(item.getPrecioFinal()).thenReturn(200f);
+		when(estrategia.costoTasasTraslado(reserva)).thenReturn(1000f);
+		reserva.doAgregarItem(item);
+		
+		reserva.doCancelarFromEnCurso();
+
+		verify(cliente).añadirVoucher(argThat(v -> v.getMonto() == 200f));
+		
+	}
+	
+	@Test
+	void testDoAgregarServicioConDisponibilidad() {	
+		
+		when(item.tieneDisponibilidad()).thenReturn(true);
+		when(item.getPrecioFinal()).thenReturn(100f);
+	
+		reserva.doAgregarItem(item);
+	
+		assertEquals(100f, reserva.costoServicios());
+		
+	}
+	
+	@Test
+	void testDoAgregarServicioSinDisponibilidad() {	
+		
+		when(item.tieneDisponibilidad()).thenReturn(false);
+		when(item.getPrecioFinal()).thenReturn(100f);
+		
+		assertThrows(NoHayDisponibilidadException.class, () -> reserva.doAgregarItem(item));
+
+		assertEquals(0f, reserva.costoServicios());
+		
+	}
+	
+	@Test
+	void testDoQuitarItem() {
+		
+		reserva.doQuitarItem(item);
+		
+		assertFalse(items.contains(item));
 		
 	}
 

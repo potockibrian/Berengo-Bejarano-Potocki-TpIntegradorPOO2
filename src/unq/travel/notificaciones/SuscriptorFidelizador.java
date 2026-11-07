@@ -26,24 +26,10 @@ public class SuscriptorFidelizador implements Suscriptor {
 					  reserva.getCliente().getDireccionDeEmail()
 					, "Reserva cancelada"
 					, "Se ha cancelado vuestra reserva"
-					, new Cupon());
+					, new Cupon(5));
 			
 		}
 		
 	}
 	
-	/*
-	private boolean esEstadoCancelado(EstadoDeReserva estadoNuevo) {
-		
-		return estadoNuevo.getClass().getTypeName() == EstadoCancelado.class.getName();
-	
-	}
-
-	private boolean esEstadoTerminal(EstadoDeReserva estadoAnterior) {
-
-		return estadoAnterior.getClass().getTypeName() == EstadoCancelado.class.getName()
-				|| estadoAnterior.getClass().getTypeName() == EstadoFinalizado.class.getName();
-		
-	}
- 	*/
 }

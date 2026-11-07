@@ -12,11 +12,15 @@ class VoucherTest {
 	@BeforeEach
 	void setUp() throws Exception {
 
-		voucher = new Voucher();
+		voucher = new Voucher(500f);
 		
 	}
 	
 	@Test
-	void test() {}
+	void test() {
+		
+		assertEquals(500f, voucher.getMonto());
+		
+	}
 
 }

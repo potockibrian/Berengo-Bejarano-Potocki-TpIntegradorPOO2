@@ -38,79 +38,53 @@ class EstadoFinalizadoTest {
 	@Test
 	void testAgregarItem() {
 
-		RuntimeException e = assertThrows(OperacionInvalidaEstadoException.class, () -> estado.agregarItem(item, items));
-		
-		//estado.agregarItem(item, items);
+		assertThrows(OperacionInvalidaEstadoException.class, () -> estado.agregarItem(item));
 		
 		verify(items, never()).add(any(ItemCatalogo.class));
-		//verify(reserva).cambiarEstado(any(ReservaException.class));
 		
 	}
 	
 	@Test
 	void testQuitarItem() {
 
-		RuntimeException e = assertThrows(OperacionInvalidaEstadoException.class, () -> estado.quitarItem(item, items));
-		
-		//estado.quitarItem(item, items);
+		assertThrows(OperacionInvalidaEstadoException.class, () -> estado.quitarItem(item));
 		
 		verify(items, never()).remove(any(ItemCatalogo.class));
-		//verify(reserva).cambiarEstado(any(ReservaException.class));
 		
 	}
 	
 	@Test
 	void testConfirmar() {
 
-		RuntimeException e = assertThrows(OperacionInvalidaEstadoException.class, () -> estado.confirmar(items));
-		
-		//estado.confirmar(items);
-		
-		//verify(reserva).cambiarEstado(any(ReservaException.class));
+		assertThrows(OperacionInvalidaEstadoException.class, () -> estado.confirmar());
 		
 	}
 	
 	@Test
 	void testCheckin() {
 
-		RuntimeException e = assertThrows(OperacionInvalidaEstadoException.class, () -> estado.checkin());
-		
-		//estado.checkin();
-		
-		//verify(reserva).cambiarEstado(any(ReservaException.class));
+		assertThrows(OperacionInvalidaEstadoException.class, () -> estado.checkin());
 		
 	}
 	
 	@Test
 	void testEjecutar() {
 
-		RuntimeException e = assertThrows(OperacionInvalidaEstadoException.class, () -> estado.ejecutar());
-		
-		//estado.ejecutar();
-		
-		//verify(reserva).cambiarEstado(any(ReservaException.class));
+		assertThrows(OperacionInvalidaEstadoException.class, () -> estado.ejecutar());
 		
 	}
 	
 	@Test
 	void testCompletar() {
 
-		RuntimeException e = assertThrows(OperacionInvalidaEstadoException.class, () -> estado.completar());
-		
-		//estado.completar();
-		
-		//verify(reserva).cambiarEstado(any(ReservaException.class));
+		assertThrows(OperacionInvalidaEstadoException.class, () -> estado.completar());
 		
 	}
 	
 	@Test
 	void testCancelar() {
 
-		RuntimeException e = assertThrows(OperacionInvalidaEstadoException.class, () -> estado.cancelar(items));
-		
-		//estado.cancelar(items);
-		
-		//verify(reserva).cambiarEstado(any(ReservaException.class));
+		assertThrows(OperacionInvalidaEstadoException.class, () -> estado.cancelar());
 		
 	}	
 	
@@ -148,41 +122,5 @@ class EstadoFinalizadoTest {
 		assertFalse(estado.esEstadoConfirmado());
 		
 	}
-	
-	/*@Test
-	void testNotificarPorEmail() {
-		
-		when(cliente.getDireccionDeEmail()).thenReturn("testmail@test.domain");
-		when(reserva.getCliente()).thenReturn(cliente);
-		
-		estado.notificarPorEmail(reserva,mailSender);
-		
-		verify(mailSender).enviarMail(
-				  eq(reserva.getCliente().getDireccionDeEmail())
-				, eq("Reserva finalizada")
-				, eq("Se ha finalizado vuestra reserva")
-				, eq(null));
-		
-	}
-	
-	@Test
-	void testGenerarFactura() {
-		
-		when(reserva.getCliente()).thenReturn(cliente);
-		estado.generarFactura(reserva);
-		
-		verify(cliente).añadirComprobante(any(Comprobante.class));
-		verify(cliente).añadirVoucher(any(Voucher.class));
-		
-	}
-	
-	@Test
-	void testFidelizar() {
-		
-		estado.fidelizar(reserva, mailSender);
-		
-		verify(reserva, never()).getCliente();
-		
-	}*/
 	
 }

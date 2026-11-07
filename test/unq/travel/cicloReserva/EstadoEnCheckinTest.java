@@ -39,46 +39,32 @@ class EstadoEnCheckinTest {
 	@Test
 	void testAgregarItem() {
 
-		RuntimeException e = assertThrows(OperacionInvalidaEstadoException.class, () -> estado.agregarItem(item, items));
-		
-		//estado.agregarItem(item, items);
+		assertThrows(OperacionInvalidaEstadoException.class, () -> estado.agregarItem(item));
 		
 		verify(items, never()).add(any(ItemCatalogo.class));
-		//verify(reserva).cambiarEstado(any(ReservaException.class));
 		
 	}
 	
 	@Test
 	void testQuitarItem() {
 
-		RuntimeException e = assertThrows(OperacionInvalidaEstadoException.class, () -> estado.quitarItem(item, items));
-		
-		//estado.quitarItem(item, items);
+		assertThrows(OperacionInvalidaEstadoException.class, () -> estado.quitarItem(item));
 		
 		verify(items, never()).remove(any(ItemCatalogo.class));
-		//verify(reserva).cambiarEstado(any(ReservaException.class));
 		
 	}
 	
 	@Test
 	void testConfirmar() {
 
-		RuntimeException e = assertThrows(OperacionInvalidaEstadoException.class, () -> estado.confirmar(items));
-		
-		//estado.confirmar(items);
-		
-		//verify(reserva).cambiarEstado(any(ReservaException.class));
+		assertThrows(OperacionInvalidaEstadoException.class, () -> estado.confirmar());
 		
 	}
 	
 	@Test
 	void testCheckin() {
 
-		RuntimeException e = assertThrows(OperacionInvalidaEstadoException.class, () -> estado.checkin());
-		
-		//estado.checkin();
-		
-		//verify(reserva).cambiarEstado(any(ReservaException.class));
+		assertThrows(OperacionInvalidaEstadoException.class, () -> estado.checkin());
 		
 	}
 	
@@ -87,39 +73,23 @@ class EstadoEnCheckinTest {
 		
 		estado.ejecutar();
 		
-		verify(reserva).cambiarEstado(any(EstadoEnCurso.class));
+		verify(reserva).doEjecutar();
 		
 	}
 	
 	@Test
 	void testCompletar() {
 
-		RuntimeException e = assertThrows(OperacionInvalidaEstadoException.class, () -> estado.completar());
-		
-		//estado.completar();
-		
-		//verify(reserva).cambiarEstado(any(ReservaException.class));
+		assertThrows(OperacionInvalidaEstadoException.class, () -> estado.completar());
 		
 	}
 	
 	@Test
 	void testCancelar() {
 		
-		// TODO: testear e implementar el reembolso y la liberacion de cupos
+		estado.cancelar();
 		
-		when(reserva.getCliente()).thenReturn(cliente);
-		List<ItemCatalogo> itemsLocal = new ArrayList<ItemCatalogo>();
-		ItemCatalogo item1 = mock(ItemCatalogo.class);
-		ItemCatalogo item2 = mock(ItemCatalogo.class);
-		itemsLocal.add(item1);
-		itemsLocal.add(item2);
-		
-		estado.cancelar(itemsLocal);
-		
-		verify(item1).incrementarCupo();
-		verify(item2).incrementarCupo();
-		verify(cliente).añadirVoucher(any(Voucher.class));
-		verify(reserva).cambiarEstado(any(EstadoCancelado.class));
+		reserva.doCancelarFromCheckin();
 		
 	}	
 	
@@ -157,32 +127,5 @@ class EstadoEnCheckinTest {
 		assertFalse(estado.esEstadoConfirmado());
 		
 	}
-	
-	/*@Test
-	void testNotificarPorEmail() {
-		
-		estado.notificarPorEmail(reserva,mailSender);
-		
-		verify(mailSender, never()).enviarMail(any(),any(),any(),any());
-		
-	}
-	
-	@Test
-	void testGenerarFactura() {
-		
-		estado.generarFactura(reserva);
-		
-		verify(reserva, never()).getCliente();
-		
-	}
-	
-	@Test
-	void testFidelizar() {
-		
-		estado.fidelizar(reserva, mailSender);
-		
-		verify(reserva, never()).getCliente();
-		
-	}*/
 	
 }

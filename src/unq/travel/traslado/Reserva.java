@@ -3,16 +3,14 @@ package unq.travel.traslado;
 import java.util.List;
 import java.util.ArrayList;
 
-import unq.travel.cicloReserva.Cliente;
-import unq.travel.cicloReserva.EstadoPendiente;
-import unq.travel.cicloReserva.EstadoDeReserva;
+import unq.travel.cicloReserva.*;
 import unq.travel.catalogo.ItemCatalogo;
 import unq.travel.notificaciones.Suscriptor;
 
 public class Reserva {
 
 	private EstadoDeReserva estado;
-	private EstrategiaTraslado estrategia;
+	private EstrategiaTraslado traslado;
 	private List<ItemCatalogo> items;
 	private Cliente cliente;
 	private List<Suscriptor> suscriptores;
@@ -21,7 +19,7 @@ public class Reserva {
 
 	public Reserva(Cliente cliente, Direccion direccion, EstrategiaTraslado estrategia, List<Suscriptor> suscriptores, int cantidadPasajeros) {
 
-		this.estrategia = estrategia;
+		this.traslado = estrategia;
 		this.estado = new EstadoPendiente(this);
 		this.cliente = cliente;
 		this.items = new ArrayList<ItemCatalogo>();
@@ -31,6 +29,18 @@ public class Reserva {
 		
 	}
 
+	public Cliente getCliente() {
+
+		return cliente;
+		
+	}
+	
+	public void elegirTraslado(EstrategiaTraslado traslado) {
+		
+		this.traslado = traslado;
+		
+	}
+	
 	public void cambiarEstado(EstadoDeReserva estado) {
 		
 		suscriptores.stream()
@@ -42,7 +52,7 @@ public class Reserva {
 
 	public void confirmarReserva() {
 
-		estado.confirmar(items);
+		estado.confirmar();
 		
 	}
 
@@ -66,39 +76,39 @@ public class Reserva {
 
 	public void cancelarReserva() {
 
-		estado.cancelar(items);
+		estado.cancelar();
 		
 	}
 
-	public float costoTraslado() {
-
-		return estrategia.costoTraslado(this);
+	public float costoTotalReserva() {
+		
+		return costoServicios() + costoTasasTraslado();
 		
 	}
-
-	public void agregarServicio(ItemCatalogo dummy) {
-
-		estado.agregarItem(dummy, items);
-		
-	}
-
-	public void quitarServicio(ItemCatalogo dummy) {
-
-		estado.quitarItem(dummy, items);
-		
-	}
-
-	public Cliente getCliente() {
-
-		return cliente;
-		
-	}
-
-	public float costoTotalServicios() {
+	
+	public float costoServicios() {
 		
 		return (float) items.stream()
 				.mapToDouble(i -> i.getPrecioFinal())
 				.sum();
+		
+	}
+	
+	public float costoTasasTraslado() {
+
+		return traslado.costoTasasTraslado(this);
+		
+	}
+
+	public void agregarServicio(ItemCatalogo item) {
+
+		estado.agregarItem(item);
+		
+	}
+
+	public void quitarServicio(ItemCatalogo item) {
+
+		estado.quitarItem(item);
 		
 	}
 
@@ -111,6 +121,92 @@ public class Reserva {
 	public int cantidadPasajeros() {
 
 		return cantidadPasajeros;
+		
+	}
+
+	public void suscribir(Suscriptor suscriptor) {
+
+		suscriptores.add(suscriptor);
+		
+	}
+
+	public void desuscribir(Suscriptor suscriptor) {
+
+		suscriptores.remove(suscriptor);
+		
+	}
+
+	public void doConfirmar() {
+
+		if (!items.stream().allMatch(i -> i.tieneDisponibilidad())) throw new NoHayDisponibilidadException();
+		
+		items.stream()
+			 .forEach(i -> i.decrementarCupo());
+		
+		this.cambiarEstado(new EstadoConfirmado(this));
+		
+	}
+
+	public void doCheckin() {
+
+		this.cambiarEstado(new EstadoEnCheckin(this));
+		
+	}
+
+	public void doEjecutar() {
+
+		this.cambiarEstado(new EstadoEnCurso(this));
+		
+	}
+
+	public void doFinalizar() {
+
+		this.cambiarEstado(new EstadoEnCurso(this));
+		
+	}
+	
+	public void doCancelar() {
+		
+		this.cambiarEstado(new EstadoCancelado(this));
+		
+	}
+
+	public void doCancelarFromConfirmada() {
+
+		items.stream()
+			 .forEach(i -> i.incrementarCupo());
+		
+		this.cambiarEstado(new EstadoCancelado(this));
+		
+	}
+
+	public void doCancelarFromCheckin() {
+		
+		cliente.añadirVoucher(new Voucher(this.costoServicios() + this.costoTasasTraslado()));
+		
+		this.cambiarEstado(new EstadoCancelado(this));
+		
+	}
+
+	public void doCancelarFromEnCurso() {
+
+		cliente.añadirVoucher(new Voucher(this.costoServicios()));
+		
+		this.cambiarEstado(new EstadoCancelado(this));
+		
+	}
+	
+	public void doAgregarItem(ItemCatalogo item) {
+
+		if(!item.tieneDisponibilidad()) throw new NoHayDisponibilidadException();
+		
+		items.add(item);
+		
+	}
+
+	public void doQuitarItem(ItemCatalogo item) {
+
+		items.remove(item);
 		
 	}
 

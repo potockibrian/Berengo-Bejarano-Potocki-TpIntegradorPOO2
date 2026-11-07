@@ -32,7 +32,7 @@ class TrasladoEstandarTest {
 		when(reserva.cantidadPasajeros()).thenReturn(1);
 		when(reserva.direccion()).thenReturn(direccion);
 		
-		estrategia.costoTraslado(reserva);
+		estrategia.costoTasasTraslado(reserva);
 		
 		verify(libreria).estimarTraslado(1, direccion);
 		

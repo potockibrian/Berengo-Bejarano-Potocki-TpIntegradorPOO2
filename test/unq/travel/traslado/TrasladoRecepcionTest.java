@@ -44,7 +44,7 @@ class TrasladoRecepcionTest {
 		
 		when(sucursal.hayDisponibilidad()).thenReturn(true);
 		
-		assertEquals(0, estrategia.costoTraslado(reserva));
+		assertEquals(0, estrategia.costoTasasTraslado(reserva));
 		
 	}
 	
@@ -53,7 +53,7 @@ class TrasladoRecepcionTest {
 		
 		when(sucursal.hayDisponibilidad()).thenReturn(false);
 		
-		assertThrows(NoHayDisponibilidadException.class, () -> estrategia.costoTraslado(reserva));
+		assertThrows(NoHayDisponibilidadException.class, () -> estrategia.costoTasasTraslado(reserva));
 		
 	}
 	

@@ -2,7 +2,7 @@ package unq.travel.traslado;
 
 public interface EstrategiaTraslado {
 	
-	public float costoTraslado(Reserva reserva);
+	public float costoTasasTraslado(Reserva reserva);
 	
 	//public boolean hayDisponibilidad();
 	

@@ -43,9 +43,7 @@ class SuscriptorFacturadorTest {
 		
 		suscriptor.notify(reserva, estadoAnterior, estadoNuevo);
 		
-		verify(cliente).añadirComprobante(any(Comprobante.class));
-		verify(cliente).añadirVoucher(any(Voucher.class));
-		
+		verify(cliente).añadirComprobante(any(Comprobante.class));		
 		
 	}
 

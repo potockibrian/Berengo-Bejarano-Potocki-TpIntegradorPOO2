@@ -11,7 +11,7 @@ public class TrasladoRecepcion implements EstrategiaTraslado {
 	}
 
 	@Override
-	public float costoTraslado(Reserva reserva) {
+	public float costoTasasTraslado(Reserva reserva) {
 		
 		if (!sucursal.hayDisponibilidad()) throw new NoHayDisponibilidadException();
 		

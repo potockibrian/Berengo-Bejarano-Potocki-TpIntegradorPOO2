@@ -14,86 +14,31 @@ public class EstadoPendiente extends EstadoDeReserva {
 	}
 
 	@Override
-	public void agregarItem(ItemCatalogo item, List<ItemCatalogo> items) {
-
-		if (!item.tieneDisponibilidad()) throw new NoHayDisponibilidadException();
+	public void agregarItem(ItemCatalogo item) {
 			
-		items.add(item);
+		reserva.doAgregarItem(item);
 		
 	}
 
 	@Override
-	public void quitarItem(ItemCatalogo item, List<ItemCatalogo> items) {
+	public void quitarItem(ItemCatalogo item) {
 
-		items.remove(item);
+		reserva.doQuitarItem(item);
 		
 	}
 
 	@Override
-	public void confirmar(List<ItemCatalogo> items) {
+	public void confirmar() {
 
-		// TODO: Testear e Implementar lógica de disponibilidad
-		
-		if(!items.stream().allMatch(i -> i.tieneDisponibilidad())) throw new NoHayDisponibilidadException();
-		
-		items.stream().forEach(i -> i.decrementarCupo());
-		
-		reserva.cambiarEstado(new EstadoConfirmado(reserva));
+		reserva.doConfirmar();
 		
 	}
 
 	@Override
-	public void checkin() {
+	public void cancelar() {
 
-		throw new OperacionInvalidaEstadoException();
+		reserva.doCancelar();
 		
-		//reserva.cambiarEstado(new ReservaException(reserva));
-		
-	}
-
-	@Override
-	public void ejecutar() {
-
-		throw new OperacionInvalidaEstadoException();
-		
-		//reserva.cambiarEstado(new ReservaException(reserva));
-		
-	}
-
-	@Override
-	public void completar() {
-
-		throw new OperacionInvalidaEstadoException();
-		
-		//reserva.cambiarEstado(new ReservaException(reserva));
-		
-	}
-
-	@Override
-	public void cancelar(List<ItemCatalogo> items) {
-
-		reserva.cambiarEstado(new EstadoCancelado(reserva));
-		
-	}
-
-	/*@Override
-	public void notificarPorEmail(Reserva reserva, MailSender mailSender) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void generarFactura(Reserva reserva) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void fidelizar(Reserva reserva, MailSender mailSender) {
-		// TODO Auto-generated method stub
-		
-	}*/
-
-	
+	}	
 		
 }

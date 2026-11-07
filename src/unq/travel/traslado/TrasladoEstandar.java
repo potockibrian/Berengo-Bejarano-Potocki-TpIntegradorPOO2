@@ -15,7 +15,7 @@ public class TrasladoEstandar implements EstrategiaTraslado {
 	}
 
 	@Override
-	public float costoTraslado(Reserva reserva) {
+	public float costoTasasTraslado(Reserva reserva) {
 
 		return libreria.estimarTraslado(reserva.cantidadPasajeros(), reserva.direccion());
 

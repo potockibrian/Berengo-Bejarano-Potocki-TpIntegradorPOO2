@@ -49,24 +49,4 @@ public class SuscriptorCorreo implements Suscriptor {
 		
 	}
 
-	/*
-	private boolean esEstadoConfirmado(EstadoDeReserva estadoNuevo) {
-		
-		return estadoNuevo.getClass().getName() == EstadoConfirmado.class.getName();
-		
-	}
-
-	private boolean esEstadoEnCurso(EstadoDeReserva estadoNuevo) {
-		
-		return estadoNuevo.getClass().getName() == EstadoEnCurso.class.getName();
-		
-	}
-
-	private boolean esEstadoFinalizado(EstadoDeReserva estadoNuevo) {
-		
-		return estadoNuevo.getClass().getName() == EstadoFinalizado.class.getName();
-		
-	}
-	*/
-
 }

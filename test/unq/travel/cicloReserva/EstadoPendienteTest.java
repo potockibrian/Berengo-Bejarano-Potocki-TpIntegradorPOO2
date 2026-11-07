@@ -34,121 +34,59 @@ class EstadoPendienteTest {
 	}
 	
 	@Test
-	void testAgregarItemConDisponibilidad() {
+	void testAgregarItem() {
 		
-		// TODO: contemplar el caso en el que no hay disponibilidad
+		estado.agregarItem(item);
 		
-		when(item.tieneDisponibilidad()).thenReturn(true);
-		
-		estado.agregarItem(item, items);
-		
-		verify(items).add(any(ItemCatalogo.class));
-		
-	}
-	
-	@Test
-	void testAgregarItemSinDisponibilidad() {
-		
-		when(item.tieneDisponibilidad()).thenReturn(false);
-		
-		assertThrows(NoHayDisponibilidadException.class, () -> estado.agregarItem(item, items));
-		
-		verify(items,never()).add(any(ItemCatalogo.class));
+		verify(reserva).doAgregarItem(item);
 		
 	}
 	
 	@Test
 	void testQuitarItem() {
 		
-		estado.quitarItem(item, items);
+		estado.quitarItem(item);
 		
-		verify(items).remove(any(ItemCatalogo.class));
-		//verify(reserva, never()).cambiarEstado(any(ReservaException.class));
-		
-	}
-	
-	@Test
-	void testConfirmarConCupoParaTodos() {
-		
-		// TODO: Testear e implementar la lógica de disponibilidad
-		
-		List<ItemCatalogo> itemsLocal = new ArrayList<ItemCatalogo>();
-		ItemCatalogo item1 = mock(ItemCatalogo.class);
-		ItemCatalogo item2 = mock(ItemCatalogo.class);
-		when(item1.tieneDisponibilidad()).thenReturn(true);
-		when(item2.tieneDisponibilidad()).thenReturn(true);
-		itemsLocal.add(item1);
-		itemsLocal.add(item2);
-		
-		estado.confirmar(itemsLocal);
-		
-		verify(item1).decrementarCupo();
-		verify(item2).decrementarCupo();
-		verify(reserva).cambiarEstado(any(EstadoConfirmado.class));
+		verify(reserva).doQuitarItem(item);
 		
 	}
-	
 
 	@Test
-	void testConfirmarSinCupoParaTodos() {
+	void testConfirmar() {
 		
-		// TODO: Testear e implementar la lógica de disponibilidad
+		estado.confirmar();
 		
-		List<ItemCatalogo> itemsLocal = new ArrayList<ItemCatalogo>();
-		ItemCatalogo item1 = mock(ItemCatalogo.class);
-		ItemCatalogo item2 = mock(ItemCatalogo.class);
-		when(item1.tieneDisponibilidad()).thenReturn(false);
-		when(item2.tieneDisponibilidad()).thenReturn(true);
-		itemsLocal.add(item1);
-		itemsLocal.add(item2);
-		
-		assertThrows(NoHayDisponibilidadException.class, () -> estado.confirmar(itemsLocal));
-		
-		verify(item1, never()).decrementarCupo();
-		verify(item2, never()).decrementarCupo();
-		verify(reserva, never()).cambiarEstado(any(EstadoConfirmado.class));
+		verify(reserva).doConfirmar();
 		
 	}
 	
 	@Test
 	void testCheckin() {
 
-		RuntimeException e = assertThrows(OperacionInvalidaEstadoException.class, () -> estado.checkin());
-		
-		//estado.checkin();
-		
-		//verify(reserva).cambiarEstado(any(ReservaException.class));
+		assertThrows(OperacionInvalidaEstadoException.class, () -> estado.checkin());
 		
 	}
 	
 	@Test
 	void testEjecutar() {
 
-		RuntimeException e = assertThrows(OperacionInvalidaEstadoException.class, () -> estado.ejecutar());
-		
-		//estado.ejecutar();
-		
-		//verify(reserva).cambiarEstado(any(ReservaException.class));
+		assertThrows(OperacionInvalidaEstadoException.class, () -> estado.ejecutar());
 		
 	}
 	
 	@Test
 	void testCompletar() {
 		
-		RuntimeException e = assertThrows(OperacionInvalidaEstadoException.class, () -> estado.completar());
-		
-		//estado.completar();
-		
-		//verify(reserva).cambiarEstado(any(ReservaException.class));
+		assertThrows(OperacionInvalidaEstadoException.class, () -> estado.completar());
 		
 	}
 	
 	@Test
 	void testCancelar() {
 		
-		estado.cancelar(items);
+		estado.cancelar();
 		
-		verify(reserva).cambiarEstado(any(EstadoCancelado.class));
+		verify(reserva).doCancelar();
 		
 	}	
 	
@@ -186,32 +124,5 @@ class EstadoPendienteTest {
 		assertFalse(estado.esEstadoConfirmado());
 		
 	}
-	
-	/*@Test
-	void testNotificarPorEmail() {
-		
-		estado.notificarPorEmail(reserva,mailSender);
-		
-		verify(mailSender, never()).enviarMail(any(),any(),any(),any());
-		
-	}
-	
-	@Test
-	void testGenerarFactura() {
-		
-		estado.generarFactura(reserva);
-		
-		verify(reserva, never()).getCliente();
-		
-	}
-	
-	@Test
-	void testFidelizar() {
-		
-		estado.fidelizar(reserva, mailSender);
-		
-		verify(reserva, never()).getCliente();
-		
-	}*/
 	
 }

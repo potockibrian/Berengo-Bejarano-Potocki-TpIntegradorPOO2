@@ -3,6 +3,7 @@ package unq.travel.cicloReserva;
 import java.util.List;
 
 import unq.travel.catalogo.ItemCatalogo;
+import unq.travel.notificaciones.Suscriptor;
 import unq.travel.traslado.Reserva;
 
 public abstract class EstadoDeReserva {
@@ -15,19 +16,43 @@ public abstract class EstadoDeReserva {
 		
 	}
 	
-	public abstract void agregarItem(ItemCatalogo item, List<ItemCatalogo> items) ;
+	public void agregarItem(ItemCatalogo item) {
+		
+		throw new OperacionInvalidaEstadoException();
+		
+	}
 
-	public abstract void quitarItem(ItemCatalogo item, List<ItemCatalogo> items) ;
+	public void quitarItem(ItemCatalogo item) {
+		
+		throw new OperacionInvalidaEstadoException();
+		
+	}
 
-	public abstract void confirmar(List<ItemCatalogo> items) ;
+	public void confirmar() {
+		
+		throw new OperacionInvalidaEstadoException();
+		
+	}
 
-	public abstract void checkin() ;
+	public void checkin() {
+		
+		throw new OperacionInvalidaEstadoException();
+		
+	}
 
-	public abstract void ejecutar() ;
+	public void ejecutar() {
+		
+		throw new OperacionInvalidaEstadoException();
+		
+	}
 
-	public abstract void completar() ;
+	public void completar() {
+		
+		throw new OperacionInvalidaEstadoException();
+		
+	}
 
-	public abstract void cancelar(List<ItemCatalogo> items) ;
+	public abstract void cancelar() ;
 
 	public boolean esEstadoTerminal() {
 
@@ -58,11 +83,5 @@ public abstract class EstadoDeReserva {
 		return false;
 		
 	}
-
-	/*public abstract void notificarPorEmail(Reserva reserva, MailSender mailSender) ;
-
-	public abstract void generarFactura(Reserva reserva) ;
-
-	public abstract void fidelizar(Reserva reserva, MailSender mailSender) ;*/
 
 }

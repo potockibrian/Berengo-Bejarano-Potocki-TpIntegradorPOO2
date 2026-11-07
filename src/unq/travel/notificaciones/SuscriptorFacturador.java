@@ -14,19 +14,12 @@ public class SuscriptorFacturador implements Suscriptor {
 
 		if (estadoNuevo.esEstadoFinalizado()) {
 			
-			reserva.getCliente().añadirVoucher(new Voucher());
-			reserva.getCliente().añadirComprobante(new Comprobante());
+			reserva.getCliente().añadirComprobante(new Comprobante(reserva.costoTotalReserva()
+																 , reserva.costoServicios()
+																 , reserva.costoTasasTraslado()));
 			
 		}
 
 	}
-
-	/*
-	private boolean esEstadoFinalizado(EstadoDeReserva estadoNuevo) {
-
-		return estadoNuevo.getClass().getName() == EstadoFinalizado.class.getName();
-		
-	}
-	*/
 
 }

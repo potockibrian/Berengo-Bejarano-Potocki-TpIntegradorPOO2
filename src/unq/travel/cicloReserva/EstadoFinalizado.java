@@ -16,65 +16,9 @@ public class EstadoFinalizado extends EstadoDeReserva {
 	}
 
 	@Override
-	public void agregarItem(ItemCatalogo item, List<ItemCatalogo> items) {
+	public void cancelar() {
 
 		throw new OperacionInvalidaEstadoException();
-		
-		//reserva.cambiarEstado(new ReservaException(reserva));
-		
-	}
-
-	@Override
-	public void quitarItem(ItemCatalogo item, List<ItemCatalogo> items) {
-
-		throw new OperacionInvalidaEstadoException();
-		
-		//reserva.cambiarEstado(new ReservaException(reserva));
-		
-	}
-
-	@Override
-	public void confirmar(List<ItemCatalogo> items) {
-
-		throw new OperacionInvalidaEstadoException();
-		
-		//reserva.cambiarEstado(new ReservaException(reserva));
-		
-	}
-
-	@Override
-	public void checkin() {
-
-		throw new OperacionInvalidaEstadoException();
-		
-		//reserva.cambiarEstado(new ReservaException(reserva));
-		
-	}
-
-	@Override
-	public void ejecutar() {
-
-		throw new OperacionInvalidaEstadoException();
-		
-		//reserva.cambiarEstado(new ReservaException(reserva));
-		
-	}
-
-	@Override
-	public void completar() {
-
-		throw new OperacionInvalidaEstadoException();
-		
-		//reserva.cambiarEstado(new ReservaException(reserva));
-		
-	}
-
-	@Override
-	public void cancelar(List<ItemCatalogo> items) {
-
-		throw new OperacionInvalidaEstadoException();
-		
-		//reserva.cambiarEstado(new ReservaException(reserva));
 		
 	}
 	
@@ -91,30 +35,5 @@ public class EstadoFinalizado extends EstadoDeReserva {
 		return true;
 		
 	}
-
-	/*@Override
-	public void notificarPorEmail(Reserva reserva, MailSender mailSender) {
-		
-		mailSender.enviarMail(
-			  reserva.getCliente().getDireccionDeEmail()
-			, "Reserva finalizada"
-			, "Se ha finalizado vuestra reserva"
-			, null);
-		
-	}
-
-	@Override
-	public void generarFactura(Reserva reserva) {
-
-		reserva.getCliente().añadirComprobante(new Comprobante());;
-		reserva.getCliente().añadirVoucher(new Voucher());		
-		
-	}
-
-	@Override
-	public void fidelizar(Reserva reserva, MailSender mailSender) {
-		// TODO Auto-generated method stub
-		
-	}*/
 
 }

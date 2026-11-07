@@ -14,65 +14,9 @@ public class EstadoCancelado extends EstadoDeReserva {
 	}
 
 	@Override
-	public void agregarItem(ItemCatalogo item, List<ItemCatalogo> items) {
+	public void cancelar() {
 
 		throw new OperacionInvalidaEstadoException();
-		
-		//reserva.cambiarEstado(new ReservaException(reserva));
-		
-	}
-
-	@Override
-	public void quitarItem(ItemCatalogo item, List<ItemCatalogo> items) {
-		
-		throw new OperacionInvalidaEstadoException();
-		
-		//reserva.cambiarEstado(new ReservaException(reserva));
-				
-	}
-
-	@Override
-	public void confirmar(List<ItemCatalogo> items) {
-
-		throw new OperacionInvalidaEstadoException();
-		
-		//reserva.cambiarEstado(new ReservaException(reserva));
-	
-	}
-
-	@Override
-	public void checkin() {
-
-		throw new OperacionInvalidaEstadoException();
-		
-		//reserva.cambiarEstado(new ReservaException(reserva));
-		
-	}
-
-	@Override
-	public void ejecutar() {
-
-		throw new OperacionInvalidaEstadoException();
-		
-		//reserva.cambiarEstado(new ReservaException(reserva));
-		
-	}
-
-	@Override
-	public void completar() {
-
-		throw new OperacionInvalidaEstadoException();
-		
-		//reserva.cambiarEstado(new ReservaException(reserva));
-		
-	}
-
-	@Override
-	public void cancelar(List<ItemCatalogo> items) {
-
-		throw new OperacionInvalidaEstadoException();
-		
-		//reserva.cambiarEstado(new ReservaException(reserva));
 		
 	}
 	
@@ -89,28 +33,5 @@ public class EstadoCancelado extends EstadoDeReserva {
 		return true;
 		
 	}
-
-	/*@Override
-	public void notificarPorEmail(Reserva reserva, MailSender mailSender) {
-		
-		return;
-		
-	}
-
-	@Override
-	public void generarFactura(Reserva reserva) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void fidelizar(Reserva reserva, MailSender mailSender) {
-
-		mailSender.enviarMail(reserva.getCliente().getDireccionDeEmail()
-				, "Reserva cancelada"
-				, "Se ha cancelado vuestra reserva"
-				, new Cupon());
-				
-	}*/
 
 }

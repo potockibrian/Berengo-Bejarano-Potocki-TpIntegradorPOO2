@@ -27,9 +27,9 @@ class EstrategiaTrasladoVIPTest {
 	@Test
 	void testCostoTraslado() {
 		
-		when(reserva.costoTotalServicios()).thenReturn(1000f);
+		when(reserva.costoServicios()).thenReturn(1000f);
 		
-		estrategia.costoTraslado(reserva);
+		estrategia.costoTasasTraslado(reserva);
 
 		verify(libreria).calcularCosto(1000f);
 		
