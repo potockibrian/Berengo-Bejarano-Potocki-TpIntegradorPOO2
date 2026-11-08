@@ -25,5 +25,34 @@ public class ReporteServiciosMasReservados {
 		return items;
 				
 	}
+
+	public RangoDeFechas getPeriodo() {
+
+		return periodo;
+
+	}
+
+	public List<Map.Entry<ItemCatalogo, Integer>> getItemsOrdenados() {
+		
+		return items.entrySet()
+			        .stream()
+			        .sorted(Map.Entry.comparingByValue())
+			        .toList();
+		
+	}
+
+	public float getPrecioPromedioCobrado(ItemCatalogo item) {
+
+		return item.getPrecioFinal() / items.get(item);
+		
+	}
+
+	public Object getCantidad(ItemCatalogo item) {
+
+		return items.get(item);
+		
+	}
+
+	
 	
 }

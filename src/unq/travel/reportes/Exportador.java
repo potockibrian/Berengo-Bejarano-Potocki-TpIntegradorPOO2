@@ -1,5 +1,11 @@
 package unq.travel.reportes;
 
-public interface Exportador<T> {
-	String exportar(T reporte);
+public interface Exportador {
+	
+	String exportar(ReporteExposicionProveedores reporte);
+	
+	String exportar(ReporteOcupacionYCupoDisponible reporte);
+
+	String exportar(ReporteServiciosMasReservados reporte);
+	
 }

@@ -13,6 +13,12 @@ public class Cupo {
 		
 	}
 
+	public Integer cantidadDeCuposDisponibles() {
+		
+		return topeMaximo - cantidadDeVentas;
+		
+	}
+	
 	public Integer cantidadDeVentas() {
 
 		return cantidadDeVentas ;
@@ -35,6 +41,12 @@ public class Cupo {
 
 		return cantidadDeVentas < topeMaximo;
 		
+	}
+
+	public int getTopeMaximo() {
+
+		return topeMaximo;
+
 	}
 
 }

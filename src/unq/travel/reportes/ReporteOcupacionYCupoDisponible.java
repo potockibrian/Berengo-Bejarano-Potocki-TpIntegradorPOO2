@@ -18,15 +18,21 @@ public class ReporteOcupacionYCupoDisponible {
 	
 	}
 	
-	public Map<Categoria, List<Cupo>> getCuposPorCategoria() {
-		
-		return cuposPorCategoria;
+	public List<Map.Entry<Categoria, List<Cupo>>> getCuposPorCategoria() {
+
+		return cuposPorCategoria
+					.entrySet()
+					.stream()
+			        .toList();
 				
 	}
 	
-	public Map<RangoDeFechas, List<Cupo>> getCuposPorPeriodo() {
+	public List<Map.Entry<RangoDeFechas, List<Cupo>>> getCuposPorPeriodo() {
 		
-		return cuposPorPeriodo;
+		return cuposPorPeriodo
+					.entrySet()
+					.stream()
+					.toList();
 		
 	}
 	
