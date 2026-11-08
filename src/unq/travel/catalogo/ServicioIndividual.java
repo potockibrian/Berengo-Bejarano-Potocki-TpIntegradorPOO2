@@ -35,6 +35,7 @@ public class ServicioIndividual extends ItemCatalogo {
 		this.descuentoPromocional = descuentoPromocional;
 		this.stock = stock;
 		this.atributosDinamicos = new ArrayList<AtributoDinamico>();
+		this.calendario = calendario;
 		
 	}
 
@@ -172,7 +173,7 @@ public class ServicioIndividual extends ItemCatalogo {
 		
 	}
 
-	public Map<RangoDeFechas, Cupo> cuposPorPeriodo() {
+	public Map<RangoDeFechas, List<Cupo>> cuposPorPeriodo() {
 
 		return calendario.cuposPorPeriodo();
 

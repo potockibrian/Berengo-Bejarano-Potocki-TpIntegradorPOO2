@@ -14,6 +14,7 @@ public class PaqueteTuristico extends ItemCatalogo {
 
 	private List<ItemCatalogo> items;
 	private float descuento;
+	private CalendarioDeCupos calendario;
 
 	public PaqueteTuristico(String nombre, String descripcion, float descuento, CalendarioDeCupos calendario) {
 
@@ -21,6 +22,7 @@ public class PaqueteTuristico extends ItemCatalogo {
 		validarDescuento(descuento);
 		this.descuento = descuento;
 		this.items = new ArrayList<ItemCatalogo>();
+		this.calendario = calendario;
 
 	}
 
@@ -157,21 +159,23 @@ public class PaqueteTuristico extends ItemCatalogo {
 	@Override
 	public boolean tieneDisponibilidad(RangoDeFechas rango) {
 
-		return calendario.tieneDisponibilidad(rango);
+		return items.stream().allMatch(i -> i.tieneDisponibilidad(rango));
 		
 	}
 
 	@Override
 	public void reservar(RangoDeFechas rango) {
 		
-		calendario.reservar(rango);
+		if(!this.tieneDisponibilidad(rango)) throw new SinStockException();
+		
+		items.stream().forEach(i -> i.reservar(rango));
 		
 	}
 
 	@Override
 	public void liberar(RangoDeFechas rango) {
 
-		calendario.liberar(rango);
+		items.stream().forEach(i -> i.liberar(rango));
 		
 	}
 }

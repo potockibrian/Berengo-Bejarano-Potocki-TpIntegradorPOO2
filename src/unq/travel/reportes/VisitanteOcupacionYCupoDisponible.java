@@ -29,10 +29,10 @@ public class VisitanteOcupacionYCupoDisponible implements Visitor{
 		{ 	
 			List<Cupo> cuposPeriodo = cuposPorPeriodo.get(k1);
 			if (cuposPeriodo == null) {
-				cuposPorPeriodo.put(k1, new ArrayList<Cupo>(List.of(v1)));
+				cuposPorPeriodo.put(k1, new ArrayList<Cupo>(v1));
 			}
 			else {
-				cuposPeriodo.add(v1);
+				cuposPeriodo.addAll(v1);
 			}
 		});
 		

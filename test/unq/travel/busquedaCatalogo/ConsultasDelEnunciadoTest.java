@@ -1,6 +1,8 @@
 package unq.travel.busquedaCatalogo;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 
@@ -23,22 +25,26 @@ class ConsultasDelEnunciadoTest {
 	private PaqueteTuristico packEscapadaUrbana;
 	private PaqueteTuristico packRutaDelVino;
 	private Buscador buscador;
+	private CalendarioDeCupos calendario1;
+	private CalendarioDeCupos calendario2;
 
 	@BeforeEach
 	void setUp() {
-		hotel = this.crearServicio("Noche de Hotel Central", Categoria.ALOJAMIENTO, 15000f, 10);
-		resortSinCupo = this.crearServicio("Resort Playa Dorada", Categoria.ALOJAMIENTO, 30000f, 0);
-		museo = this.crearServicio("Excursion Guiada Museo", Categoria.EXCURSION, 4000f, 10);
-		tourEnOferta = this.crearServicio("Tour Nocturno en Oferta", Categoria.EXCURSION, 18000f, 10);
-		traslado = this.crearServicio("Traslado Aeropuerto-Hotel", Categoria.TRASLADO, 2000f, 10);
+		calendario1 = mock(CalendarioDeCupos.class);
+		calendario2 = mock(CalendarioDeCupos.class);
+		hotel = this.crearServicio("Noche de Hotel Central", Categoria.ALOJAMIENTO, 15000f, 10, calendario1);
+		resortSinCupo = this.crearServicio("Resort Playa Dorada", Categoria.ALOJAMIENTO, 30000f, 0, calendario2);
+		museo = this.crearServicio("Excursion Guiada Museo", Categoria.EXCURSION, 4000f, 10, calendario1);
+		tourEnOferta = this.crearServicio("Tour Nocturno en Oferta", Categoria.EXCURSION, 18000f, 10, calendario1);
+		traslado = this.crearServicio("Traslado Aeropuerto-Hotel", Categoria.TRASLADO, 2000f, 10, calendario1);
 
-		packEscapadaUrbana = new PaqueteTuristico("Pack Escapada Urbana", "Hotel, museo y traslado", 0.10f, null);
+		packEscapadaUrbana = new PaqueteTuristico("Pack Escapada Urbana", "Hotel, museo y traslado", 0.10f, calendario1);
 		packEscapadaUrbana.agregarItem(hotel);
 		packEscapadaUrbana.agregarItem(museo);
 		packEscapadaUrbana.agregarItem(traslado);
 
-		packRutaDelVino = new PaqueteTuristico("Pack Ruta del Vino", "Alquiler de auto por bodegas", 0.10f, null);
-		packRutaDelVino.agregarItem(this.crearServicio("Alquiler de Auto", Categoria.ALQUILER_AUTO, 20000f, 10));
+		packRutaDelVino = new PaqueteTuristico("Pack Ruta del Vino", "Alquiler de auto por bodegas", 0.10f, calendario1);
+		packRutaDelVino.agregarItem(this.crearServicio("Alquiler de Auto", Categoria.ALQUILER_AUTO, 20000f, 10, calendario1));
 
 		Catalogo catalogo = new Catalogo();
 		catalogo.agregarItem(hotel);
@@ -55,6 +61,7 @@ class ConsultasDelEnunciadoTest {
 	@Test
 	void testAlojamientoDisponibleOConOfertaEnElNombre() {
 
+		when(calendario1.tieneDisponibilidad()).thenReturn(true);
 		Criterio criterio = new CriterioOr(
 				new CriterioAnd(new CriterioCategoria(Categoria.ALOJAMIENTO), new CriterioDisponibilidad()),
 				new CriterioNombre("oferta"));
@@ -85,9 +92,9 @@ class ConsultasDelEnunciadoTest {
 
 	}
 
-	private ServicioIndividual crearServicio(String nombre, Categoria categoria, float precio, int stock) {
+	private ServicioIndividual crearServicio(String nombre, Categoria categoria, float precio, int stock, CalendarioDeCupos calendario) {
 		return new ServicioIndividual(nombre, "Descripcion de " + nombre, "COD-" + nombre,
-				"Operador SA", categoria, precio, 0f, stock, new CalendarioDeCupos(stock));
+				"Operador SA", categoria, precio, 0f, stock, calendario);
 	}
 
 }
