@@ -1,5 +1,6 @@
 package unq.travel.reportes;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,11 +20,13 @@ public class ReporteServiciosMasReservados {
 	
 	}
 	
+	/*
 	public Map<ItemCatalogo, Integer> getItems() {
 		
 		return items;
 				
 	}
+	*/
 
 	public RangoDeFechas getPeriodo() {
 
@@ -46,11 +49,13 @@ public class ReporteServiciosMasReservados {
 		
 	}
 
+	/*
 	public Object getCantidad(ItemCatalogo item) {
 
 		return items.get(item);
 		
 	}
+	*/
 
 	
 	

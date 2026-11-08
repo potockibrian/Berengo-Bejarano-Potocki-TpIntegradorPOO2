@@ -1,6 +1,7 @@
 package unq.travel.reportes;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -15,8 +16,8 @@ import unq.travel.cupos.RangoDeFechas;
 
 public class VisitanteOcupacionYCupoDisponible implements Visitor{
 
-	private Map<Categoria, List<Cupo>> cuposPorCategoria;
-	private Map<RangoDeFechas, List<Cupo>> cuposPorPeriodo;
+	private Map<Categoria, List<Cupo>> cuposPorCategoria = new HashMap<>();
+	private Map<RangoDeFechas, List<Cupo>> cuposPorPeriodo = new HashMap<>();
 	
 	@Override
 	public void visitar(ServicioIndividual servicio) {

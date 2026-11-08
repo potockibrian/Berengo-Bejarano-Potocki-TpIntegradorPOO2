@@ -11,7 +11,7 @@ import unq.travel.cupos.RangoDeFechas;
 
 public class VisitanteServiciosMasReservados implements Visitor {
 	
-	private Map<ItemCatalogo, Integer> items;
+	private Map<ItemCatalogo, Integer> items = new HashMap<>();
 	private RangoDeFechas periodo;
 	
 	public VisitanteServiciosMasReservados(RangoDeFechas periodo) {
@@ -27,8 +27,6 @@ public class VisitanteServiciosMasReservados implements Visitor {
 	}
 	
 	@Override
-	// Visitando un serv. ind. obtiene su proveedor,
-	// incrementa el contador y el total de servicios
 	public void visitar(ServicioIndividual servicio) {
 		
 		items.put(servicio, servicio.cantidadDeVentasEnPeriodo(periodo));
@@ -36,8 +34,6 @@ public class VisitanteServiciosMasReservados implements Visitor {
 	}
 	
 	@Override
-	// Visitando un serv. ind. obtiene su proveedor,
-	// incrementa el contador y el total de servicios
 	public void visitar(PaqueteTuristico paquete) {
 
 		items.put(paquete, paquete.cantidadDeVentasEnPeriodo(periodo));
@@ -46,8 +42,8 @@ public class VisitanteServiciosMasReservados implements Visitor {
 	
 	public ReporteServiciosMasReservados procesar(Catalogo catalogo, RangoDeFechas periodo) {
 		
-		// reinicia contador para generar un calculo nuevo c/vez
 		items.clear();
+		this.setPeriodo(periodo);
 		
 		for(ItemCatalogo item : catalogo.getItems()) {
 		
