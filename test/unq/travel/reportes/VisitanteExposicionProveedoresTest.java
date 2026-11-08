@@ -21,7 +21,7 @@ public class VisitanteExposicionProveedoresTest {
 				1000,
 				0,
 				10,
-				new CalendarioDeCupos()
+				new CalendarioDeCupos(5)
 		);
 		
 		VisitanteExposicionProveedores visitor = 
@@ -43,7 +43,7 @@ public class VisitanteExposicionProveedoresTest {
 				1000,
 				0,
 				10,
-				new CalendarioDeCupos()
+				new CalendarioDeCupos(0)
 		);
 		
 		ServicioIndividual servicioA2 = new ServicioIndividual(
@@ -55,7 +55,7 @@ public class VisitanteExposicionProveedoresTest {
 				2000,
 				0,
 				10,
-				new CalendarioDeCupos()
+				new CalendarioDeCupos(0)
 		);
 		
 		ServicioIndividual servicioB = new ServicioIndividual(
@@ -67,17 +67,17 @@ public class VisitanteExposicionProveedoresTest {
 				500,
 				0,
 				10,
-				new CalendarioDeCupos()
+				new CalendarioDeCupos(0)
 		);
 		
 		PaqueteTuristico paqueteInterno = new PaqueteTuristico(
-				"Paquete interno", "Descripcion", 0);
+				"Paquete interno", "Descripcion", 0, null);
 		
 		paqueteInterno.agregarItem(servicioA2);
 		paqueteInterno.agregarItem(servicioB);
 		
 		PaqueteTuristico paquetePrincipal = new PaqueteTuristico(
-				"Paquete principal", "Descripcion", 0);
+				"Paquete principal", "Descripcion", 0, null);
 		
 		paquetePrincipal.agregarItem(servicioA1);
 		paquetePrincipal.agregarItem(paqueteInterno);
@@ -111,7 +111,7 @@ public class VisitanteExposicionProveedoresTest {
 				1000,
 				0,
 				10,
-				new CalendarioDeCupos()
+				new CalendarioDeCupos(0)
 		);
 		
 		ServicioIndividual servicioB = new ServicioIndividual(
@@ -123,11 +123,11 @@ public class VisitanteExposicionProveedoresTest {
 				2000,
 				0,
 				10,
-				new CalendarioDeCupos()
+				new CalendarioDeCupos(0)
 		);
 		
 		PaqueteTuristico paquete = new PaqueteTuristico(
-				"Paquete", "Prueba", 0);
+				"Paquete", "Prueba", 0, null);
 		
 		ServicioIndividual servicioA2 = new ServicioIndividual(
 				"Excursion",
@@ -138,7 +138,7 @@ public class VisitanteExposicionProveedoresTest {
 				500,
 				0,
 				10,
-				new CalendarioDeCupos()
+				new CalendarioDeCupos(0)
 		);
 		
 		paquete.agregarItem(servicioA2);
@@ -183,7 +183,7 @@ public class VisitanteExposicionProveedoresTest {
 				1000,
 				0,
 				10,
-				new CalendarioDeCupos()
+				new CalendarioDeCupos(0)
 		);
 		
 		ServicioIndividual servicioB = new ServicioIndividual(
@@ -195,7 +195,7 @@ public class VisitanteExposicionProveedoresTest {
 				2000,
 				0,
 				10,
-				new CalendarioDeCupos()
+				new CalendarioDeCupos(0)
 		);
 		
 		catalogo.agregarItem(servicioA);
@@ -224,7 +224,7 @@ public class VisitanteExposicionProveedoresTest {
 				1000,
 				0,
 				10,
-				new CalendarioDeCupos()
+				new CalendarioDeCupos(0)
 		);
 		
 		ServicioIndividual servicioA2 = new ServicioIndividual(
@@ -236,7 +236,7 @@ public class VisitanteExposicionProveedoresTest {
 				2000,
 				0,
 				10,
-				new CalendarioDeCupos()
+				new CalendarioDeCupos(0)
 		);
 		
 		ServicioIndividual servicioB = new ServicioIndividual(
@@ -248,7 +248,7 @@ public class VisitanteExposicionProveedoresTest {
 				500,
 				0,
 				10,
-				new CalendarioDeCupos()
+				new CalendarioDeCupos(0)
 		);
 		
 		catalogo.agregarItem(servicioA1);
@@ -293,7 +293,7 @@ public class VisitanteExposicionProveedoresTest {
 				1000,
 				0,
 				10,
-				new CalendarioDeCupos()
+				new CalendarioDeCupos(0)
 		);
 		
 		ServicioIndividual servicioB = new ServicioIndividual(
@@ -305,7 +305,7 @@ public class VisitanteExposicionProveedoresTest {
 				2000,
 				0,
 				10,
-				new CalendarioDeCupos()
+				new CalendarioDeCupos(0)
 		);
 		
 		primerCatalogo.agregarItem(servicioA);
@@ -328,7 +328,7 @@ public class VisitanteExposicionProveedoresTest {
 				500,
 				0,
 				10,
-				new CalendarioDeCupos()
+				new CalendarioDeCupos(0)
 		);
 		
 		segundoCatalogo.agregarItem(otroServicio);

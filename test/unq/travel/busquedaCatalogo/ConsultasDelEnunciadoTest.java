@@ -32,12 +32,12 @@ class ConsultasDelEnunciadoTest {
 		tourEnOferta = this.crearServicio("Tour Nocturno en Oferta", Categoria.EXCURSION, 18000f, 10);
 		traslado = this.crearServicio("Traslado Aeropuerto-Hotel", Categoria.TRASLADO, 2000f, 10);
 
-		packEscapadaUrbana = new PaqueteTuristico("Pack Escapada Urbana", "Hotel, museo y traslado", 0.10f);
+		packEscapadaUrbana = new PaqueteTuristico("Pack Escapada Urbana", "Hotel, museo y traslado", 0.10f, null);
 		packEscapadaUrbana.agregarItem(hotel);
 		packEscapadaUrbana.agregarItem(museo);
 		packEscapadaUrbana.agregarItem(traslado);
 
-		packRutaDelVino = new PaqueteTuristico("Pack Ruta del Vino", "Alquiler de auto por bodegas", 0.10f);
+		packRutaDelVino = new PaqueteTuristico("Pack Ruta del Vino", "Alquiler de auto por bodegas", 0.10f, null);
 		packRutaDelVino.agregarItem(this.crearServicio("Alquiler de Auto", Categoria.ALQUILER_AUTO, 20000f, 10));
 
 		Catalogo catalogo = new Catalogo();
@@ -87,7 +87,7 @@ class ConsultasDelEnunciadoTest {
 
 	private ServicioIndividual crearServicio(String nombre, Categoria categoria, float precio, int stock) {
 		return new ServicioIndividual(nombre, "Descripcion de " + nombre, "COD-" + nombre,
-				"Operador SA", categoria, precio, 0f, stock, new CalendarioDeCupos());
+				"Operador SA", categoria, precio, 0f, stock, new CalendarioDeCupos(stock));
 	}
 
 }

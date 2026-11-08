@@ -10,11 +10,13 @@ public abstract class ItemCatalogo {
 
 	private String nombre;
 	private String descripcion;
+	protected CalendarioDeCupos calendario;
 
-	protected ItemCatalogo(String nombre, String descripcion) {
+	protected ItemCatalogo(String nombre, String descripcion, CalendarioDeCupos calendario) {
 
 		this.nombre = nombre;
 		this.descripcion = descripcion;
+		this.calendario = calendario;
 
 	}
 
@@ -64,16 +66,22 @@ public abstract class ItemCatalogo {
 
 	public abstract boolean esDeCategoria(Categoria categoria);
 
-	public abstract boolean tieneDisponibilidad();
-
-	public abstract void decrementarCupo();
-
-	public abstract void incrementarCupo();
-
+	public abstract boolean tieneDisponibilidad(RangoDeFechas rango);
+	
 	public abstract void aceptar(Visitor visitor);
 
 	public abstract List<Cupo> cupos() ;
 
 	protected abstract Integer cantidadDeVentasEnPeriodo(RangoDeFechas periodo);
+
+	public abstract void reservar(RangoDeFechas rango);
+
+	public abstract void liberar(RangoDeFechas rango);
+
+	public boolean tieneDisponibilidad() {
+
+		return calendario.tieneDisponibilidad();
+		
+	}
 
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import unq.travel.cupos.CalendarioDeCupos;
 import unq.travel.cupos.Cupo;
 import unq.travel.cupos.RangoDeFechas;
 import unq.travel.reportes.Visitor;
@@ -14,9 +15,9 @@ public class PaqueteTuristico extends ItemCatalogo {
 	private List<ItemCatalogo> items;
 	private float descuento;
 
-	public PaqueteTuristico(String nombre, String descripcion, float descuento) {
+	public PaqueteTuristico(String nombre, String descripcion, float descuento, CalendarioDeCupos calendario) {
 
-		super(nombre, descripcion);
+		super(nombre, descripcion, calendario);
 		validarDescuento(descuento);
 		this.descuento = descuento;
 		this.items = new ArrayList<ItemCatalogo>();
@@ -74,6 +75,7 @@ public class PaqueteTuristico extends ItemCatalogo {
 
 	}
 
+	/*
 	@Override
 	public boolean tieneDisponibilidad() {
 
@@ -112,6 +114,8 @@ public class PaqueteTuristico extends ItemCatalogo {
 		}
 
 	}
+	
+	*/
 
 	@Override
 	public void aceptar(Visitor visitor) {
@@ -150,4 +154,24 @@ public class PaqueteTuristico extends ItemCatalogo {
 		
 	}
 
+	@Override
+	public boolean tieneDisponibilidad(RangoDeFechas rango) {
+
+		return calendario.tieneDisponibilidad(rango);
+		
+	}
+
+	@Override
+	public void reservar(RangoDeFechas rango) {
+		
+		calendario.reservar(rango);
+		
+	}
+
+	@Override
+	public void liberar(RangoDeFechas rango) {
+
+		calendario.liberar(rango);
+		
+	}
 }

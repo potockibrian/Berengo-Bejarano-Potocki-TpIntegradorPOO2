@@ -22,7 +22,7 @@ public class VisitorTest {
 				15000,
 				0,
 				10,
-				new CalendarioDeCupos()
+				new CalendarioDeCupos(0)
 		);
 		
 		Visitor visitor = mock(Visitor.class);
@@ -37,7 +37,7 @@ public class VisitorTest {
 		PaqueteTuristico paquete = new PaqueteTuristico(
 				"Paquete de vacaciones",
 				"Paquete de prueba",
-				0.10f
+				0.10f, null
 		);
 		
 		Visitor visitor = mock(Visitor.class);

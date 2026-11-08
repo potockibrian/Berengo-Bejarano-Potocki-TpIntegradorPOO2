@@ -16,12 +16,11 @@ public class ServicioIndividual extends ItemCatalogo {
 	private float descuentoPromocional;
 	private int stock;
 	private List<AtributoDinamico> atributosDinamicos;
-	private CalendarioDeCupos calendario;
 
 	public ServicioIndividual(String nombre, String descripcion, String codigoReserva, String proveedor,
 			Categoria categoria, float precioBase, float descuentoPromocional, int stock, CalendarioDeCupos calendario) {
 
-		super(nombre, descripcion);
+		super(nombre, descripcion, calendario);
 		validarDescuento(descuentoPromocional);
 		if (precioBase < 0) {
 			throw new IllegalArgumentException("El precio base no puede ser negativo");
@@ -36,7 +35,6 @@ public class ServicioIndividual extends ItemCatalogo {
 		this.descuentoPromocional = descuentoPromocional;
 		this.stock = stock;
 		this.atributosDinamicos = new ArrayList<AtributoDinamico>();
-		this.calendario = calendario;
 		
 	}
 
@@ -82,6 +80,7 @@ public class ServicioIndividual extends ItemCatalogo {
 
 	}
 
+	/*
 	@Override
 	public boolean tieneDisponibilidad() {
 
@@ -105,6 +104,7 @@ public class ServicioIndividual extends ItemCatalogo {
 		stock = stock + 1;
 
 	}
+	*/
 
 	public void definirAtributo(String nombre, boolean obligatorio, TipoAtributo tipo) {
 
@@ -181,6 +181,27 @@ public class ServicioIndividual extends ItemCatalogo {
 	public Integer cantidadDeVentasEnPeriodo(RangoDeFechas periodo) {
 
 		return calendario.cantidadDeVentasEnPeriodo(periodo);
+		
+	}
+
+	@Override
+	public boolean tieneDisponibilidad(RangoDeFechas rango) {
+
+		return calendario.tieneDisponibilidad(rango);
+		
+	}
+
+	@Override
+	public void reservar(RangoDeFechas rango) {
+
+		calendario.reservar(rango);
+		
+	}
+
+	@Override
+	public void liberar(RangoDeFechas rango) {
+
+		calendario.liberar(rango);
 		
 	}
 

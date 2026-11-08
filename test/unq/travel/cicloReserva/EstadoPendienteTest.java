@@ -38,7 +38,7 @@ class EstadoPendienteTest {
 		
 		estado.agregarItem(item);
 		
-		verify(reserva).doAgregarItem(item);
+		verify(reserva).doAgregarItem(item, null);
 		
 	}
 	

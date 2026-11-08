@@ -40,5 +40,23 @@ public class RangoDeFechas {
 				&& (rango.getFechaInicio().compareTo(fechaFinal) <= 0);
 				
 	}
+
+	public RangoDeFechas union(RangoDeFechas rango) {
+
+		return new RangoDeFechas(min(this.fechaInicio, rango.getFechaInicio()), max(this.fechaFinal, rango.getFechaFinal()));
+		
+	}
+	
+	private LocalDate min(LocalDate fecha1, LocalDate fecha2) {
+		
+		return (fecha1.compareTo(fecha2) <= 0) ? fecha1 : fecha2;
+		
+	}
+	
+	private LocalDate max(LocalDate fecha1, LocalDate fecha2) {
+		
+		return (fecha1.compareTo(fecha2) >= 0)? fecha1 : fecha2;
+		
+	}
 	
 }

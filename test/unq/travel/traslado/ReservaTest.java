@@ -72,7 +72,7 @@ class ReservaTest {
 	void testCostoTotalReserva() {
 		
 		when(item.tieneDisponibilidad()).thenReturn(true);
-		reserva.doAgregarItem(item);
+		reserva.doAgregarItem(item, null);
 		when(estrategia.costoTasasTraslado(reserva)).thenReturn(100f);
 		when(item.getPrecioFinal()).thenReturn(100f);
 		
@@ -250,13 +250,13 @@ class ReservaTest {
 		ItemCatalogo item2 = mock(ItemCatalogo.class);
 		when(item1.tieneDisponibilidad()).thenReturn(true);
 		when(item2.tieneDisponibilidad()).thenReturn(true);
-		reserva.doAgregarItem(item1);
-		reserva.doAgregarItem(item2);
+		reserva.doAgregarItem(item1, null);
+		reserva.doAgregarItem(item2, null);
 		
 		reserva.doConfirmar();
 		
-		verify(item1).decrementarCupo();
-		verify(item2).decrementarCupo();
+		verify(item1).reservar(any());
+		verify(item2).reservar(any());
 		
 	}
 	
@@ -267,14 +267,14 @@ class ReservaTest {
 		ItemCatalogo item2 = mock(ItemCatalogo.class);
 		when(item1.tieneDisponibilidad()).thenReturn(true);
 		when(item2.tieneDisponibilidad()).thenReturn(true);
-		reserva.doAgregarItem(item1);
-		reserva.doAgregarItem(item2);
+		reserva.doAgregarItem(item1, null);
+		reserva.doAgregarItem(item2, null);
 		when(item2.tieneDisponibilidad()).thenReturn(false);
 		
 		assertThrows(NoHayDisponibilidadException.class, () -> reserva.doConfirmar());
 		
-		verify(item1, never()).decrementarCupo();
-		verify(item2, never()).decrementarCupo();
+		verify(item1, never()).reservar(any());
+		verify(item2, never()).reservar(any());
 		
 	}
 	
@@ -303,11 +303,11 @@ class ReservaTest {
 	void testDoCancelar() {
 		
 		when(item.tieneDisponibilidad()).thenReturn(true);
-		reserva.doAgregarItem(item);
+		reserva.doAgregarItem(item, null);
 		
 		reserva.doCancelar();
 		
-		verify(item, never()).incrementarCupo();
+		verify(item, never()).liberar(any());
 		
 	}
 	
@@ -315,11 +315,11 @@ class ReservaTest {
 	void testDoCancelarFromConfirmada() {
 		
 		when(item.tieneDisponibilidad()).thenReturn(true);
-		reserva.doAgregarItem(item);
+		reserva.doAgregarItem(item, null);
 		
 		reserva.doCancelarFromConfirmada();
 		
-		verify(item).incrementarCupo();
+		verify(item).liberar(any());
 		
 	}
 	
@@ -329,7 +329,7 @@ class ReservaTest {
 		when(item.tieneDisponibilidad()).thenReturn(true);
 		when(item.getPrecioFinal()).thenReturn(200f);
 		when(estrategia.costoTasasTraslado(reserva)).thenReturn(1000f);
-		reserva.doAgregarItem(item);
+		reserva.doAgregarItem(item, null);
 		
 		reserva.doCancelarFromCheckin();
 
@@ -343,7 +343,7 @@ class ReservaTest {
 		when(item.tieneDisponibilidad()).thenReturn(true);
 		when(item.getPrecioFinal()).thenReturn(200f);
 		when(estrategia.costoTasasTraslado(reserva)).thenReturn(1000f);
-		reserva.doAgregarItem(item);
+		reserva.doAgregarItem(item, null);
 		
 		reserva.doCancelarFromEnCurso();
 
@@ -357,7 +357,7 @@ class ReservaTest {
 		when(item.tieneDisponibilidad()).thenReturn(true);
 		when(item.getPrecioFinal()).thenReturn(100f);
 	
-		reserva.doAgregarItem(item);
+		reserva.doAgregarItem(item, null);
 	
 		assertEquals(100f, reserva.costoServicios());
 		
@@ -369,7 +369,7 @@ class ReservaTest {
 		when(item.tieneDisponibilidad()).thenReturn(false);
 		when(item.getPrecioFinal()).thenReturn(100f);
 		
-		assertThrows(NoHayDisponibilidadException.class, () -> reserva.doAgregarItem(item));
+		assertThrows(NoHayDisponibilidadException.class, () -> reserva.doAgregarItem(item, null));
 
 		assertEquals(0f, reserva.costoServicios());
 		

@@ -16,7 +16,7 @@ public class EstadoPendiente extends EstadoDeReserva {
 	@Override
 	public void agregarItem(ItemCatalogo item) {
 			
-		reserva.doAgregarItem(item);
+		reserva.doAgregarItem(item, null);
 		
 	}
 

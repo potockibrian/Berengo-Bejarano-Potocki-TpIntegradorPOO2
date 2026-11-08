@@ -1,11 +1,13 @@
 package unq.travel.catalogo;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import unq.travel.cupos.CalendarioDeCupos;
+import unq.travel.cupos.RangoDeFechas;
 
 class ServicioIndividualTest {
 
@@ -15,10 +17,10 @@ class ServicioIndividualTest {
 	@BeforeEach
 	void setUp() {
 		hotelSinDescuento = new ServicioIndividual("Noche de Hotel Central", "Habitación doble con desayuno",
-				"HTL-001", "Hoteles Centro SA", Categoria.ALOJAMIENTO, 15000f, 0f, 10, new CalendarioDeCupos());
+				"HTL-001", "Hoteles Centro SA", Categoria.ALOJAMIENTO, 15000f, 0f, 10, new CalendarioDeCupos(0));
 
 		hotelConDescuento = new ServicioIndividual("Noche de Hotel Central", "Habitación doble con desayuno",
-				"HTL-001", "Hoteles Centro SA", Categoria.ALOJAMIENTO, 15000f, 0.20f, 10, new CalendarioDeCupos());
+				"HTL-001", "Hoteles Centro SA", Categoria.ALOJAMIENTO, 15000f, 0.20f, 10, new CalendarioDeCupos(0));
 	}
 
 	@Test
@@ -78,7 +80,7 @@ class ServicioIndividualTest {
 
 		ServicioIndividual hotel = this.crearHotelConStock(1);
 
-		hotel.decrementarCupo();
+		hotel.reservar(mock(RangoDeFechas.class));
 
 		assertFalse(hotel.tieneDisponibilidad());
 
@@ -89,7 +91,7 @@ class ServicioIndividualTest {
 
 		ServicioIndividual hotel = this.crearHotelConStock(0);
 
-		hotel.incrementarCupo();
+		hotel.liberar(mock(RangoDeFechas.class));
 
 		assertTrue(hotel.tieneDisponibilidad());
 
@@ -100,7 +102,7 @@ class ServicioIndividualTest {
 
 		ServicioIndividual hotelSinStock = this.crearHotelConStock(0);
 
-		assertThrows(SinStockException.class, () -> hotelSinStock.decrementarCupo());
+		assertThrows(SinStockException.class, () -> hotelSinStock.reservar(mock(RangoDeFechas.class)));
 
 	}
 
@@ -108,7 +110,7 @@ class ServicioIndividualTest {
 	void testNoSePuedeCrearConDescuentoMayorAUno() {
 
 		assertThrows(IllegalArgumentException.class, () -> new ServicioIndividual("Noche de Hotel Central",
-				"Habitación doble con desayuno", "HTL-001", "Hoteles Centro SA", Categoria.ALOJAMIENTO, 15000f, 20f, 10, new CalendarioDeCupos()));
+				"Habitación doble con desayuno", "HTL-001", "Hoteles Centro SA", Categoria.ALOJAMIENTO, 15000f, 20f, 10, new CalendarioDeCupos(0)));
 
 	}
 
@@ -116,7 +118,7 @@ class ServicioIndividualTest {
 	void testNoSePuedeCrearConDescuentoNegativo() {
 
 		assertThrows(IllegalArgumentException.class, () -> new ServicioIndividual("Noche de Hotel Central",
-				"Habitación doble con desayuno", "HTL-001", "Hoteles Centro SA", Categoria.ALOJAMIENTO, 15000f, -0.10f, 10, new CalendarioDeCupos()));
+				"Habitación doble con desayuno", "HTL-001", "Hoteles Centro SA", Categoria.ALOJAMIENTO, 15000f, -0.10f, 10, new CalendarioDeCupos(0)));
 
 	}
 
@@ -141,7 +143,7 @@ class ServicioIndividualTest {
 	void testNoSePuedeCrearConPrecioBaseNegativo() {
 
 		assertThrows(IllegalArgumentException.class, () -> new ServicioIndividual("Noche de Hotel Central",
-				"Habitación doble con desayuno", "HTL-001", "Hoteles Centro SA", Categoria.ALOJAMIENTO, -500f, 0f, 10, new CalendarioDeCupos()));
+				"Habitación doble con desayuno", "HTL-001", "Hoteles Centro SA", Categoria.ALOJAMIENTO, -500f, 0f, 10, new CalendarioDeCupos(0)));
 
 	}
 
@@ -248,7 +250,7 @@ class ServicioIndividualTest {
 	void testNoCumpleConLaValidacionSinNombre() {
 
 		ServicioIndividual hotelSinNombre = new ServicioIndividual(null, "Habitación doble con desayuno",
-				"HTL-001", "Hoteles Centro SA", Categoria.ALOJAMIENTO, 15000f, 0f, 10, new CalendarioDeCupos());
+				"HTL-001", "Hoteles Centro SA", Categoria.ALOJAMIENTO, 15000f, 0f, 10, new CalendarioDeCupos(0));
 
 		assertFalse(hotelSinNombre.esValido());
 
@@ -258,7 +260,7 @@ class ServicioIndividualTest {
 	void testNoCumpleConLaValidacionSinCodigo() {
 
 		ServicioIndividual hotelSinCodigo = new ServicioIndividual("Noche de Hotel Central", "Habitación doble con desayuno",
-				null, "Hoteles Centro SA", Categoria.ALOJAMIENTO, 15000f, 0f, 10, new CalendarioDeCupos());
+				null, "Hoteles Centro SA", Categoria.ALOJAMIENTO, 15000f, 0f, 10, new CalendarioDeCupos(0));
 
 		assertFalse(hotelSinCodigo.esValido());
 
@@ -297,7 +299,7 @@ class ServicioIndividualTest {
 
 	private ServicioIndividual crearHotelConStock(int stock) {
 		return new ServicioIndividual("Noche de Hotel Central", "Habitación doble con desayuno",
-				"HTL-001", "Hoteles Centro SA", Categoria.ALOJAMIENTO, 15000f, 0f, stock, new CalendarioDeCupos());
+				"HTL-001", "Hoteles Centro SA", Categoria.ALOJAMIENTO, 15000f, 0f, stock, new CalendarioDeCupos(stock));
 	}
 
 }

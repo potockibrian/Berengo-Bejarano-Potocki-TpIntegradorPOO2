@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 import unq.travel.cicloReserva.*;
+import unq.travel.cupos.RangoDeFechas;
 import unq.travel.catalogo.ItemCatalogo;
 import unq.travel.notificaciones.Suscriptor;
 
@@ -16,6 +17,7 @@ public class Reserva {
 	private List<Suscriptor> suscriptores;
 	public int cantidadPasajeros;
 	public Direccion direccion;
+	private ArrayList<LineaDeReserva> lineas;
 
 	public Reserva(Cliente cliente, Direccion direccion, EstrategiaTraslado estrategia, List<Suscriptor> suscriptores, int cantidadPasajeros) {
 
@@ -26,6 +28,7 @@ public class Reserva {
 		this.suscriptores = suscriptores;
 		this.direccion = direccion;
 		this.cantidadPasajeros = cantidadPasajeros;
+		this.lineas = new ArrayList<LineaDeReserva>();
 		
 	}
 
@@ -90,8 +93,8 @@ public class Reserva {
 	
 	public float costoServicios() {
 		
-		return (float) items.stream()
-				.mapToDouble(i -> i.getPrecioFinal())
+		return (float) lineas.stream()
+				.mapToDouble(i -> i.precioFinal())
 				.sum();
 		
 	}
@@ -140,10 +143,10 @@ public class Reserva {
 
 	public void doConfirmar() {
 
-		if (!items.stream().allMatch(i -> i.tieneDisponibilidad())) throw new NoHayDisponibilidadException();
+		if (!lineas.stream().allMatch(i -> i.tieneDisponibilidad())) throw new NoHayDisponibilidadException();
 		
-		items.stream()
-			 .forEach(i -> i.decrementarCupo());
+		lineas.stream()
+			 .forEach(i -> i.reservarCupo());
 		
 		this.cambiarEstado(new EstadoConfirmado(this));
 		
@@ -175,8 +178,8 @@ public class Reserva {
 
 	public void doCancelarFromConfirmada() {
 
-		items.stream()
-			 .forEach(i -> i.incrementarCupo());
+		lineas.stream()
+			 .forEach(i -> i.liberarCupo());
 		
 		this.cambiarEstado(new EstadoCancelado(this));
 		
@@ -184,8 +187,8 @@ public class Reserva {
 
 	public void doCancelarFromCheckin() {
 		
-		items.stream()
-			 .forEach(i -> i.incrementarCupo());
+		lineas.stream()
+			 .forEach(i -> i.liberarCupo());
 		
 		cliente.añadirVoucher(new Voucher(this.costoServicios() + this.costoTasasTraslado()));
 		
@@ -201,11 +204,13 @@ public class Reserva {
 		
 	}
 	
-	public void doAgregarItem(ItemCatalogo item) {
+	public void doAgregarItem(ItemCatalogo item, RangoDeFechas periodo) {
 
-		if(!item.tieneDisponibilidad()) throw new NoHayDisponibilidadException();
+		LineaDeReserva linea = new LineaDeReserva(item, periodo);
 		
-		items.add(item);
+		if(!linea.tieneDisponibilidad()) throw new NoHayDisponibilidadException();
+		
+		lineas.add(linea);
 		
 	}
 
