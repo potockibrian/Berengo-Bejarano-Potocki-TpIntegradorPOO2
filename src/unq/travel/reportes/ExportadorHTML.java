@@ -178,7 +178,7 @@ public class ExportadorHTML implements Exportador {
 		
 	}
 	
-	private String escapar(String valor) {
+	String escapar(String valor) {
 		
 		return String.valueOf(valor).replace("&", "&amp;")
 									.replace("<", "&lt;")

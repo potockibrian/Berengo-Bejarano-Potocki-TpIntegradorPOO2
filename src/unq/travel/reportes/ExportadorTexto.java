@@ -90,7 +90,7 @@ public class ExportadorTexto implements Exportador {
 		
 	}
 	
-	private String describirCupos(List<Cupo> cupos) {
+	public String describirCupos(List<Cupo> cupos) {
 		
 		return "totales " + cupos.stream().mapToInt(c -> c.getTopeMaximo()).sum()
 			 + ", reservados " + cupos.stream().mapToInt(c -> c.cantidadDeVentas()).sum()

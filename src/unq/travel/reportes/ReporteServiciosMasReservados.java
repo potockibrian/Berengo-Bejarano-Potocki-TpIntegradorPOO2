@@ -9,7 +9,6 @@ import unq.travel.cupos.RangoDeFechas;
 
 public class ReporteServiciosMasReservados {
 	
-	// Asocia c/proveedor con su porcentaje de exposicion
 	private RangoDeFechas periodo;
 	private Map<ItemCatalogo, Integer> items;
 	

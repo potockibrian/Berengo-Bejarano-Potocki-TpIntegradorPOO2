@@ -88,7 +88,7 @@ public class ExportadorCSV implements Exportador {
 		
 	}
 	
-	private String escapar(String valor) {
+	public String escapar(String valor) {
 		
 		String texto = String.valueOf(valor);
 		
