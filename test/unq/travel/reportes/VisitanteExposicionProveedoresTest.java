@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import unq.travel.catalogo.Categoria;
 import unq.travel.catalogo.PaqueteTuristico;
 import unq.travel.catalogo.ServicioIndividual;
+import unq.travel.cupos.CalendarioDeCupos;
 import unq.travel.catalogo.Catalogo;
 
 public class VisitanteExposicionProveedoresTest {
@@ -19,7 +20,8 @@ public class VisitanteExposicionProveedoresTest {
 				Categoria.ALOJAMIENTO,
 				1000,
 				0,
-				10
+				10,
+				new CalendarioDeCupos()
 		);
 		
 		VisitanteExposicionProveedores visitor = 
@@ -40,7 +42,8 @@ public class VisitanteExposicionProveedoresTest {
 				Categoria.ALOJAMIENTO,
 				1000,
 				0,
-				10
+				10,
+				new CalendarioDeCupos()
 		);
 		
 		ServicioIndividual servicioA2 = new ServicioIndividual(
@@ -51,7 +54,8 @@ public class VisitanteExposicionProveedoresTest {
 				Categoria.VUELO,
 				2000,
 				0,
-				10
+				10,
+				new CalendarioDeCupos()
 		);
 		
 		ServicioIndividual servicioB = new ServicioIndividual(
@@ -62,7 +66,8 @@ public class VisitanteExposicionProveedoresTest {
 				Categoria.EXCURSION,
 				500,
 				0,
-				10
+				10,
+				new CalendarioDeCupos()
 		);
 		
 		PaqueteTuristico paqueteInterno = new PaqueteTuristico(
@@ -105,7 +110,8 @@ public class VisitanteExposicionProveedoresTest {
 				Categoria.ALOJAMIENTO,
 				1000,
 				0,
-				10
+				10,
+				new CalendarioDeCupos()
 		);
 		
 		ServicioIndividual servicioB = new ServicioIndividual(
@@ -116,7 +122,8 @@ public class VisitanteExposicionProveedoresTest {
 				Categoria.VUELO,
 				2000,
 				0,
-				10
+				10,
+				new CalendarioDeCupos()
 		);
 		
 		PaqueteTuristico paquete = new PaqueteTuristico(
@@ -130,7 +137,8 @@ public class VisitanteExposicionProveedoresTest {
 				Categoria.EXCURSION,
 				500,
 				0,
-				10
+				10,
+				new CalendarioDeCupos()
 		);
 		
 		paquete.agregarItem(servicioA2);
@@ -174,7 +182,8 @@ public class VisitanteExposicionProveedoresTest {
 				Categoria.ALOJAMIENTO,
 				1000,
 				0,
-				10
+				10,
+				new CalendarioDeCupos()
 		);
 		
 		ServicioIndividual servicioB = new ServicioIndividual(
@@ -185,7 +194,8 @@ public class VisitanteExposicionProveedoresTest {
 				Categoria.VUELO,
 				2000,
 				0,
-				10
+				10,
+				new CalendarioDeCupos()
 		);
 		
 		catalogo.agregarItem(servicioA);
@@ -213,7 +223,8 @@ public class VisitanteExposicionProveedoresTest {
 				Categoria.ALOJAMIENTO,
 				1000,
 				0,
-				10
+				10,
+				new CalendarioDeCupos()
 		);
 		
 		ServicioIndividual servicioA2 = new ServicioIndividual(
@@ -224,7 +235,8 @@ public class VisitanteExposicionProveedoresTest {
 				Categoria.VUELO,
 				2000,
 				0,
-				10
+				10,
+				new CalendarioDeCupos()
 		);
 		
 		ServicioIndividual servicioB = new ServicioIndividual(
@@ -235,7 +247,8 @@ public class VisitanteExposicionProveedoresTest {
 				Categoria.EXCURSION,
 				500,
 				0,
-				10
+				10,
+				new CalendarioDeCupos()
 		);
 		
 		catalogo.agregarItem(servicioA1);
@@ -279,7 +292,8 @@ public class VisitanteExposicionProveedoresTest {
 				Categoria.ALOJAMIENTO,
 				1000,
 				0,
-				10
+				10,
+				new CalendarioDeCupos()
 		);
 		
 		ServicioIndividual servicioB = new ServicioIndividual(
@@ -290,7 +304,8 @@ public class VisitanteExposicionProveedoresTest {
 				Categoria.VUELO,
 				2000,
 				0,
-				10
+				10,
+				new CalendarioDeCupos()
 		);
 		
 		primerCatalogo.agregarItem(servicioA);
@@ -312,7 +327,8 @@ public class VisitanteExposicionProveedoresTest {
 				Categoria.EXCURSION,
 				500,
 				0,
-				10
+				10,
+				new CalendarioDeCupos()
 		);
 		
 		segundoCatalogo.agregarItem(otroServicio);

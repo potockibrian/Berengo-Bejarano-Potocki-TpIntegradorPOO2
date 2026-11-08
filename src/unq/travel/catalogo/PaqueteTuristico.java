@@ -2,7 +2,11 @@ package unq.travel.catalogo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+import unq.travel.cupos.Cupo;
+import unq.travel.cupos.RangoDeFechas;
 import unq.travel.reportes.Visitor;
 
 public class PaqueteTuristico extends ItemCatalogo {
@@ -113,6 +117,9 @@ public class PaqueteTuristico extends ItemCatalogo {
 	public void aceptar(Visitor visitor) {
 
 		visitor.visitar(this);
+		
+		items.stream()
+		     .forEach(i -> i.aceptar(visitor));
 
 	}
 
@@ -120,6 +127,27 @@ public class PaqueteTuristico extends ItemCatalogo {
 
 		return new ArrayList<ItemCatalogo>(items);
 
+	}
+
+	public Integer cantidadDeVentasEnPeriodo(RangoDeFechas periodo) {
+
+		return items.stream()
+					.mapToInt(i -> i.cantidadDeVentasEnPeriodo(periodo))
+					.sum();
+		
+	}
+
+	@Override
+	public List<Cupo> cupos() {
+
+		List<Cupo> cupos = new ArrayList<Cupo>();
+		
+		items.stream()
+				.map(i -> i.cupos())
+				.forEach(cs -> cupos.addAll(cs));
+		
+		return cupos;
+		
 	}
 
 }

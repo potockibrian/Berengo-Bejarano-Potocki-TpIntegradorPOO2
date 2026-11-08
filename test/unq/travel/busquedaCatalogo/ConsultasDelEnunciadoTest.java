@@ -11,6 +11,7 @@ import unq.travel.catalogo.Catalogo;
 import unq.travel.catalogo.Categoria;
 import unq.travel.catalogo.PaqueteTuristico;
 import unq.travel.catalogo.ServicioIndividual;
+import unq.travel.cupos.CalendarioDeCupos;
 
 class ConsultasDelEnunciadoTest {
 
@@ -86,7 +87,7 @@ class ConsultasDelEnunciadoTest {
 
 	private ServicioIndividual crearServicio(String nombre, Categoria categoria, float precio, int stock) {
 		return new ServicioIndividual(nombre, "Descripcion de " + nombre, "COD-" + nombre,
-				"Operador SA", categoria, precio, 0f, stock);
+				"Operador SA", categoria, precio, 0f, stock, new CalendarioDeCupos());
 	}
 
 }

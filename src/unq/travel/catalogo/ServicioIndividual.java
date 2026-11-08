@@ -2,8 +2,10 @@ package unq.travel.catalogo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import unq.travel.reportes.Visitor;
+import unq.travel.cupos.*;
+import unq.travel.reportes.*;
 
 public class ServicioIndividual extends ItemCatalogo {
 
@@ -14,9 +16,10 @@ public class ServicioIndividual extends ItemCatalogo {
 	private float descuentoPromocional;
 	private int stock;
 	private List<AtributoDinamico> atributosDinamicos;
+	private CalendarioDeCupos calendario;
 
 	public ServicioIndividual(String nombre, String descripcion, String codigoReserva, String proveedor,
-			Categoria categoria, float precioBase, float descuentoPromocional, int stock) {
+			Categoria categoria, float precioBase, float descuentoPromocional, int stock, CalendarioDeCupos calendario) {
 
 		super(nombre, descripcion);
 		validarDescuento(descuentoPromocional);
@@ -33,7 +36,8 @@ public class ServicioIndividual extends ItemCatalogo {
 		this.descuentoPromocional = descuentoPromocional;
 		this.stock = stock;
 		this.atributosDinamicos = new ArrayList<AtributoDinamico>();
-
+		this.calendario = calendario;
+		
 	}
 
 	public String getProveedor() {
@@ -153,6 +157,31 @@ public class ServicioIndividual extends ItemCatalogo {
 
 		visitor.visitar(this);
 
+	}
+
+	public Categoria getCategoria() {
+
+		return categoria;
+
+	}
+
+	@Override
+	public List<Cupo> cupos() {
+		
+		return calendario.cupos();
+		
+	}
+
+	public Map<RangoDeFechas, Cupo> cuposPorPeriodo() {
+
+		return calendario.cuposPorPeriodo();
+
+	}
+
+	public Integer cantidadDeVentasEnPeriodo(RangoDeFechas periodo) {
+
+		return calendario.cantidadDeVentasEnPeriodo(periodo);
+		
 	}
 
 }

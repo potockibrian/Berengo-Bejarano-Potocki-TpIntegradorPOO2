@@ -1,6 +1,10 @@
 package unq.travel.catalogo;
 
-import unq.travel.reportes.Visitor;
+import java.util.List;
+import java.util.Map;
+
+import unq.travel.cupos.*;
+import unq.travel.reportes.*;
 
 public abstract class ItemCatalogo {
 
@@ -67,5 +71,9 @@ public abstract class ItemCatalogo {
 	public abstract void incrementarCupo();
 
 	public abstract void aceptar(Visitor visitor);
+
+	public abstract List<Cupo> cupos() ;
+
+	protected abstract Integer cantidadDeVentasEnPeriodo(RangoDeFechas periodo);
 
 }

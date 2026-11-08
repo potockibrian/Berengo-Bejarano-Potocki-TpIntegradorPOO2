@@ -184,6 +184,9 @@ public class Reserva {
 
 	public void doCancelarFromCheckin() {
 		
+		items.stream()
+			 .forEach(i -> i.incrementarCupo());
+		
 		cliente.añadirVoucher(new Voucher(this.costoServicios() + this.costoTasasTraslado()));
 		
 		this.cambiarEstado(new EstadoCancelado(this));

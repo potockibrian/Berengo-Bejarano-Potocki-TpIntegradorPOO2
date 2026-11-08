@@ -7,6 +7,8 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import unq.travel.cupos.CalendarioDeCupos;
+
 class PaqueteTuristicoTest {
 
 	private ServicioIndividual hotel;
@@ -133,7 +135,7 @@ class PaqueteTuristicoTest {
 	void testNoCumpleConLaValidacionSiTieneUnServicioInvalido() {
 
 		ServicioIndividual servicioSinCodigo = new ServicioIndividual("Alquiler de Auto", "Auto compacto",
-				null, "Operador SA", Categoria.ALQUILER_AUTO, 8000f, 0f, 10);
+				null, "Operador SA", Categoria.ALQUILER_AUTO, 8000f, 0f, 10, new CalendarioDeCupos());
 
 		packEscapadaUrbana.agregarItem(servicioSinCodigo);
 
@@ -255,17 +257,17 @@ class PaqueteTuristicoTest {
 
 	private ServicioIndividual crearServicio(String nombre, Categoria categoria, float precio, float descuento) {
 		return new ServicioIndividual(nombre, "Descripcion de " + nombre, "COD-" + nombre,
-				"Operador SA", categoria, precio, descuento, 10);
+				"Operador SA", categoria, precio, descuento, 10, new CalendarioDeCupos());
 	}
 
 	private ServicioIndividual crearServicioSinStock(String nombre, Categoria categoria) {
 		return new ServicioIndividual(nombre, "Descripcion de " + nombre, "COD-" + nombre,
-				"Operador SA", categoria, 1000f, 0f, 0);
+				"Operador SA", categoria, 1000f, 0f, 0, new CalendarioDeCupos());
 	}
 
 	private ServicioIndividual crearServicioConCupo(String nombre, int cupo) {
 		return new ServicioIndividual(nombre, "Descripcion de " + nombre, "COD-" + nombre,
-				"Operador SA", Categoria.ALOJAMIENTO, 1000f, 0f, cupo);
+				"Operador SA", Categoria.ALOJAMIENTO, 1000f, 0f, cupo, new CalendarioDeCupos());
 	}
 
 }

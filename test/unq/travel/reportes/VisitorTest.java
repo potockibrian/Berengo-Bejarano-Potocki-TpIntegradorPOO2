@@ -3,6 +3,7 @@ package unq.travel.reportes;
 import static org.mockito.Mockito.*;
 import org.junit.jupiter.api.Test;
 import unq.travel.catalogo.ServicioIndividual;
+import unq.travel.cupos.CalendarioDeCupos;
 import unq.travel.catalogo.Categoria;
 import unq.travel.catalogo.PaqueteTuristico;
 
@@ -20,7 +21,8 @@ public class VisitorTest {
 				Categoria.ALOJAMIENTO,
 				15000,
 				0,
-				10
+				10,
+				new CalendarioDeCupos()
 		);
 		
 		Visitor visitor = mock(Visitor.class);

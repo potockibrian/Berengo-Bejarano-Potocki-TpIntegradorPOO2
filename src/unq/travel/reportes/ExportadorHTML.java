@@ -7,6 +7,7 @@ public class ExportadorHTML
 
 	@Override
 	public String exportar(ReporteExposicionProveedores reporte) {
+		
 		StringBuilder resultado = new StringBuilder();
 		
 		resultado.append("<html>\n");
@@ -23,8 +24,7 @@ public class ExportadorHTML
 		resultado.append("<th>Exposicion (%) </th>");
 		resultado.append("</tr>\n");
 		
-		for (Map.Entry<String, Double> entrada :
-			reporte.getPorcentajesPorProveedor().entrySet()) {
+		for (Map.Entry<String, Double> entrada : reporte.getPorcentajesPorProveedor().entrySet()) {
 			
 			resultado.append("<tr>");
 			resultado.append("<td>");
@@ -37,6 +37,7 @@ public class ExportadorHTML
 			resultado.append("</td>");
 			
 			resultado.append("</tr>\n");
+			
 		}
 		
 		resultado.append("</table>\n");
@@ -44,5 +45,6 @@ public class ExportadorHTML
 		resultado.append("</html>\n");
 		
 		return resultado.toString();
+		
 	}
 }
