@@ -35,6 +35,8 @@ public class Cupo {
 
 		if (cantidadDeVentas == topeMaximo) throw new SinStockException();
 		
+		cantidadDeVentas++;
+		
 	}
 
 	public boolean tieneDisponibilidad() {
