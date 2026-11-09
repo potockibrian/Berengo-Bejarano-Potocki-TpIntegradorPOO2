@@ -5,7 +5,7 @@ public abstract class MetodoDePago {
 	
     public final void pagar(float monto) {
         if (!validarDatos(monto)) {
-            throw new IllegalArgumentException("Datos de pago invalidos");
+            throw new PagoInvalidoException("Datos de pago invalidos");
         }
         
         reservarFondos();

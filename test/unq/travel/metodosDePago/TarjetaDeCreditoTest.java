@@ -30,7 +30,7 @@ class TarjetaDeCreditoTest {
     		.thenReturn(false);
         
         assertThrows(
-        		IllegalArgumentException.class, 
+        		PagoInvalidoException.class, 
         		() -> metodo.pagar(3000f));
         
         verify(api).validarDatos(anyInt(),any(),any());

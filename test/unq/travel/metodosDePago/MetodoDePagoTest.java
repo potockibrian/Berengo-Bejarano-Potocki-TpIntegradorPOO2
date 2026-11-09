@@ -68,7 +68,7 @@ public class MetodoDePagoTest {
 		};
 		
 		assertThrows(
-				IllegalArgumentException.class,
+				PagoInvalidoException.class,
 				() -> metodoInvalido.pagar(3000f));
 		
 		assertEquals(List.of("validar"), pasos);
