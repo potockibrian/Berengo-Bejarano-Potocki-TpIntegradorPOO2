@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import unq.travel.cicloReserva.*;
 import unq.travel.cupos.RangoDeFechas;
+import unq.travel.metodosDePago.MetodoDePago;
 import unq.travel.catalogo.ItemCatalogo;
 import unq.travel.notificaciones.Suscriptor;
 
@@ -18,8 +19,9 @@ public class Reserva {
 	public int cantidadPasajeros;
 	public Direccion direccion;
 	private ArrayList<LineaDeReserva> lineas;
+	private MetodoDePago metodoDePago;
 
-	public Reserva(Cliente cliente, Direccion direccion, EstrategiaTraslado estrategia, List<Suscriptor> suscriptores, int cantidadPasajeros) {
+	public Reserva(Cliente cliente, Direccion direccion, EstrategiaTraslado estrategia, List<Suscriptor> suscriptores, int cantidadPasajeros, MetodoDePago metodoDePago) {
 
 		this.traslado = estrategia;
 		this.estado = new EstadoPendiente(this);
@@ -29,6 +31,7 @@ public class Reserva {
 		this.direccion = direccion;
 		this.cantidadPasajeros = cantidadPasajeros;
 		this.lineas = new ArrayList<LineaDeReserva>();
+		this.metodoDePago = metodoDePago;
 		
 	}
 
@@ -144,6 +147,8 @@ public class Reserva {
 	public void doConfirmar() {
 
 		if (!lineas.stream().allMatch(i -> i.tieneDisponibilidad())) throw new NoHayDisponibilidadException();
+		
+		metodoDePago.pagar(this.costoTotalReserva());	// metodoDePago se encarga de levantar la excepción
 		
 		lineas.stream()
 			 .forEach(i -> i.reservarCupo());

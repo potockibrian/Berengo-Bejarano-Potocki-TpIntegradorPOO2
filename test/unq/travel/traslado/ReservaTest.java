@@ -10,9 +10,11 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InOrder;
 
 import unq.travel.cicloReserva.*;
 import unq.travel.cupos.*;
+import unq.travel.metodosDePago.MetodoDePago;
 import unq.travel.traslado.*;
 import unq.travel.catalogo.*;
 import unq.travel.notificaciones.Suscriptor;
@@ -31,6 +33,8 @@ class ReservaTest {
 	private List<Suscriptor> suscriptores;
 	private ItemCatalogo item;
 	private RangoDeFechas periodo;
+	private MetodoDePago metodoDePago;
+	private InOrder inOrder;
 	
 	@BeforeEach
 	void setUp() throws Exception {
@@ -46,8 +50,9 @@ class ReservaTest {
 		suscriptorFidelizador = mock(Suscriptor.class);
 		suscriptores = new ArrayList(List.of(suscriptorCorreo, suscriptorFacturador, suscriptorFidelizador));
 		periodo = mock(RangoDeFechas.class);
+		metodoDePago = mock(MetodoDePago.class);
 		
-		reserva = new Reserva(cliente, direccion, estrategia, suscriptores, 1);
+		reserva = new Reserva(cliente, direccion, estrategia, suscriptores, 1, metodoDePago);
 		reserva.cambiarEstado(estado);
 		
 	}
@@ -254,6 +259,7 @@ class ReservaTest {
 		
 		verify(item1).reservar(any());
 		verify(item2).reservar(any());
+		verify(metodoDePago).pagar(reserva.costoTotalReserva());
 		
 	}
 	
@@ -272,6 +278,7 @@ class ReservaTest {
 		
 		verify(item1, never()).reservar(any());
 		verify(item2, never()).reservar(any());
+		verify(metodoDePago, never()).pagar(reserva.costoTotalReserva());;
 		
 	}
 	
