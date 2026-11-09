@@ -225,4 +225,10 @@ public class Reserva {
 		
 	}
 
+	public void cambiarMetodoDePago(MetodoDePago metodoDePago) {
+
+		this.metodoDePago = metodoDePago;
+		
+	}
+
 }

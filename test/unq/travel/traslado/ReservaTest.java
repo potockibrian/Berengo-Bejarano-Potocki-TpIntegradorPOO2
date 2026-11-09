@@ -387,5 +387,17 @@ class ReservaTest {
 		assertFalse(items.contains(item));
 		
 	}
+	
+	@Test
+	void testCambiarMetodoDePago() {
+		
+		MetodoDePago metodoDePago2 = mock(MetodoDePago.class);
+		
+		reserva.cambiarMetodoDePago(metodoDePago2);
+		reserva.doConfirmar();
+		
+		verify(metodoDePago2).pagar(reserva.costoTotalReserva());
+		
+	}
 
 }
