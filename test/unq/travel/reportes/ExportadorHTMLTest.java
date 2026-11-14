@@ -38,6 +38,7 @@ public class ExportadorHTMLTest {
 	private ItemCatalogo item1;
 	private ItemCatalogo item2;
 	private ItemCatalogo item3;
+	private RegistroDeVentas registroDeVentas;
 	
 	@BeforeEach
 	void setUp() {
@@ -65,6 +66,7 @@ public class ExportadorHTMLTest {
 		when(item3.getPrecioFinal()).thenReturn(3000f);
 		
 		exportador = new ExportadorHTML();
+		registroDeVentas = mock(RegistroDeVentas.class);
 		
 	}
 	
@@ -125,12 +127,20 @@ public class ExportadorHTMLTest {
 	@Test
 	public void exportaLosServiciosMasReservadosSegunPeriodo() {
 		
-		Map<ItemCatalogo, Integer> serviciosMasReservados = new HashMap();
+		Map<ItemCatalogo, Integer> serviciosMasReservados = new HashMap<>();
 		serviciosMasReservados.put(item1, 10);
 		serviciosMasReservados.put(item2, 20);
 		serviciosMasReservados.put(item3, 30);
 		
-		reporteReservados = new ReporteServiciosMasReservados(periodo1, serviciosMasReservados);
+		when(registroDeVentas.precioPromedioDe(item1, periodo1)).thenReturn(1000f);
+	    when(registroDeVentas.precioPromedioDe(item2, periodo1)).thenReturn(2000f);
+	    when(registroDeVentas.precioPromedioDe(item3, periodo1)).thenReturn(3000f);
+		
+		reporteReservados = new ReporteServiciosMasReservados(
+			    periodo1,
+			    serviciosMasReservados,
+			    registroDeVentas
+			);
 		
 		String resultado = exportador.exportar(reporteReservados);
 		
@@ -146,14 +156,14 @@ public class ExportadorHTMLTest {
 				"<td>" + String.format(Locale.US, "%.2f", reporteReservados.getPrecioPromedioCobrado(item1)) + "</td>" + "</tr>\n"
 				));
 		assertTrue(resultado.contains(
-				"<tr>" + "<td>" + exportador.escapar(item1.getNombre()) + "</td>" +
-				"<td>" + 10 + "</td>" +
-				"<td>" + String.format(Locale.US, "%.2f", reporteReservados.getPrecioPromedioCobrado(item1)) + "</td>" + "</tr>\n"
+				"<tr>" + "<td>" + exportador.escapar(item2.getNombre()) + "</td>" +
+				"<td>" + 20 + "</td>" +
+				"<td>" + String.format(Locale.US, "%.2f", reporteReservados.getPrecioPromedioCobrado(item2)) + "</td>" + "</tr>\n"
 				));
 		assertTrue(resultado.contains(
-				"<tr>" + "<td>" + exportador.escapar(item1.getNombre()) + "</td>" +
-				"<td>" + 10 + "</td>" +
-				"<td>" + String.format(Locale.US, "%.2f", reporteReservados.getPrecioPromedioCobrado(item1)) + "</td>" + "</tr>\n"
+				"<tr>" + "<td>" + exportador.escapar(item3.getNombre()) + "</td>" +
+				"<td>" + 30 + "</td>" +
+				"<td>" + String.format(Locale.US, "%.2f", reporteReservados.getPrecioPromedioCobrado(item3)) + "</td>" + "</tr>\n"
 				));
 		
 	}

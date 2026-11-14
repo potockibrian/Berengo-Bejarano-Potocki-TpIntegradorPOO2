@@ -39,6 +39,7 @@ public class ExportadorCSVTest {
 	private ItemCatalogo item1;
 	private ItemCatalogo item2;
 	private ItemCatalogo item3;
+	private RegistroDeVentas registroDeVentas;
 	
 	
 	@BeforeEach
@@ -67,6 +68,7 @@ public class ExportadorCSVTest {
 		when(item3.getPrecioFinal()).thenReturn(3000f);
 		
 		exportador = new ExportadorCSV();
+		registroDeVentas = mock(RegistroDeVentas.class);
 		
 	}
 	
@@ -118,12 +120,13 @@ public class ExportadorCSVTest {
 	@Test
 	public void exportaLosServiciosMasReservadosSegunPeriodo() {
 		
-		Map<ItemCatalogo, Integer> serviciosMasReservados = new HashMap();
+		Map<ItemCatalogo, Integer> serviciosMasReservados = new HashMap<>();
 		serviciosMasReservados.put(item1, 10);
 		serviciosMasReservados.put(item2, 20);
 		serviciosMasReservados.put(item3, 30);
 		
-		reporteReservados = new ReporteServiciosMasReservados(periodo1, serviciosMasReservados);
+		reporteReservados = new ReporteServiciosMasReservados(
+				periodo1, serviciosMasReservados, registroDeVentas);
 		
 		String resultado = exportador.exportar(reporteReservados);
 		

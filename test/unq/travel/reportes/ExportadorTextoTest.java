@@ -38,6 +38,7 @@ public class ExportadorTextoTest {
 	private ItemCatalogo item1;
 	private ItemCatalogo item2;
 	private ItemCatalogo item3;
+	private RegistroDeVentas registroDeVentas;
 	
 	@BeforeEach
 	void setUp() {
@@ -65,6 +66,7 @@ public class ExportadorTextoTest {
 		when(item3.getPrecioFinal()).thenReturn(3000f);
 		
 		exportador = new ExportadorTexto();
+		registroDeVentas = mock(RegistroDeVentas.class);
 		
 	}
 	@Test
@@ -116,12 +118,20 @@ public class ExportadorTextoTest {
 	@Test
 	public void exportaLosServiciosMasReservadosSegunPeriodoEnTexto() {
 		
-		Map<ItemCatalogo, Integer> serviciosMasReservados = new HashMap();
+		Map<ItemCatalogo, Integer> serviciosMasReservados = new HashMap<>();
 		serviciosMasReservados.put(item1, 10);
 		serviciosMasReservados.put(item2, 20);
 		serviciosMasReservados.put(item3, 30);
 		
-		reporteReservados = new ReporteServiciosMasReservados(periodo1, serviciosMasReservados);
+		when(registroDeVentas.precioPromedioDe(item1, periodo1)).thenReturn(1000f);
+		when(registroDeVentas.precioPromedioDe(item2, periodo1)).thenReturn(2000f);
+		when(registroDeVentas.precioPromedioDe(item3, periodo1)).thenReturn(3000f);
+		
+		reporteReservados = new ReporteServiciosMasReservados(
+			    periodo1,
+			    serviciosMasReservados,
+			    registroDeVentas
+			);
 		
 		String resultado = exportador.exportar(reporteReservados);
 		
