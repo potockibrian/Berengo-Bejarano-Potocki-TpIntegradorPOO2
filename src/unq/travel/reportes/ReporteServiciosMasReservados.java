@@ -12,24 +12,20 @@ public class ReporteServiciosMasReservados {
 	
 	private RangoDeFechas periodo;
 	private Map<ItemCatalogo, Integer> items;
+	private RegistroDeVentas registroDeVentas;
 	
-	public ReporteServiciosMasReservados(RangoDeFechas periodo, Map<ItemCatalogo, Integer> items) {
+	public ReporteServiciosMasReservados(
+			RangoDeFechas periodo, 
+			Map<ItemCatalogo, Integer> items,
+			RegistroDeVentas registroDeVentas) {
 		
 		this.periodo = periodo;
-		this.items = items;
+		this.items = new HashMap<>(items);
+		this.registroDeVentas = registroDeVentas;
 	
 	}
-	
-	/*
-	public Map<ItemCatalogo, Integer> getItems() {
-		
-		return items;
-				
-	}
-	*/
 
 	public RangoDeFechas getPeriodo() {
-
 		return periodo;
 
 	}
@@ -38,25 +34,14 @@ public class ReporteServiciosMasReservados {
 		
 		return items.entrySet()
 			        .stream()
-			        .sorted(Map.Entry.comparingByValue())
+			        .sorted(Map.Entry.<ItemCatalogo, Integer>
+			        			comparingByValue().reversed())
 			        .toList();
 		
 	}
 
 	public float getPrecioPromedioCobrado(ItemCatalogo item) {
-
-		return item.getPrecioFinal() / items.get(item);
-		
+		return registroDeVentas.precioPromedioDe(item, periodo);
 	}
-
-	/*
-	public Object getCantidad(ItemCatalogo item) {
-
-		return items.get(item);
-		
-	}
-	*/
-
-	
 	
 }

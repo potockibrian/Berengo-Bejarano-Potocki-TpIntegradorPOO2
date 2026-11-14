@@ -2,11 +2,9 @@ package unq.travel.reportes;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.ArgumentMatchers.any;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,31 +20,35 @@ import unq.travel.cupos.RangoDeFechas;
 class VisitanteServiciosMasReservadosTest {
 
 	private RangoDeFechas periodo;
-	private Cupo cupo;
 	private ServicioIndividual servicio1;
 	private ServicioIndividual servicio2;
 	private VisitanteServiciosMasReservados visitante;
 	private Catalogo catalogo;
 	private PaqueteTuristico paquete;
+	private RegistroDeVentas registroDeVentas;
 	
 	@BeforeEach
 	void setUp() throws Exception {
 		
 		periodo = mock(RangoDeFechas.class);
-		cupo = mock(Cupo.class);
+		
 		servicio1 = mock(ServicioIndividual.class);
 		servicio2 = mock(ServicioIndividual.class);
 		paquete = mock(PaqueteTuristico.class);
-		catalogo = new Catalogo();
 		
-		visitante = new VisitanteServiciosMasReservados(periodo);
+		catalogo = new Catalogo();
+		registroDeVentas = mock(RegistroDeVentas.class);
+		
+		visitante = new VisitanteServiciosMasReservados(
+				periodo, registroDeVentas);
 		
 	}
 
 	@Test
 	void testProcesarCatalogoVacio() {
 		
-		ReporteServiciosMasReservados reporte = visitante.procesar(catalogo, periodo);
+		ReporteServiciosMasReservados reporte = 
+				visitante.procesar(catalogo, periodo);
 		
 		assertTrue(reporte.getItemsOrdenados().isEmpty());
 		
@@ -54,24 +56,13 @@ class VisitanteServiciosMasReservadosTest {
 	
 	@Test
 	void testProcesarConCatalogoConElementos() {
+	    catalogo.agregarItem(servicio1);
+	    catalogo.agregarItem(paquete);
 
-		List<Cupo> cupos = new ArrayList<>();
-		cupos.add(cupo);
-		Map<RangoDeFechas, List<Cupo>> cuposPorPeriodo = new HashMap<>();
-		cuposPorPeriodo.put(periodo, cupos);
-		List<Cupo> cuposPorCategoria = new ArrayList<>();
-		List<ItemCatalogo> items = new ArrayList<>();
-		when(servicio1.getCategoria()).thenReturn(Categoria.ALOJAMIENTO);
-		when(servicio1.cuposPorPeriodo()).thenReturn(cuposPorPeriodo);
-		when(servicio1.cupos()).thenReturn(cuposPorCategoria);
-		catalogo.agregarItem(servicio1);
-		catalogo.agregarItem(paquete);
-		
-		ReporteServiciosMasReservados reporte = visitante.procesar(catalogo, periodo);
+	    visitante.procesar(catalogo, periodo);
 
-		verify(servicio1).aceptar(visitante);
-		verify(paquete).aceptar(visitante);		
-		
+	    verify(servicio1).aceptar(visitante);
+	    verify(paquete).aceptar(visitante);
 	}
 	
 	@Test
@@ -79,25 +70,50 @@ class VisitanteServiciosMasReservadosTest {
 		
 		visitante.visitar(paquete);
 		
-		verify(paquete).cantidadDeVentasEnPeriodo(periodo);
+		verify(registroDeVentas).cantidadDeVentasDe(paquete, periodo);
 		
 	}
 	
 	@Test
 	void testVisitarComoServicioIndividual() {
+	    visitante.visitar(servicio1);
 
-		List<Cupo> cupos = new ArrayList<>();
-		cupos.add(cupo);
-		Map<RangoDeFechas, List<Cupo>> cuposPorPeriodo = new HashMap<>();
-		cuposPorPeriodo.put(periodo, cupos);
-		when(servicio1.getCategoria()).thenReturn(Categoria.ALOJAMIENTO);
-		when(servicio1.cuposPorPeriodo()).thenReturn(cuposPorPeriodo);
-		when(servicio1.cupos()).thenReturn(cupos);
-		
-		visitante.visitar(servicio1);
-		
-		verify(servicio1).cantidadDeVentasEnPeriodo(periodo);
-		
+	    verify(registroDeVentas).cantidadDeVentasDe(servicio1, periodo);
+	}
+	
+	@Test
+	void testProcesarIncluyeLaCantidadDeVentasDeCadaProducto() {
+	    catalogo.agregarItem(servicio1);
+	    catalogo.agregarItem(paquete);
+
+	    when(registroDeVentas.cantidadDeVentasDe(servicio1, periodo))
+	        .thenReturn(3);
+
+	    when(registroDeVentas.cantidadDeVentasDe(paquete, periodo))
+	        .thenReturn(5);
+
+	    doAnswer(invocation -> {
+	        Visitor visitor = invocation.getArgument(0);
+	        visitor.visitar(servicio1);
+	        return null;
+	    }).when(servicio1).aceptar(any(Visitor.class));
+
+	    doAnswer(invocation -> {
+	        Visitor visitor = invocation.getArgument(0);
+	        visitor.visitar(paquete);
+	        return null;
+	    }).when(paquete).aceptar(any(Visitor.class));
+
+	    ReporteServiciosMasReservados reporte =
+	        visitante.procesar(catalogo, periodo);
+
+	    assertEquals(3, reporte.getItemsOrdenados().stream()
+	        .filter(entry -> entry.getKey() == servicio1)
+	        .findFirst().get().getValue());
+
+	    assertEquals(5, reporte.getItemsOrdenados().stream()
+	        .filter(entry -> entry.getKey() == paquete)
+	        .findFirst().get().getValue());
 	}
 
 }

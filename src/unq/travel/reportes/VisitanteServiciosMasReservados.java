@@ -13,10 +13,14 @@ public class VisitanteServiciosMasReservados implements Visitor {
 	
 	private Map<ItemCatalogo, Integer> items = new HashMap<>();
 	private RangoDeFechas periodo;
+	private RegistroDeVentas registroDeVentas;
 	
-	public VisitanteServiciosMasReservados(RangoDeFechas periodo) {
+	public VisitanteServiciosMasReservados(
+			RangoDeFechas periodo,
+			RegistroDeVentas registroDeVentas) {
 		
 		this.periodo = periodo;
+		this.registroDeVentas = registroDeVentas;
 		
 	}
 	
@@ -29,29 +33,32 @@ public class VisitanteServiciosMasReservados implements Visitor {
 	@Override
 	public void visitar(ServicioIndividual servicio) {
 		
-		items.put(servicio, servicio.cantidadDeVentasEnPeriodo(periodo));
+		items.put(servicio, 
+				registroDeVentas.cantidadDeVentasDe(servicio, periodo));
 		
 	}
 	
 	@Override
 	public void visitar(PaqueteTuristico paquete) {
 
-		items.put(paquete, paquete.cantidadDeVentasEnPeriodo(periodo));
+		items.put(paquete, 
+				registroDeVentas.cantidadDeVentasDe(paquete, periodo));
 		
 	}
 	
-	public ReporteServiciosMasReservados procesar(Catalogo catalogo, RangoDeFechas periodo) {
+	public ReporteServiciosMasReservados procesar(
+			Catalogo catalogo, RangoDeFechas periodo) {
 		
 		items.clear();
 		this.setPeriodo(periodo);
 		
 		for(ItemCatalogo item : catalogo.getItems()) {
-		
 			item.aceptar(this);
 		
 		}
 		
-		return new ReporteServiciosMasReservados(periodo, items);
+		return new ReporteServiciosMasReservados(
+				periodo, items, registroDeVentas);
 		
 	}
 
