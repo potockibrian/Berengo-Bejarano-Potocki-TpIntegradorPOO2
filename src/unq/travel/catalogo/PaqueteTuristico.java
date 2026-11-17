@@ -172,11 +172,23 @@ public class PaqueteTuristico extends ItemCatalogo {
 
 	@Override
 	public void reservar(RangoDeFechas rango) {
-		
-		if(!this.tieneDisponibilidad(rango)) throw new SinStockException();
-		
-		items.stream().forEach(i -> i.reservar(rango));
-		
+
+		if (!this.tieneDisponibilidad(rango)) {
+			throw new SinStockException();
+		}
+		List<ItemCatalogo> reservados = new ArrayList<ItemCatalogo>();
+		try {
+			for (ItemCatalogo item : items) {
+				item.reservar(rango);
+				reservados.add(item);
+			}
+		} catch (SinStockException e) {
+			for (ItemCatalogo item : reservados) {
+				item.liberar(rango);
+			}
+			throw e;
+		}
+
 	}
 
 	@Override

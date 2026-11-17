@@ -1,6 +1,7 @@
 package unq.travel.catalogo;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -269,14 +270,18 @@ class PaqueteTuristicoTest {
 	@Test
 	void testDecrementarCupoConUnServicioRepetidoSinCupoSuficienteNoPierdeCupo() {
 
-		when(calendario1.tieneDisponibilidad(periodo)).thenReturn(false);
-		when(calendario2.tieneDisponibilidad(periodo)).thenReturn(true);
-		ServicioIndividual hotelConUnCupo = this.crearServicioConCupo("Noche de Hotel Central", 1);
+		CalendarioDeCupos calendarioDelHotel = mock(CalendarioDeCupos.class);
+		when(calendarioDelHotel.tieneDisponibilidad(periodo)).thenReturn(true);
+		doNothing().doThrow(new SinStockException()).when(calendarioDelHotel).reservar(periodo);
+		ServicioIndividual hotelConUnCupo = new ServicioIndividual("Noche de Hotel Central", "Habitación doble",
+				"HTL-001", "Hoteles Centro SA", Categoria.ALOJAMIENTO, 15000f, 0f, 1, calendarioDelHotel);
 		PaqueteTuristico dosNoches = new PaqueteTuristico("Dos noches de hotel", "Hotel dos noches", 0.10f, calendario2);
 		dosNoches.agregarItem(hotelConUnCupo);
 		dosNoches.agregarItem(hotelConUnCupo);
 
 		assertThrows(SinStockException.class, () -> dosNoches.reservar(periodo));
+
+		verify(calendarioDelHotel).liberar(periodo);
 
 	}
 
