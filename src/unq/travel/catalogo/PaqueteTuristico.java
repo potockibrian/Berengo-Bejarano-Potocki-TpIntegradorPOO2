@@ -157,6 +157,13 @@ public class PaqueteTuristico extends ItemCatalogo {
 	}
 
 	@Override
+	public boolean tieneDisponibilidad() {
+
+		return items.stream().allMatch(item -> item.tieneDisponibilidad());
+
+	}
+
+	@Override
 	public boolean tieneDisponibilidad(RangoDeFechas rango) {
 
 		return items.stream().allMatch(i -> i.tieneDisponibilidad(rango));

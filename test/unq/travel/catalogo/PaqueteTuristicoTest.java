@@ -128,6 +128,23 @@ class PaqueteTuristicoTest {
 	}
 
 	@Test
+	void testTieneDisponibilidadSiSusItemsTienenAunqueElCalendarioDelPaqueteNoTenga() {
+
+		CalendarioDeCupos calendarioDelHotel = mock(CalendarioDeCupos.class);
+		CalendarioDeCupos calendarioDelPaquete = mock(CalendarioDeCupos.class);
+		when(calendarioDelHotel.tieneDisponibilidad()).thenReturn(true);
+		when(calendarioDelPaquete.tieneDisponibilidad()).thenReturn(false);
+		ServicioIndividual hotelDisponible = new ServicioIndividual("Noche de Hotel Central", "Habitación doble",
+				"HTL-001", "Hoteles Centro SA", Categoria.ALOJAMIENTO, 15000f, 0f, 10, calendarioDelHotel);
+		PaqueteTuristico paquete = new PaqueteTuristico("Paquete", "Hotel con disponibilidad", 0.10f, calendarioDelPaquete);
+
+		paquete.agregarItem(hotelDisponible);
+
+		assertTrue(paquete.tieneDisponibilidad());
+
+	}
+
+	@Test
 	void testNoTieneDisponibilidadSiAlgunServicioNoTieneStock() {
 
 		packEscapadaUrbana.agregarItem(this.crearServicioSinStock("Alquiler de Auto", Categoria.ALQUILER_AUTO));
