@@ -31,7 +31,6 @@ public class RegistroDeVentasTest {
 				Categoria.ALOJAMIENTO,
 				1000,
 				0,
-				10,
 				new CalendarioDeCupos(10));
 		
 		otroServicio = new ServicioIndividual(
@@ -42,7 +41,6 @@ public class RegistroDeVentasTest {
 			    Categoria.EXCURSION,
 			    2000f,
 			    0f,
-			    10,
 			    new CalendarioDeCupos(10));
 		
 		periodo = new RangoDeFechas(

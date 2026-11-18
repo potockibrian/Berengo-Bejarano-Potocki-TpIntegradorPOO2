@@ -21,7 +21,6 @@ public class VisitorTest {
 				Categoria.ALOJAMIENTO,
 				15000,
 				0,
-				10,
 				new CalendarioDeCupos(0)
 		);
 		

@@ -68,4 +68,15 @@ class CatalogoTest {
 
 	}
 
+	@Test
+	void testModificarLaListaDeItemsDevueltaNoModificaElCatalogo() {
+
+		catalogo.agregarItem(hotel);
+
+		catalogo.getItems().clear();
+
+		assertEquals(List.of(hotel), catalogo.getItems());
+
+	}
+
 }

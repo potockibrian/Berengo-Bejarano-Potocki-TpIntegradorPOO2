@@ -20,7 +20,6 @@ public class VisitanteExposicionProveedoresTest {
 				Categoria.ALOJAMIENTO,
 				1000,
 				0,
-				10,
 				new CalendarioDeCupos(5)
 		);
 		
@@ -42,7 +41,6 @@ public class VisitanteExposicionProveedoresTest {
 				Categoria.ALOJAMIENTO,
 				1000,
 				0,
-				10,
 				new CalendarioDeCupos(0)
 		);
 		
@@ -54,7 +52,6 @@ public class VisitanteExposicionProveedoresTest {
 				Categoria.VUELO,
 				2000,
 				0,
-				10,
 				new CalendarioDeCupos(0)
 		);
 		
@@ -66,7 +63,6 @@ public class VisitanteExposicionProveedoresTest {
 				Categoria.EXCURSION,
 				500,
 				0,
-				10,
 				new CalendarioDeCupos(0)
 		);
 		
@@ -110,7 +106,6 @@ public class VisitanteExposicionProveedoresTest {
 				Categoria.ALOJAMIENTO,
 				1000,
 				0,
-				10,
 				new CalendarioDeCupos(0)
 		);
 		
@@ -122,7 +117,6 @@ public class VisitanteExposicionProveedoresTest {
 				Categoria.VUELO,
 				2000,
 				0,
-				10,
 				new CalendarioDeCupos(0)
 		);
 		
@@ -137,7 +131,6 @@ public class VisitanteExposicionProveedoresTest {
 				Categoria.EXCURSION,
 				500,
 				0,
-				10,
 				new CalendarioDeCupos(0)
 		);
 		
@@ -182,7 +175,6 @@ public class VisitanteExposicionProveedoresTest {
 				Categoria.ALOJAMIENTO,
 				1000,
 				0,
-				10,
 				new CalendarioDeCupos(0)
 		);
 		
@@ -194,7 +186,6 @@ public class VisitanteExposicionProveedoresTest {
 				Categoria.VUELO,
 				2000,
 				0,
-				10,
 				new CalendarioDeCupos(0)
 		);
 		
@@ -223,7 +214,6 @@ public class VisitanteExposicionProveedoresTest {
 				Categoria.ALOJAMIENTO,
 				1000,
 				0,
-				10,
 				new CalendarioDeCupos(0)
 		);
 		
@@ -235,7 +225,6 @@ public class VisitanteExposicionProveedoresTest {
 				Categoria.VUELO,
 				2000,
 				0,
-				10,
 				new CalendarioDeCupos(0)
 		);
 		
@@ -247,7 +236,6 @@ public class VisitanteExposicionProveedoresTest {
 				Categoria.EXCURSION,
 				500,
 				0,
-				10,
 				new CalendarioDeCupos(0)
 		);
 		
@@ -292,7 +280,6 @@ public class VisitanteExposicionProveedoresTest {
 				Categoria.ALOJAMIENTO,
 				1000,
 				0,
-				10,
 				new CalendarioDeCupos(0)
 		);
 		
@@ -304,7 +291,6 @@ public class VisitanteExposicionProveedoresTest {
 				Categoria.VUELO,
 				2000,
 				0,
-				10,
 				new CalendarioDeCupos(0)
 		);
 		
@@ -327,7 +313,6 @@ public class VisitanteExposicionProveedoresTest {
 				Categoria.EXCURSION,
 				500,
 				0,
-				10,
 				new CalendarioDeCupos(0)
 		);
 		

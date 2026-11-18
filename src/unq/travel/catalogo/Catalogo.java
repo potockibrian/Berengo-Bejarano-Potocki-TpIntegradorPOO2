@@ -30,7 +30,7 @@ public class Catalogo {
 
 	public List<ItemCatalogo> getItems() {
 
-		return items;
+		return new ArrayList<ItemCatalogo>(items);
 
 	}
 

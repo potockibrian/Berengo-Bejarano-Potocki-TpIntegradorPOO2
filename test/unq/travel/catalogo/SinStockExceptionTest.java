@@ -1,30 +1,18 @@
 package unq.travel.catalogo;
 
-import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class SinStockExceptionTest {
 
-	@BeforeEach
-	void setUp() throws Exception {
-	}
-
 	@Test
-	void testSinStockException() {
+	void testGuardaElMensajeRecibido() {
 
-		try {
-			
-			throw new SinStockException("error");
-			
-		} catch (SinStockException e) {
-			
-			assertEquals("error", e.getMessage());
-			
-		}
-			
+		SinStockException excepcion = new SinStockException("No hay cupo disponible");
+
+		assertEquals("No hay cupo disponible", excepcion.getMessage());
+
 	}
 
 }

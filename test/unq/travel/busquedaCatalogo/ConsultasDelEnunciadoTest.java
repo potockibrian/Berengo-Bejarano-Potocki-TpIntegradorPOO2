@@ -32,11 +32,11 @@ class ConsultasDelEnunciadoTest {
 	void setUp() {
 		calendario1 = mock(CalendarioDeCupos.class);
 		calendario2 = mock(CalendarioDeCupos.class);
-		hotel = this.crearServicio("Noche de Hotel Central", Categoria.ALOJAMIENTO, 15000f, 10, calendario1);
-		resortSinCupo = this.crearServicio("Resort Playa Dorada", Categoria.ALOJAMIENTO, 30000f, 0, calendario2);
-		museo = this.crearServicio("Excursion Guiada Museo", Categoria.EXCURSION, 4000f, 10, calendario1);
-		tourEnOferta = this.crearServicio("Tour Nocturno en Oferta", Categoria.EXCURSION, 18000f, 10, calendario1);
-		traslado = this.crearServicio("Traslado Aeropuerto-Hotel", Categoria.TRASLADO, 2000f, 10, calendario1);
+		hotel = this.crearServicio("Noche de Hotel Central", Categoria.ALOJAMIENTO, 15000f, calendario1);
+		resortSinCupo = this.crearServicio("Resort Playa Dorada", Categoria.ALOJAMIENTO, 30000f, calendario2);
+		museo = this.crearServicio("Excursion Guiada Museo", Categoria.EXCURSION, 4000f, calendario1);
+		tourEnOferta = this.crearServicio("Tour Nocturno en Oferta", Categoria.EXCURSION, 18000f, calendario1);
+		traslado = this.crearServicio("Traslado Aeropuerto-Hotel", Categoria.TRASLADO, 2000f, calendario1);
 
 		packEscapadaUrbana = new PaqueteTuristico("Pack Escapada Urbana", "Hotel, museo y traslado", 0.10f, calendario1);
 		packEscapadaUrbana.agregarItem(hotel);
@@ -44,7 +44,7 @@ class ConsultasDelEnunciadoTest {
 		packEscapadaUrbana.agregarItem(traslado);
 
 		packRutaDelVino = new PaqueteTuristico("Pack Ruta del Vino", "Alquiler de auto por bodegas", 0.10f, calendario1);
-		packRutaDelVino.agregarItem(this.crearServicio("Alquiler de Auto", Categoria.ALQUILER_AUTO, 20000f, 10, calendario1));
+		packRutaDelVino.agregarItem(this.crearServicio("Alquiler de Auto", Categoria.ALQUILER_AUTO, 20000f, calendario1));
 
 		Catalogo catalogo = new Catalogo();
 		catalogo.agregarItem(hotel);
@@ -92,9 +92,9 @@ class ConsultasDelEnunciadoTest {
 
 	}
 
-	private ServicioIndividual crearServicio(String nombre, Categoria categoria, float precio, int stock, CalendarioDeCupos calendario) {
+	private ServicioIndividual crearServicio(String nombre, Categoria categoria, float precio, CalendarioDeCupos calendario) {
 		return new ServicioIndividual(nombre, "Descripcion de " + nombre, "COD-" + nombre,
-				"Operador SA", categoria, precio, 0f, stock, calendario);
+				"Operador SA", categoria, precio, 0f, calendario);
 	}
 
 }

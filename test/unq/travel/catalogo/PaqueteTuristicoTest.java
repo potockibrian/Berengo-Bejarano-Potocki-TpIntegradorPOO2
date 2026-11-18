@@ -114,11 +114,11 @@ class PaqueteTuristicoTest {
 
 		when(calendario1.tieneDisponibilidad(periodo)).thenReturn(true);
 		when(calendario2.tieneDisponibilidad(periodo)).thenReturn(true);
-		PaqueteTuristico packSinStock = new PaqueteTuristico("Pack sin stock", "Servicio agotado", 0.10f, calendario1);
+		PaqueteTuristico packSinCupo = new PaqueteTuristico("Pack sin cupo", "Servicio agotado", 0.10f, calendario1);
 		PaqueteTuristico kitGranTour = new PaqueteTuristico("Kit Gran Tour", "Pack Escapada Urbana y pack agotado", 0.20f, calendario2);
 		
 		packEscapadaUrbana.agregarItem(kitGranTour);
-		packEscapadaUrbana.agregarItem(packSinStock);
+		packEscapadaUrbana.agregarItem(packSinCupo);
 		
 		assertTrue(packEscapadaUrbana.tieneDisponibilidad(periodo));
 
@@ -136,7 +136,7 @@ class PaqueteTuristicoTest {
 		when(calendarioDelHotel.tieneDisponibilidad()).thenReturn(true);
 		when(calendarioDelPaquete.tieneDisponibilidad()).thenReturn(false);
 		ServicioIndividual hotelDisponible = new ServicioIndividual("Noche de Hotel Central", "Habitación doble",
-				"HTL-001", "Hoteles Centro SA", Categoria.ALOJAMIENTO, 15000f, 0f, 10, calendarioDelHotel);
+				"HTL-001", "Hoteles Centro SA", Categoria.ALOJAMIENTO, 15000f, 0f, calendarioDelHotel);
 		PaqueteTuristico paquete = new PaqueteTuristico("Paquete", "Hotel con disponibilidad", 0.10f, calendarioDelPaquete);
 
 		paquete.agregarItem(hotelDisponible);
@@ -146,9 +146,9 @@ class PaqueteTuristicoTest {
 	}
 
 	@Test
-	void testNoTieneDisponibilidadSiAlgunServicioNoTieneStock() {
+	void testNoTieneDisponibilidadSiAlgunServicioNoTieneCupo() {
 
-		packEscapadaUrbana.agregarItem(this.crearServicioSinStock("Alquiler de Auto", Categoria.ALQUILER_AUTO));
+		packEscapadaUrbana.agregarItem(this.crearServicio("Alquiler de Auto", Categoria.ALQUILER_AUTO, 1000f, 0f));
 
 		assertFalse(packEscapadaUrbana.tieneDisponibilidad());
 
@@ -157,12 +157,12 @@ class PaqueteTuristicoTest {
 	@Test
 	void testNoTieneDisponibilidadSiUnPaqueteAnidadoNoTiene() {
 
-		PaqueteTuristico packSinStock = new PaqueteTuristico("Pack sin stock", "Servicio agotado", 0.10f, calendario1);
+		PaqueteTuristico packSinCupo = new PaqueteTuristico("Pack sin cupo", "Servicio agotado", 0.10f, calendario1);
 		PaqueteTuristico kitGranTour = new PaqueteTuristico("Kit Gran Tour", "Pack Escapada Urbana y pack agotado", 0.20f, calendario1);
 
-		packSinStock.agregarItem(this.crearServicioSinStock("Tour Gastronomico", Categoria.EXCURSION));
+		packSinCupo.agregarItem(this.crearServicio("Tour Gastronomico", Categoria.EXCURSION, 1000f, 0f));
 		kitGranTour.agregarItem(packEscapadaUrbana);
-		kitGranTour.agregarItem(packSinStock);
+		kitGranTour.agregarItem(packSinCupo);
 
 		assertFalse(kitGranTour.tieneDisponibilidad());
 
@@ -179,7 +179,7 @@ class PaqueteTuristicoTest {
 	void testNoCumpleConLaValidacionSiTieneUnServicioInvalido() {
 
 		ServicioIndividual servicioSinCodigo = new ServicioIndividual("Alquiler de Auto", "Auto compacto",
-				null, "Operador SA", Categoria.ALQUILER_AUTO, 8000f, 0f, 10, calendario1);
+				null, "Operador SA", Categoria.ALQUILER_AUTO, 8000f, 0f, calendario1);
 
 		packEscapadaUrbana.agregarItem(servicioSinCodigo);
 
@@ -256,10 +256,10 @@ class PaqueteTuristicoTest {
 	@Test
 	void testDecrementarCupoSinDisponibilidadLanzaExcepcionYNoModificaNingunItem() {
 
-		ServicioIndividual hotelConUnCupo = this.crearServicioConCupo("Noche de Hotel Central", 1);
+		ServicioIndividual hotelConUnCupo = this.crearServicio("Noche de Hotel Central", Categoria.ALOJAMIENTO, 1000f, 0f);
 		PaqueteTuristico paquete = new PaqueteTuristico("Paquete", "Hotel y auto agotado", 0.10f, calendario1);
 		paquete.agregarItem(hotelConUnCupo);
-		paquete.agregarItem(this.crearServicioSinStock("Alquiler de Auto", Categoria.ALQUILER_AUTO));
+		paquete.agregarItem(this.crearServicio("Alquiler de Auto", Categoria.ALQUILER_AUTO, 1000f, 0f));
 
 		assertThrows(SinStockException.class, () -> paquete.reservar(periodo));
 
@@ -274,7 +274,7 @@ class PaqueteTuristicoTest {
 		when(calendarioDelHotel.tieneDisponibilidad(periodo)).thenReturn(true);
 		doNothing().doThrow(new SinStockException()).when(calendarioDelHotel).reservar(periodo);
 		ServicioIndividual hotelConUnCupo = new ServicioIndividual("Noche de Hotel Central", "Habitación doble",
-				"HTL-001", "Hoteles Centro SA", Categoria.ALOJAMIENTO, 15000f, 0f, 1, calendarioDelHotel);
+				"HTL-001", "Hoteles Centro SA", Categoria.ALOJAMIENTO, 15000f, 0f, calendarioDelHotel);
 		PaqueteTuristico dosNoches = new PaqueteTuristico("Dos noches de hotel", "Hotel dos noches", 0.10f, calendario2);
 		dosNoches.agregarItem(hotelConUnCupo);
 		dosNoches.agregarItem(hotelConUnCupo);
@@ -340,17 +340,7 @@ class PaqueteTuristicoTest {
 
 	private ServicioIndividual crearServicio(String nombre, Categoria categoria, float precio, float descuento) {
 		return new ServicioIndividual(nombre, "Descripcion de " + nombre, "COD-" + nombre,
-				"Operador SA", categoria, precio, descuento, 10, calendario1);
-	}
-
-	private ServicioIndividual crearServicioSinStock(String nombre, Categoria categoria) {
-		return new ServicioIndividual(nombre, "Descripcion de " + nombre, "COD-" + nombre,
-				"Operador SA", categoria, 1000f, 0f, 0, calendario1);
-	}
-
-	private ServicioIndividual crearServicioConCupo(String nombre, int cupo) {
-		return new ServicioIndividual(nombre, "Descripcion de " + nombre, "COD-" + nombre,
-				"Operador SA", Categoria.ALOJAMIENTO, 1000f, 0f, cupo, calendario1);
+				"Operador SA", categoria, precio, descuento, calendario1);
 	}
 
 }

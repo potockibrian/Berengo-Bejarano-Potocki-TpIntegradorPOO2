@@ -14,29 +14,23 @@ public class ServicioIndividual extends ItemCatalogo {
 	private Categoria categoria;
 	private float precioBase;
 	private float descuentoPromocional;
-	private int stock;
 	private List<AtributoDinamico> atributosDinamicos;
 
 	public ServicioIndividual(String nombre, String descripcion, String codigoReserva, String proveedor,
-			Categoria categoria, float precioBase, float descuentoPromocional, int stock, CalendarioDeCupos calendario) {
+			Categoria categoria, float precioBase, float descuentoPromocional, CalendarioDeCupos calendario) {
 
 		super(nombre, descripcion, calendario);
 		validarDescuento(descuentoPromocional);
 		if (precioBase < 0) {
 			throw new IllegalArgumentException("El precio base no puede ser negativo");
 		}
-		if (stock < 0) {
-			throw new IllegalArgumentException("El stock no puede ser negativo");
-		}
 		this.codigoReserva = codigoReserva;
 		this.proveedor = proveedor;
 		this.categoria = categoria;
 		this.precioBase = precioBase;
 		this.descuentoPromocional = descuentoPromocional;
-		this.stock = stock;
 		this.atributosDinamicos = new ArrayList<AtributoDinamico>();
-		this.calendario = calendario;
-		
+
 	}
 
 	public String getProveedor() {
@@ -80,32 +74,6 @@ public class ServicioIndividual extends ItemCatalogo {
 		return this.categoria == categoria;
 
 	}
-
-	/*
-	@Override
-	public boolean tieneDisponibilidad() {
-
-		return stock > 0;
-
-	}
-
-	@Override
-	public void decrementarCupo() {
-
-		if (!this.tieneDisponibilidad()) {
-			throw new SinStockException("No hay cupo disponible de " + this.getNombre());
-		}
-		stock = stock - 1;
-
-	}
-
-	@Override
-	public void incrementarCupo() {
-
-		stock = stock + 1;
-
-	}
-	*/
 
 	public void definirAtributo(String nombre, boolean obligatorio, TipoAtributo tipo) {
 

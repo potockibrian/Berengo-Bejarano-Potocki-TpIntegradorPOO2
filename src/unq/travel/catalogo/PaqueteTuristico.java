@@ -77,48 +77,6 @@ public class PaqueteTuristico extends ItemCatalogo {
 
 	}
 
-	/*
-	@Override
-	public boolean tieneDisponibilidad() {
-
-		for (ItemCatalogo item : items) {
-			if (!item.tieneDisponibilidad()) {
-				return false;
-			}
-		}
-		return true;
-
-	}
-
-	@Override
-	public void decrementarCupo() {
-
-		List<ItemCatalogo> decrementados = new ArrayList<ItemCatalogo>();
-		try {
-			for (ItemCatalogo item : items) {
-				item.decrementarCupo();
-				decrementados.add(item);
-			}
-		} catch (SinStockException e) {
-			for (ItemCatalogo item : decrementados) {
-				item.incrementarCupo();
-			}
-			throw e;
-		}
-
-	}
-
-	@Override
-	public void incrementarCupo() {
-
-		for (ItemCatalogo item : items) {
-			item.incrementarCupo();
-		}
-
-	}
-	
-	*/
-
 	@Override
 	public void aceptar(Visitor visitor) {
 
