@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import libraries.TrasladoVIP;
+import unq.travel.cupos.RangoDeFechas;
 
 class EstrategiaTrasladoVIPTest {
 	
@@ -38,7 +39,21 @@ class EstrategiaTrasladoVIPTest {
 	@Test
 	void testHayDisponibilidad() {
 		
-		assertTrue(estrategia.hayDisponibilidad());
+		assertTrue(estrategia.hayDisponibilidad(mock(RangoDeFechas.class)));
+		
+	}
+	
+	@Test
+	void testLiberar() {
+		
+		estrategia.liberar(mock(RangoDeFechas.class));
+		
+	}
+	
+	@Test
+	void testReservar() {
+		
+		estrategia.reservar(mock(RangoDeFechas.class));
 		
 	}
 	

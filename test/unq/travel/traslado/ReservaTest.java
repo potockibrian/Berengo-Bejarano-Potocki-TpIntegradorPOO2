@@ -99,22 +99,9 @@ class ReservaTest {
 	@Test
 	void testConfirmarReservaConDisponibilidadDeTraslado() {
 
-		when(estrategia.hayDisponibilidad()).thenReturn(true);
-
 		reserva.confirmarReserva();
 		
 		verify(estado).confirmar();
-		
-	}
-	
-	@Test
-	void testConfirmarReservaSinDisponibilidadDeTraslado() {
-		
-		when(estrategia.hayDisponibilidad()).thenReturn(false);
-		
-		assertThrows(NoHayDisponibilidadException.class, () -> reserva.confirmarReserva());
-		
-		verify(estado, never()).confirmar();
 		
 	}
 	
@@ -252,6 +239,7 @@ class ReservaTest {
 		ItemCatalogo item2 = mock(ItemCatalogo.class);
 		when(item1.tieneDisponibilidad(any())).thenReturn(true);
 		when(item2.tieneDisponibilidad(any())).thenReturn(true);
+		when(estrategia.hayDisponibilidad(any(RangoDeFechas.class))).thenReturn(true);
 		reserva.doAgregarItem(item1, new RangoDeFechas(LocalDate.of(2000, 1, 1), LocalDate.of(2000, 1, 2)));
 		reserva.doAgregarItem(item2, new RangoDeFechas(LocalDate.of(2000, 3, 2), LocalDate.of(2000, 3, 3)));
 		
@@ -273,6 +261,25 @@ class ReservaTest {
 		reserva.doAgregarItem(item1, periodo);
 		reserva.doAgregarItem(item2, periodo);
 		when(item2.tieneDisponibilidad(any())).thenReturn(false);
+		
+		assertThrows(NoHayDisponibilidadException.class, () -> reserva.doConfirmar());
+		
+		verify(item1, never()).reservar(any());
+		verify(item2, never()).reservar(any());
+		verify(metodoDePago, never()).pagar(reserva.costoTotalReserva());;
+		
+	}
+
+	@Test
+	void testDoConfirmarSinCupoDeTrasladoParaTodos() {
+		
+		ItemCatalogo item1 = mock(ItemCatalogo.class);
+		ItemCatalogo item2 = mock(ItemCatalogo.class);
+		when(item1.tieneDisponibilidad(any())).thenReturn(true);
+		when(item2.tieneDisponibilidad(any())).thenReturn(true);
+		reserva.doAgregarItem(item1, periodo);
+		reserva.doAgregarItem(item2, periodo);
+		when(estrategia.hayDisponibilidad(any())).thenReturn(false);
 		
 		assertThrows(NoHayDisponibilidadException.class, () -> reserva.doConfirmar());
 		

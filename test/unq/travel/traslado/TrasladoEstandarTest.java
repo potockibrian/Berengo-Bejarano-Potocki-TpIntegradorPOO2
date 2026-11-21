@@ -7,9 +7,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import libraries.PlataformaTransporte;
+import unq.travel.cupos.RangoDeFechas;
 
 class TrasladoEstandarTest {
 	
+	private RangoDeFechas periodo;
 	private EstrategiaTraslado estrategia;
 	private PlataformaTransporte libreria;
 	private Reserva reserva;
@@ -18,6 +20,7 @@ class TrasladoEstandarTest {
 	@BeforeEach
 	void setUp() {
 		
+		periodo = mock(RangoDeFechas.class);
 		libreria = mock(PlataformaTransporte.class);
 		reserva = mock(Reserva.class);
 		direccion = mock(Direccion.class);
@@ -41,7 +44,7 @@ class TrasladoEstandarTest {
 	@Test
 	void testHayDisponibilidad() {
 		
-		assertTrue(estrategia.hayDisponibilidad());
+		assertTrue(estrategia.hayDisponibilidad(periodo));
 		
 	}
 	
