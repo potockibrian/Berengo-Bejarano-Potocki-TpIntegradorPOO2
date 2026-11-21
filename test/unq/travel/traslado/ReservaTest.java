@@ -399,5 +399,28 @@ class ReservaTest {
 		verify(metodoDePago2).pagar(reserva.costoTotalReserva());
 		
 	}
+	
+	@Test
+	void testGenerarComprobanteAlCliente() {
+		
+		when(item.tieneDisponibilidad(any())).thenReturn(true);
+		when(item.getPrecioFinal()).thenReturn(200f);
+		when(estrategia.costoTasasTraslado(reserva)).thenReturn(1000f);
+		reserva.doAgregarItem(item, periodo);
+		
+		reserva.generarComprobanteAlCliente();
+		
+		verify(cliente).añadirComprobante(any(Comprobante.class));
+		
+	}
+	
+	@Test
+	void testObtenerEmailDelCliente() {
+		
+		when(cliente.getDireccionDeEmail()).thenReturn("email@domain.com");
+		
+		assertEquals("email@domain.com", reserva.obtenerEmailDelCliente());
+		
+	}
 
 }

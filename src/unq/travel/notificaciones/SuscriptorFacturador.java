@@ -14,9 +14,7 @@ public class SuscriptorFacturador implements Suscriptor {
 
 		if (estadoNuevo.esEstadoFinalizado()) {
 			
-			reserva.getCliente().añadirComprobante(new Comprobante(reserva.costoTotalReserva()
-																 , reserva.costoServicios()
-																 , reserva.costoTasasTraslado()));
+			reserva.generarComprobanteAlCliente();
 			
 		}
 

@@ -230,5 +230,19 @@ public class Reserva {
 		this.metodoDePago = metodoDePago;
 		
 	}
+	
+	public void generarComprobanteAlCliente() {
+		
+		cliente.añadirComprobante(new Comprobante(this.costoTotalReserva()
+				 , this.costoServicios()
+				 , this.costoTasasTraslado()));
+		
+	}
+
+	public String obtenerEmailDelCliente() {
+
+		return cliente.getDireccionDeEmail();
+		
+	}
 
 }

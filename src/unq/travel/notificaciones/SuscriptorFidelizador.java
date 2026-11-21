@@ -23,7 +23,7 @@ public class SuscriptorFidelizador implements Suscriptor {
 		if (!estadoAnterior.esEstadoTerminal() && estadoNuevo.esEstadoCancelado()) {
 			
 			mailSender.enviarMail(
-					  reserva.getCliente().getDireccionDeEmail()
+					  reserva.obtenerEmailDelCliente()
 					, "Reserva cancelada"
 					, "Se ha cancelado vuestra reserva"
 					, new Cupon(5));

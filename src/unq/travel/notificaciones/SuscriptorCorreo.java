@@ -23,7 +23,7 @@ public class SuscriptorCorreo implements Suscriptor {
 		if (estadoNuevo.esEstadoConfirmado()) {
 		
 			mailSender.enviarMail(
-					reserva.getCliente().getDireccionDeEmail()
+					reserva.obtenerEmailDelCliente()
 					, "Reserva confirmada"
 					, "Se ha confirmado vuestra reserva"
 					, null);
@@ -32,7 +32,7 @@ public class SuscriptorCorreo implements Suscriptor {
 		if (estadoNuevo.esEstadoEnCurso()) {
 		
 			mailSender.enviarMail(
-					reserva.getCliente().getDireccionDeEmail()
+					reserva.obtenerEmailDelCliente()
 					, "Reserva en curso"
 					, "Se ha ejecutado vuestra reserva"
 					, null);
@@ -41,7 +41,7 @@ public class SuscriptorCorreo implements Suscriptor {
 		if (estadoNuevo.esEstadoFinalizado()) {
 		
 			mailSender.enviarMail(
-					reserva.getCliente().getDireccionDeEmail()
+					reserva.obtenerEmailDelCliente()
 					, "Reserva finalizada"
 					, "Se ha finalizado vuestra reserva"
 					, null);
