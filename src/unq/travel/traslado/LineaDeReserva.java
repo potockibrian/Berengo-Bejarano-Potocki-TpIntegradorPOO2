@@ -31,14 +31,22 @@ public class LineaDeReserva {
 
 	}
 	
-	public void reservarCupo() {
+	public boolean tieneDisponibilidad(EstrategiaTraslado estrategia) {
 
+		return estrategia.hayDisponibilidad(rango);
+
+	}
+	
+	public void reservarCupo(EstrategiaTraslado estrategia) {
+
+		estrategia.reservar(rango);
 		item.reservar(rango);
 
 	}
 
-	public void liberarCupo() {
+	public void liberarCupo(EstrategiaTraslado estrategia) {
 		
+		estrategia.liberar(rango);
 		item.liberar(rango);
 
 	}

@@ -1,12 +1,14 @@
 package unq.travel.traslado;
 
+import unq.travel.cupos.RangoDeFechas;
+
 public class TrasladoRecepcion extends EstrategiaTraslado {
 
-	public int cantidadDeGuias;
+	public Sucursal sucursal;
 	
-	public TrasladoRecepcion(int cantidadDeGuias) {
+	public TrasladoRecepcion(Sucursal sucursal) {
 
-		this.cantidadDeGuias = cantidadDeGuias;
+		this.sucursal = sucursal;
 		
 	}
 
@@ -18,10 +20,24 @@ public class TrasladoRecepcion extends EstrategiaTraslado {
 	}
 	
 	@Override
-	public boolean hayDisponibilidad() {
+	public boolean hayDisponibilidad(RangoDeFechas periodo) {
 		
-		return cantidadDeGuias > 0;
+		return sucursal.hayDisponibilidad(periodo);
 		
 	}
 
+	@Override
+	public void reservar(RangoDeFechas periodo) {
+		
+		sucursal.reservar(periodo);
+		
+	}
+
+	@Override
+	public void liberar(RangoDeFechas periodo) {
+		
+		sucursal.liberar(periodo);
+		
+	}
+	
 }

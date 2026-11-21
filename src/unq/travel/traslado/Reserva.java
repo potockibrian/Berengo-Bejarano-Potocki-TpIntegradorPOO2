@@ -57,8 +57,6 @@ public class Reserva {
 	}
 
 	public void confirmarReserva() {
-
-		if(!traslado.hayDisponibilidad()) throw new NoHayDisponibilidadException();
 		
 		estado.confirmar();
 		
@@ -147,11 +145,12 @@ public class Reserva {
 	public void doConfirmar() {
 
 		if (!lineas.stream().allMatch(i -> i.tieneDisponibilidad())) throw new NoHayDisponibilidadException();
+		if (!lineas.stream().allMatch(i -> i.tieneDisponibilidad(traslado))) throw new NoHayDisponibilidadException();
 		
 		metodoDePago.pagar(this.costoTotalReserva());	// metodoDePago se encarga de levantar la excepción
 		
 		lineas.stream()
-			 .forEach(i -> i.reservarCupo());
+			 .forEach(i -> i.reservarCupo(traslado));
 		
 		this.cambiarEstado(new EstadoConfirmado(this));
 		
@@ -184,7 +183,7 @@ public class Reserva {
 	public void doCancelarFromConfirmada() {
 
 		lineas.stream()
-			 .forEach(i -> i.liberarCupo());
+			 .forEach(i -> i.liberarCupo(traslado));
 		
 		this.cambiarEstado(new EstadoCancelado(this));
 		
@@ -193,7 +192,7 @@ public class Reserva {
 	public void doCancelarFromCheckin() {
 		
 		lineas.stream()
-			 .forEach(i -> i.liberarCupo());
+			 .forEach(i -> i.liberarCupo(traslado));
 		
 		cliente.añadirVoucher(new Voucher(this.costoServicios() + this.costoTasasTraslado()));
 		
