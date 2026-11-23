@@ -8,6 +8,8 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import unq.travel.busquedaCatalogo.Criterio;
+
 class CatalogoTest {
 
 	private Catalogo catalogo;
@@ -76,6 +78,18 @@ class CatalogoTest {
 		catalogo.getItems().clear();
 
 		assertEquals(List.of(hotel), catalogo.getItems());
+
+	}
+
+	@Test
+	void testBuscaEntreSusItemsLosQueCumplenElCriterio() {
+
+		Criterio criterio = mock(Criterio.class);
+		when(criterio.cumpleConCriterio(museo)).thenReturn(true);
+		catalogo.agregarItem(hotel);
+		catalogo.agregarItem(museo);
+
+		assertEquals(List.of(museo), catalogo.buscar(criterio));
 
 	}
 
