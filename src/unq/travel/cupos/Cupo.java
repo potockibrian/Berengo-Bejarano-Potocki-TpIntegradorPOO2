@@ -7,11 +7,12 @@ import unq.travel.catalogo.SinStockException;
 public class Cupo {
 
 	private int topeMaximo;
-	private Integer cantidadDeVentas = 0;
+	private Integer cantidadDeVentas;
 
 	public Cupo(int topeMaximo) {
 		
 		this.topeMaximo = topeMaximo;
+		this.cantidadDeVentas = 0;
 		
 	}
 	
@@ -60,9 +61,9 @@ public class Cupo {
 
 	}
 	
-	public int incrementarTope(int incremento) {
+	public void incrementarTope(int incremento) {
 		
-		return topeMaximo += incremento;
+		topeMaximo += incremento;
 		
 	}
 	
@@ -72,11 +73,12 @@ public class Cupo {
 		
 	}
 		
+	/*
 	public Cupo combinarConCupoMin(Cupo cupo) {
 		
 		return new Cupo(Math.min(this.topeMaximo, cupo.topeMaximo), Math.min(this.cantidadDeVentas, cupo.cantidadDeVentas));
 		
 	}
-
+	*/
 
 }

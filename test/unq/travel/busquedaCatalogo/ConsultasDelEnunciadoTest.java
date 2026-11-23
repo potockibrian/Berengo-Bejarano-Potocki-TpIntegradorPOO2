@@ -14,6 +14,7 @@ import unq.travel.catalogo.Categoria;
 import unq.travel.catalogo.PaqueteTuristico;
 import unq.travel.catalogo.ServicioIndividual;
 import unq.travel.cupos.CalendarioDeCupos;
+import unq.travel.cupos.RangoDeFechas;
 
 class ConsultasDelEnunciadoTest {
 
@@ -27,9 +28,11 @@ class ConsultasDelEnunciadoTest {
 	private Buscador buscador;
 	private CalendarioDeCupos calendario1;
 	private CalendarioDeCupos calendario2;
+	private RangoDeFechas periodo;
 
 	@BeforeEach
 	void setUp() {
+		periodo = mock(RangoDeFechas.class);
 		calendario1 = mock(CalendarioDeCupos.class);
 		calendario2 = mock(CalendarioDeCupos.class);
 		hotel = this.crearServicio("Noche de Hotel Central", Categoria.ALOJAMIENTO, 15000f, calendario1);
@@ -38,12 +41,12 @@ class ConsultasDelEnunciadoTest {
 		tourEnOferta = this.crearServicio("Tour Nocturno en Oferta", Categoria.EXCURSION, 18000f, calendario1);
 		traslado = this.crearServicio("Traslado Aeropuerto-Hotel", Categoria.TRASLADO, 2000f, calendario1);
 
-		packEscapadaUrbana = new PaqueteTuristico("Pack Escapada Urbana", "Hotel, museo y traslado", 0.10f, calendario1);
+		packEscapadaUrbana = new PaqueteTuristico("Pack Escapada Urbana", "Hotel, museo y traslado", 0.10f);
 		packEscapadaUrbana.agregarItem(hotel);
 		packEscapadaUrbana.agregarItem(museo);
 		packEscapadaUrbana.agregarItem(traslado);
 
-		packRutaDelVino = new PaqueteTuristico("Pack Ruta del Vino", "Alquiler de auto por bodegas", 0.10f, calendario1);
+		packRutaDelVino = new PaqueteTuristico("Pack Ruta del Vino", "Alquiler de auto por bodegas", 0.10f);
 		packRutaDelVino.agregarItem(this.crearServicio("Alquiler de Auto", Categoria.ALQUILER_AUTO, 20000f, calendario1));
 
 		Catalogo catalogo = new Catalogo();
@@ -61,9 +64,10 @@ class ConsultasDelEnunciadoTest {
 	@Test
 	void testAlojamientoDisponibleOConOfertaEnElNombre() {
 
-		when(calendario1.tieneDisponibilidad()).thenReturn(true);
+		when(hotel.tieneDisponibilidad(periodo)).thenReturn(true);
+		when(museo.tieneDisponibilidad(periodo)).thenReturn(true);
 		Criterio criterio = new CriterioOr(
-				new CriterioAnd(new CriterioCategoria(Categoria.ALOJAMIENTO), new CriterioDisponibilidad()),
+				new CriterioAnd(new CriterioCategoria(Categoria.ALOJAMIENTO), new CriterioDisponibilidad(periodo)),
 				new CriterioNombre("oferta"));
 
 		assertEquals(List.of(hotel, tourEnOferta, packEscapadaUrbana), buscador.buscar(criterio));
@@ -73,6 +77,8 @@ class ConsultasDelEnunciadoTest {
 	@Test
 	void testHastaQuinceMilQueSeaAlojamientoOExcursion() {
 
+		when(hotel.tieneDisponibilidad(periodo)).thenReturn(true);
+		when(museo.tieneDisponibilidad(periodo)).thenReturn(true);
 		Criterio criterio = new CriterioAnd(
 				new CriterioPrecioMax(15000f),
 				new CriterioOr(new CriterioCategoria(Categoria.ALOJAMIENTO), new CriterioCategoria(Categoria.EXCURSION)));

@@ -9,42 +9,18 @@ import unq.travel.catalogo.SinStockException;
 public class CalendarioDeCupos {
 
 	private CuposDeFechas cuposDeFechas = new CuposDeFechas();
-	private List<RangoDeFechas> periodos;
-	
-	public Cupo cupos() {
-
-		return cuposDeFechas.cupos();
-		
-	}
-
-	public Map<RangoDeFechas, Cupo> cuposPorPeriodo() {
-
-		Map<RangoDeFechas, Cupo> cuposPorPeriodo = new HashMap();
-		
-		periodos.stream()
-				.forEach(p -> cuposPorPeriodo.put(p, cuposDeFechas.cuposEnFechas(p.fechas())));
-		
-		return cuposPorPeriodo;
-		
-	}
 	
 	/*
-	public List<Cupo> cuposEnPeriodo(RangoDeFechas periodo) {
+	public RegistroVentaPeriodo cantidadYTotalCobradoDeVentasEnPeriodo(RangoDeFechas periodo) {
 		
-		return periodo.fechas().stream()
-			    .map(f -> cuposDeFechas.cupoDeFecha);
+		return registrosDeVenta.stream()
+				.filter(r -> r.periodoContiene(periodo))
+				.reduce(new RegistroVentaPeriodo(periodo), (nuevo, acumulador) -> nuevo.combinarConRegistro(acumulador));
 		
 	}
 	*/
 	
 	/*
-	public List<Map.Entry<LocalDate, Cupo>> cuposEnPeriodoConFecha(RangoDeFechas periodo) {
-		
-		return cuposDeFechas.cuposEnFechasConFecha(periodo.fechas());
-		
-	}
-	*/
-	
 	public Integer cantidadDeVentasEnPeriodo(RangoDeFechas periodo) {
 		
 		return periodo.fechas().stream()
@@ -53,14 +29,19 @@ public class CalendarioDeCupos {
 					  .orElse(0);
 		
 	}
-
+	*/
+	
+	public Cupo cuposEnPeriodo(RangoDeFechas periodo) {
+		
+		return cuposDeFechas.cuposEnFechas(periodo.fechas());
+		
+	}
+	
 	public void reservar(RangoDeFechas rango) {
 		
 		if(!rango.fechas().stream().allMatch(f -> cuposDeFechas.tieneDisponibilidad(f))) throw new SinStockException();
 		
 		rango.fechas().stream().forEach(f -> cuposDeFechas.reservar(f));
-		
-		periodos.add(rango);
 		
 	}
 	
@@ -87,7 +68,7 @@ public class CalendarioDeCupos {
 	public void agregarCupoParaPeriodo(RangoDeFechas periodo, int cantidad) {
 		
 		periodo.fechas().stream()
-			   .forEach(f -> cuposDeFechas.agregarCupoAFecha(f, new Cupo(cantidad)));
+			   .forEach(f -> cuposDeFechas.agregarCantidadDeCuposAFecha(f, cantidad));
 		
 	}
 	

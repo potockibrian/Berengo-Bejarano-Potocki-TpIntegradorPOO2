@@ -1,5 +1,7 @@
 package unq.travel.catalogo;
 
+import java.util.List;
+
 public class AtributoDinamico {
 
 	private String nombre;
@@ -7,11 +9,23 @@ public class AtributoDinamico {
 	private TipoAtributo tipo;
 	private Object valor;
 
-	public AtributoDinamico(String nombre, boolean obligatorio, TipoAtributo tipo) {
+	public AtributoDinamico(String nombre, boolean obligatorio, TipoAtributo tipo, Object valor) {
 
+		try {
+			
+			List.of(nombre, obligatorio, tipo, valor);
+			tipo.esValorValido(valor);
+			
+		} catch (Exception e) {
+			
+			throw new ValorDeAtributoInvalidoException();
+			
+		}
+		
 		this.nombre = nombre;
 		this.obligatorio = obligatorio;
 		this.tipo = tipo;
+		this.valor = valor;
 
 	}
 
@@ -23,15 +37,26 @@ public class AtributoDinamico {
 
 	public void asignarValor(Object valor) {
 
+		try { 
+			
+			tipo.esValorValido(valor); 
+		
+		} catch(Exception e) { 
+		
+			throw new ValorDeAtributoInvalidoException(); 
+		
+		}
+		
+		if (valor == null) throw new ValorDeAtributoInvalidoException();
+			
 		this.valor = valor;
 
 	}
 
 	public Object getValor() {
 
-		if (!this.tieneValor()) {
-			throw new AtributoSinValorException("El atributo " + nombre + " no tiene valor asignado");
-		}
+		if (!this.tieneValor()) throw new AtributoSinValorException("El atributo " + nombre + " no tiene valor asignado");
+		
 		return valor;
 
 	}
@@ -43,13 +68,9 @@ public class AtributoDinamico {
 	}
 
 	public boolean esValido() {
-
-		if (this.tieneValor()) {
-			return tipo.esValorValido(valor);
-		} else {
-			return !obligatorio;
-		}
-
+			
+		return !obligatorio || valor != null;
+		
 	}
 
 }

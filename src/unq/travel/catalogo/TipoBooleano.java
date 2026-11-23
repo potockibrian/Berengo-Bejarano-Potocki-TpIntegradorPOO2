@@ -1,11 +1,11 @@
 package unq.travel.catalogo;
 
-public class TipoBooleano implements TipoAtributo {
+public class TipoBooleano implements TipoAtributo<Boolean> {
 
 	@Override
-	public boolean esValorValido(Object valor) {
+	public boolean esValorValido(Boolean valor) throws ClassCastException {
 
-		return valor instanceof Boolean;
+		return true;
 
 	}
 

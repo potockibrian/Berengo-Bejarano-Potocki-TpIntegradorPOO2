@@ -3,6 +3,8 @@ package unq.travel.catalogo;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.lang.reflect.Field;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,21 +13,20 @@ class AtributoDinamicoTest {
 	private TipoAtributo tipo;
 	private AtributoDinamico obligatorio;
 	private AtributoDinamico opcional;
+	private Object valor;
 
 	@BeforeEach
 	void setUp() {
-		tipo = mock(TipoAtributo.class);
-		when(tipo.esValorValido(4)).thenReturn(true);
-		when(tipo.esValorValido("cuatro")).thenReturn(false);
 
-		obligatorio = new AtributoDinamico("CapacidadMaxima", true, tipo);
-		opcional = new AtributoDinamico("RatingEstrellas", false, tipo);
+		valor = 10;
+		tipo = new TipoNumerico();
+
+		obligatorio = new AtributoDinamico("CapacidadMaxima", true, tipo, valor);
+		opcional = new AtributoDinamico("RatingEstrellas", false, tipo, valor);
 	}
 
 	@Test
 	void testNoTieneValorHastaQueSeLeAsigna() {
-
-		assertFalse(obligatorio.tieneValor());
 
 		obligatorio.asignarValor(4);
 
@@ -43,19 +44,23 @@ class AtributoDinamicoTest {
 	}
 
 	@Test
-	void testConsultarElValorSinHaberloAsignadoLanzaExcepcion() {
-
-		assertThrows(AtributoSinValorException.class, () -> obligatorio.getValor());
-
-	}
-
-	@Test
-	void testObligatorioSinValorNoCumpleConLaValidacion() {
-
+	void testObligatorioSinValorNoCumpleConLaValidacion() throws Exception {
+		
+		setCampo(obligatorio, "valor", null);
+		
 		assertFalse(obligatorio.esValido());
 
 	}
 
+	@Test
+	void testOpcionalSinValorCumpleConLaValidacion() throws Exception {
+		
+		setCampo(opcional, "valor", null);
+		
+		assertTrue(opcional.esValido());
+
+	}
+	
 	@Test
 	void testObligatorioConValorDelTipoCorrectoCumpleConLaValidacion() {
 
@@ -68,9 +73,7 @@ class AtributoDinamicoTest {
 	@Test
 	void testObligatorioConValorDelTipoEquivocadoNoCumpleConLaValidacion() {
 
-		obligatorio.asignarValor("cuatro");
-
-		assertFalse(obligatorio.esValido());
+		assertThrows(ValorDeAtributoInvalidoException.class, () -> obligatorio.asignarValor("cuatro"));
 
 	}
 
@@ -78,8 +81,6 @@ class AtributoDinamicoTest {
 	void testOpcionalSinValorCumpleConLaValidacionSinConsultarAlTipo() {
 
 		assertTrue(opcional.esValido());
-
-		verify(tipo, never()).esValorValido(any());
 
 	}
 
@@ -94,11 +95,69 @@ class AtributoDinamicoTest {
 
 	@Test
 	void testOpcionalConValorDelTipoEquivocadoNoCumpleConLaValidacion() {
+		
+		assertThrows(ValorDeAtributoInvalidoException.class, () -> opcional.asignarValor("cuatro"));
+		
+	}
+	
+	@Test
+	void testConstruirUnaInstanciaConElValorInvalidoParaElTipoLevantaExcepcion() {
+		
+		assertThrows(ValorDeAtributoInvalidoException.class, () -> new AtributoDinamico("CapacidadMaxima", true, tipo, "valor invalido"));
+		
+	}
+	
+	@Test
+	void testConstruirUnaInstanciaConElValorNullLevantaExcepcion() {
+		
+		assertThrows(ValorDeAtributoInvalidoException.class, () -> new AtributoDinamico("CapacidadMaxima", true, tipo, null));
+		
+	}
+	
+	@Test
+	void testAsignarValorNullLevantaExcepcion() {
+		
+		assertThrows(ValorDeAtributoInvalidoException.class, () -> obligatorio.asignarValor(null));
+		assertThrows(ValorDeAtributoInvalidoException.class, () -> opcional.asignarValor(null));
+		
+	}
+	
+	@Test
+	void testAsignarValorInvalidoParaElTipoLevantaExcepcion() {
+		
+		assertThrows(ValorDeAtributoInvalidoException.class, () -> obligatorio.asignarValor("valor inválido"));
+		assertThrows(ValorDeAtributoInvalidoException.class, () -> opcional.asignarValor("valor inválido"));
+		
+	}
+	
+	@Test
+	void testSiElValorEsNullNoTieneValor() throws Exception {
+		
+		setCampo(obligatorio, "valor", null);
+		setCampo(opcional, "valor", null);
+		
+		assertFalse(obligatorio.tieneValor());
+		assertFalse(opcional.tieneValor());
+		
+	}
+	
+	@Test
+	void testSiElValorEsNullObtenerElValorLevantaUnaExcepcion() throws Exception {
+		
+		setCampo(obligatorio, "valor", null);
+		setCampo(opcional, "valor", null);
+		
+		assertThrows(AtributoSinValorException.class, () -> obligatorio.getValor());
+		assertThrows(AtributoSinValorException.class, () -> opcional.getValor());
+		
+	}
 
-		opcional.asignarValor("cuatro");
-
-		assertFalse(opcional.esValido());
-
+	private static void setCampo(Object objeto, String nombre, Object valor) throws Exception {
+		
+		Field campo = objeto.getClass().getDeclaredField(nombre);
+		campo.setAccessible(true);
+		campo.set(objeto, valor);
+		
 	}
 
 }

@@ -1,11 +1,11 @@
 package unq.travel.catalogo;
 
-public class TipoNumerico implements TipoAtributo {
+public class TipoNumerico implements TipoAtributo<Number> {
 
 	@Override
-	public boolean esValorValido(Object valor) {
+	public boolean esValorValido(Number valor) throws ClassCastException{
 
-		return valor instanceof Number;
+		return true;
 
 	}
 

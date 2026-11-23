@@ -1,7 +1,7 @@
 package unq.travel.catalogo;
 
-public interface TipoAtributo {
+public interface TipoAtributo<T> {
 
-	boolean esValorValido(Object valor);
+	boolean esValorValido(T valor) throws ClassCastException;
 
 }

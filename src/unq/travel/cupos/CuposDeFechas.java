@@ -6,14 +6,16 @@ import java.util.*;
 import unq.travel.catalogo.SinStockException;
 
 public class CuposDeFechas {
-
-	private Map<LocalDate, Cupo> cuposConFecha = new HashMap<LocalDate, Cupo>();
 	
-	public void agregarCupoAFecha(LocalDate fecha, Cupo cupo) {
+	private Map<LocalDate, Cupo> cuposConFecha = new HashMap<LocalDate, Cupo>();
+
+	public Object agregarCantidadDeCuposAFecha(LocalDate fecha, int cantidad) {
 		
-		cupo = cupo.combinarConCupo(cuposConFecha.getOrDefault(fecha, new Cupo(0)));
+		Cupo cupoAIncrementar = cuposConFecha.getOrDefault(fecha, new Cupo(0));
 		
-		cuposConFecha.put(fecha, cupo);
+		cupoAIncrementar.incrementarTope(cantidad);
+		
+		return cuposConFecha.put(fecha, cupoAIncrementar);
 		
 	}
 	
@@ -47,7 +49,7 @@ public class CuposDeFechas {
 			cuposConFecha.get(fecha).reservar();
 			
 		}
-		catch (NullPointerException e) {
+		catch (Exception e) {
 		
 			throw new SinStockException();
 		
@@ -55,6 +57,7 @@ public class CuposDeFechas {
 		
 	}
 
+	/*
 	public int cantidadDeVentasEnFecha(LocalDate fecha) {
 
 		Cupo cupoDeFecha = cuposConFecha.get(fecha);
@@ -62,20 +65,21 @@ public class CuposDeFechas {
 		return (cupoDeFecha == null) ? 0 : cupoDeFecha.cantidadDeVentas();
 		
 	}
+	*/
 
 	public Cupo cuposEnFechas(List<LocalDate> fechas) {
 		
+		// Obtiene los cupos de las fechas dadas, filtrando los cupos de las fechas sin cupo
 		List<Cupo> cupos = fechas.stream()
-					 			 .map(f -> cuposConFecha.get(f))
-					 			 .filter(c -> c != null)
+					 			 .map(f -> cuposConFecha.getOrDefault(f, new Cupo(0)))
 					 			 .toList();
 		
-		return (cupos.isEmpty())
-				? new Cupo(0)
-						: cupos.stream().reduce(cupos.getFirst(), (acumulador, nuevo) -> acumulador.combinarConCupoMin(nuevo));
+		// Combina todos los cupos, y si no hay ningún cupo devuelve un cupo vacío
+		return cupos.stream().reduce(new Cupo(0), (acumulador, nuevo) -> acumulador.combinarConCupo(nuevo));
 		
 	}
 
+	/*
 	public Cupo cupos() {
 
 		List<Cupo> cupos = (List<Cupo>) cuposConFecha.values();
@@ -86,14 +90,6 @@ public class CuposDeFechas {
 												.reduce(cupos.getFirst(), (nuevo, acumulador) -> nuevo.combinarConCupo(acumulador));
 		
 	}
-	
-	public List<Map.Entry<LocalDate, Cupo>> cuposEnFechasConFecha(List<LocalDate> fechas) {
-		
-		return fechas.stream()
-			    .filter(cuposConFecha::containsKey)
-			    .map(fecha -> Map.entry(fecha, cuposConFecha.get(fecha)))
-			    .toList();
-		
-	}
+	*/
 	
 }

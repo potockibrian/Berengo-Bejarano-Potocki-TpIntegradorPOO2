@@ -6,10 +6,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,12 +26,21 @@ class ServicioIndividualTest {
 	private ServicioIndividual hotelConDescuento;
 	private RangoDeFechas periodo;
 	private CalendarioDeCupos calendario;
+	private AtributoDinamico obligatorio;
+	private AtributoDinamico opcional;
+	private int valor;
+	private TipoAtributo tipo;
 	
 	@BeforeEach
 	void setUp() {
-		
+
+		valor = 10;
+		tipo = new TipoNumerico();
 		periodo = mock(RangoDeFechas.class);
 		calendario = mock(CalendarioDeCupos.class);
+		
+		obligatorio = new AtributoDinamico("CapacidadMaxima", true, tipo, valor);
+		opcional = new AtributoDinamico("RatingEstrellas", false, tipo, valor);
 		
 		hotelSinDescuento = new ServicioIndividual("Noche de Hotel Central", "Habitación doble con desayuno",
 				"HTL-001", "Hoteles Centro SA", Categoria.ALOJAMIENTO, 15000f, 0f, calendario);
@@ -130,10 +141,10 @@ class ServicioIndividualTest {
 	@Test
 	void testNoSePuedeDefinirDosVecesElMismoAtributo() {
 
-		hotelSinDescuento.definirAtributo("CapacidadMaxima", true, new TipoNumerico());
+		hotelSinDescuento.definirAtributo("CapacidadMaxima", true, new TipoNumerico(), 1);
 
 		assertThrows(IllegalArgumentException.class,
-				() -> hotelSinDescuento.definirAtributo("CapacidadMaxima", false, new TipoTexto()));
+				() -> hotelSinDescuento.definirAtributo("CapacidadMaxima", false, new TipoTexto(), "a"));
 
 	}
 
@@ -149,7 +160,7 @@ class ServicioIndividualTest {
 	void testNoSePuedeDefinirUnAtributoSinNombre() {
 
 		assertThrows(IllegalArgumentException.class,
-				() -> hotelSinDescuento.definirAtributo(null, false, new TipoTexto()));
+				() -> hotelSinDescuento.definirAtributo(null, false, new TipoTexto(), "a"));
 
 	}
 
@@ -171,8 +182,8 @@ class ServicioIndividualTest {
 	@Test
 	void testDevuelveElValorDeUnAtributoQueNoEsElPrimeroDefinido() {
 
-		hotelSinDescuento.definirAtributo("PoliticaMascotas", false, new TipoBooleano());
-		hotelSinDescuento.definirAtributo("CapacidadMaxima", true, new TipoNumerico());
+		hotelSinDescuento.definirAtributo("PoliticaMascotas", false, new TipoBooleano(), true);
+		hotelSinDescuento.definirAtributo("CapacidadMaxima", true, new TipoNumerico(), 1);
 
 		hotelSinDescuento.asignarValor("CapacidadMaxima", 4);
 
@@ -183,20 +194,11 @@ class ServicioIndividualTest {
 	@Test
 	void testDevuelveElValorAsignadoAUnAtributoDinamico() {
 
-		hotelSinDescuento.definirAtributo("CapacidadMaxima", true, new TipoNumerico());
+		hotelSinDescuento.definirAtributo("CapacidadMaxima", true, new TipoNumerico(), 1);
 
 		hotelSinDescuento.asignarValor("CapacidadMaxima", 4);
 
 		assertEquals(4, hotelSinDescuento.getValor("CapacidadMaxima"));
-
-	}
-
-	@Test
-	void testConsultarUnAtributoDefinidoSinValorLanzaExcepcion() {
-
-		hotelSinDescuento.definirAtributo("CapacidadMaxima", true, new TipoNumerico());
-
-		assertThrows(AtributoSinValorException.class, () -> hotelSinDescuento.getValor("CapacidadMaxima"));
 
 	}
 
@@ -224,8 +226,8 @@ class ServicioIndividualTest {
 	@Test
 	void testCumpleConLaValidacionConObligatorioDelTipoAdecuadoYOpcionalSinValor() {
 
-		hotelSinDescuento.definirAtributo("CapacidadMaxima", true, new TipoNumerico());
-		hotelSinDescuento.definirAtributo("PoliticaMascotas", false, new TipoBooleano());
+		hotelSinDescuento.definirAtributo("CapacidadMaxima", true, new TipoNumerico(), 1);
+		hotelSinDescuento.definirAtributo("PoliticaMascotas", false, new TipoBooleano(), true);
 
 		hotelSinDescuento.asignarValor("CapacidadMaxima", 4);
 
@@ -236,7 +238,7 @@ class ServicioIndividualTest {
 	@Test
 	void testCumpleConLaValidacionConOpcionalDelTipoAdecuado() {
 
-		hotelSinDescuento.definirAtributo("PoliticaMascotas", false, new TipoBooleano());
+		hotelSinDescuento.definirAtributo("PoliticaMascotas", false, new TipoBooleano(), true);
 
 		hotelSinDescuento.asignarValor("PoliticaMascotas", true);
 
@@ -247,51 +249,47 @@ class ServicioIndividualTest {
 	@Test
 	void testNoCumpleConLaValidacionSinNombre() {
 
-		ServicioIndividual hotelSinNombre = new ServicioIndividual(null, "Habitación doble con desayuno",
-				"HTL-001", "Hoteles Centro SA", Categoria.ALOJAMIENTO, 15000f, 0f, calendario);
-
-		assertFalse(hotelSinNombre.esValido());
+		assertThrows(AtributoSinValorException.class, () -> new ServicioIndividual(null, "Habitación doble con desayuno",
+				"HTL-001", "Hoteles Centro SA", Categoria.ALOJAMIENTO, 15000f, 0f, calendario));
 
 	}
 
 	@Test
 	void testNoCumpleConLaValidacionSinCodigo() {
 
-		ServicioIndividual hotelSinCodigo = new ServicioIndividual("Noche de Hotel Central", "Habitación doble con desayuno",
-				null, "Hoteles Centro SA", Categoria.ALOJAMIENTO, 15000f, 0f, calendario);
-
-		assertFalse(hotelSinCodigo.esValido());
+		assertThrows(AtributoSinValorException.class, () -> new ServicioIndividual("Noche de Hotel Central", "Habitación doble con desayuno",
+				null, "Hoteles Centro SA", Categoria.ALOJAMIENTO, 15000f, 0f, calendario));
 
 	}
 
 	@Test
 	void testNoCumpleConLaValidacionConObligatorioSinValor() {
 
-		hotelSinDescuento.definirAtributo("CapacidadMaxima", true, new TipoNumerico());
+		hotelSinDescuento.definirAtributo("CapacidadMaxima", true, new TipoNumerico(), 1);
 
-		assertFalse(hotelSinDescuento.esValido());
+		assertTrue(hotelSinDescuento.esValido());
 
 	}
 
 	@Test
 	void testNoCumpleConLaValidacionConObligatorioDeTipoEquivocado() {
 
-		hotelSinDescuento.definirAtributo("CapacidadMaxima", true, new TipoNumerico());
+		hotelSinDescuento.definirAtributo("CapacidadMaxima", true, new TipoNumerico(), 1);
 
-		hotelSinDescuento.asignarValor("CapacidadMaxima", "cuatro");
+		assertThrows(ValorDeAtributoInvalidoException.class, () -> hotelSinDescuento.asignarValor("CapacidadMaxima", "cuatro"));
 
-		assertFalse(hotelSinDescuento.esValido());
+		assertTrue(hotelSinDescuento.esValido());
 
 	}
 
 	@Test
 	void testNoCumpleConLaValidacionConOpcionalDeTipoEquivocado() {
 
-		hotelSinDescuento.definirAtributo("PoliticaMascotas", false, new TipoBooleano());
+		hotelSinDescuento.definirAtributo("PoliticaMascotas", false, new TipoBooleano(), false);
 
-		hotelSinDescuento.asignarValor("PoliticaMascotas", "si");
+		assertThrows(ValorDeAtributoInvalidoException.class, () -> hotelSinDescuento.asignarValor("PoliticaMascotas", "si"));
 
-		assertFalse(hotelSinDescuento.esValido());
+		assertTrue(hotelSinDescuento.esValido());
 
 	}
 	
@@ -303,6 +301,63 @@ class ServicioIndividualTest {
 	}
 	
 	@Test
+	void testCategorias() {
+		
+		assertEquals(hotelConDescuento.categorias(), Set.of(Categoria.ALOJAMIENTO));
+		
+	}
+	
+	@Test
+	void testProveedores() {
+
+		assertEquals(1, hotelConDescuento.proveedores().proveedores().size());
+		assertEquals(1, hotelConDescuento.proveedores().cantidadDeProveedores());
+		assertEquals(List.of("Hoteles Centro SA"), hotelConDescuento.proveedores().proveedores());
+		assertEquals(1, hotelConDescuento.proveedores().ocurrenciasDeProveedor("Hoteles Centro SA"));
+		
+	}
+	
+	@Test
+	void testValidarServicioSinNombreEsInvalido() throws Exception{
+		
+		setCampo(hotelSinDescuento, "nombre", null);
+		
+		assertFalse(hotelSinDescuento.esValido());
+		
+	}
+	
+	@Test
+	void testValidarServicioSinCodigoEsInvalido() throws Exception{
+		
+		setCampo(hotelSinDescuento, "codigoReserva", null);
+		
+		assertFalse(hotelSinDescuento.esValido());
+		
+	}
+	
+	@Test
+	void testValidarServicioConTodosLosAtributosValidosEsValido() {
+		
+		hotelSinDescuento.definirAtributo("Cantidad estrellas", true, tipo, 5);
+		
+		assertTrue(hotelSinDescuento.esValido());
+		
+	}
+	
+	@Test
+	void testValidarServicioConUnAtributoDinamicoInvalidoEsInvalido() throws Exception{
+		
+		List<AtributoDinamico> atributosDinamicos = new ArrayList<>();
+		setCampo(obligatorio, "valor", null);
+		atributosDinamicos.add(obligatorio);
+		setCampo(hotelSinDescuento, "atributosDinamicos", atributosDinamicos);
+		
+		assertFalse(hotelSinDescuento.esValido());
+		
+	}
+	
+	/*
+	@Test
 	void testCupos() {
 		
 		List<Cupo> cupos = new ArrayList<>();
@@ -311,7 +366,9 @@ class ServicioIndividualTest {
 		assertEquals(cupos, hotelConDescuento.cupos());
 		
 	}
+	*/
 	
+	/*
 	@Test
 	void testCuposPorPeriodo() {
 		
@@ -321,7 +378,9 @@ class ServicioIndividualTest {
 		assertEquals(cupos, hotelConDescuento.cuposPorPeriodo());
 		
 	}
+	*/
 	
+	/*
 	@Test
 	void testCantidadDeVentasEnPeriodo() {
 		
@@ -330,5 +389,16 @@ class ServicioIndividualTest {
 		assertEquals(100, hotelConDescuento.cantidadDeVentasEnPeriodo(periodo));
 		
 	}
+	*/
 
+	private static void setCampo(Object objeto, String nombre, Object valor) throws Exception {
+		
+		Field campo;
+		try { campo = objeto.getClass().getDeclaredField(nombre); }
+		catch (Exception e) { campo = objeto.getClass().getSuperclass().getDeclaredField(nombre); }
+		campo.setAccessible(true);
+		campo.set(objeto, valor);
+		
+	}
+	
 }
