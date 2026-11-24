@@ -13,7 +13,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class RangoDeFechasTest {
-
+	
+	private LocalDate DIA_1 = LocalDate.of(2026, 1, 1);
+	private LocalDate DIA_2 = LocalDate.of(2026, 1, 2);
+	private LocalDate DIA_3 = LocalDate.of(2026, 1, 3);
+	private LocalDate DIA_4 = LocalDate.of(2026, 1, 4);
+	
 	private LocalDate fechaInicio;
 	private LocalDate fechaFinal;
 	private RangoDeFechas periodo;
@@ -71,31 +76,6 @@ class RangoDeFechasTest {
 		
 	}
 	
-	/*
-	@Test
-	void testInterseccion() {
-		
-		fechaInicio = mock(LocalDate.class);
-		when(fechaInicio.compareTo(periodo1.getFechaFinal())).thenReturn(-1);
-		when(periodo1.getFechaInicio()).thenReturn(LocalDate.of(2025, 2, 1));
-		when(periodo1.getFechaFinal()).thenReturn(fechaFinal);
-		
-		assertTrue(periodo.interseccion(periodo1));
-		
-		fechaFinal = LocalDate.of(3000, 1, 1);
-		when(periodo1.getFechaInicio()).thenReturn(fechaInicio);
-		when(periodo1.getFechaFinal()).thenReturn(fechaFinal);
-		
-		assertFalse(periodo.interseccion(periodo1));
-		
-		fechaInicio = LocalDate.of(3000, 1, 1);
-		when(periodo1.getFechaInicio()).thenReturn(fechaInicio);
-		when(periodo1.getFechaFinal()).thenReturn(fechaFinal);
-		
-		assertFalse(periodo.interseccion(periodo1));
-		
-	}
-	
 	@Test
 	void testUnion() {
 		
@@ -108,7 +88,6 @@ class RangoDeFechasTest {
 		assertEquals(nuevo.getFechaFinal(), max(fechaFinal, periodo1.getFechaFinal()));
 
 	}
-	*/
 	
 	@Test
 	void testHashCode() {
@@ -125,6 +104,15 @@ class RangoDeFechasTest {
 		
 	}
 	
+	@Test
+	void testContieneA() {
+		
+		RangoDeFechas rango = new RangoDeFechas(DIA_1, DIA_4);
+		
+		assertTrue(rango.contieneA(new RangoDeFechas(DIA_2, DIA_3)));
+		
+	}
+	
 	private LocalDate min(LocalDate fecha1, LocalDate fecha2) {
 		
 		return (fecha1.compareTo(fecha2) <= 0) ? fecha1 : fecha2;
@@ -133,7 +121,7 @@ class RangoDeFechasTest {
 	
 	private LocalDate max(LocalDate fecha1, LocalDate fecha2) {
 		
-		return (fecha1.compareTo(fecha2) >= 0)? fecha1 : fecha2;
+		return (fecha1.compareTo(fecha2) >= 0) ? fecha1 : fecha2;
 		
 	}
 

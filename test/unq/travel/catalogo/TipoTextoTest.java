@@ -18,7 +18,7 @@ class TipoTextoTest {
 	@Test
 	void testNoAceptaUnNumero() {
 
-		assertFalse(tipo.esValorValido(4));
+		assertThrows(ClassCastException.class, () -> assertFalse(tipo.esValorValido(4)));
 
 	}
 

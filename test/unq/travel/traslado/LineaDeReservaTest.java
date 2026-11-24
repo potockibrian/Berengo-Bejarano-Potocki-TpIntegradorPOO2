@@ -14,10 +14,12 @@ class LineaDeReservaTest {
 	private ItemCatalogo item;
 	private RangoDeFechas periodo;
 	private LineaDeReserva linea;
+	private EstrategiaTraslado estrategia;
 	
 	@BeforeEach
 	void setUp() throws Exception {
 		
+		estrategia = mock(EstrategiaTraslado.class);
 		item = mock(ItemCatalogo.class);
 		periodo = mock(RangoDeFechas.class);
 		
@@ -37,7 +39,7 @@ class LineaDeReservaTest {
 	@Test
 	void testReservarCupo() {
 		
-		linea.reservarCupo();
+		linea.reservarCupo(estrategia);
 		
 		verify(item).reservar(periodo);
 		
@@ -46,7 +48,7 @@ class LineaDeReservaTest {
 	@Test
 	void testLiberarCupo() {
 		
-		linea.liberarCupo();
+		linea.liberarCupo(estrategia);
 		
 		verify(item).liberar(periodo);
 		

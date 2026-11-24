@@ -2,21 +2,20 @@ package unq.travel.catalogo;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import unq.travel.cupos.*;
 import unq.travel.reportes.*;
 
 public abstract class ItemCatalogo {
 
-	private String nombre;
-	private String descripcion;
-	protected CalendarioDeCupos calendario;
+	protected String nombre;
+	protected String descripcion;
 
-	protected ItemCatalogo(String nombre, String descripcion, CalendarioDeCupos calendario) {
+	protected ItemCatalogo(String nombre, String descripcion) {
 
 		this.nombre = nombre;
 		this.descripcion = descripcion;
-		this.calendario = calendario;
 
 	}
 
@@ -32,24 +31,24 @@ public abstract class ItemCatalogo {
 
 	}
 
-	public final float getPrecioBase() {
-
-		return this.calcularPrecioBase();
-
-	}
+	public abstract float getPrecioBase() ;
 
 	public final float getPrecioFinal() {
 
-		return this.calcularPrecioBase() * (1 - this.descuento());
+		return this.getPrecioBase() * (1 - this.descuento());
 
 	}
 
+	/*
 	public final boolean esValido() {
 
 		return this.nombre != null && this.validarServicio();
 
 	}
 
+	protected abstract boolean validarServicio();
+	*/
+	
 	protected static void validarDescuento(float descuento) {
 
 		if (descuento < 0 || descuento > 1) {
@@ -60,28 +59,22 @@ public abstract class ItemCatalogo {
 
 	protected abstract float descuento();
 
-	protected abstract float calcularPrecioBase();
-
-	protected abstract boolean validarServicio();
-
 	public abstract boolean esDeCategoria(Categoria categoria);
 
-	public abstract boolean tieneDisponibilidad(RangoDeFechas rango);
+	public abstract boolean tieneDisponibilidad();
 	
-	public abstract void aceptar(Visitor visitor);
+	public abstract boolean tieneDisponibilidad(RangoDeFechas rango);
 
-	public abstract List<Cupo> cupos() ;
+	public abstract Cupo cuposEnPeriodoDeCategoria(RangoDeFechas periodo, Categoria categoria);
 
-	protected abstract Integer cantidadDeVentasEnPeriodo(RangoDeFechas periodo);
+	public abstract RegistroVentaPeriodo cantidadYTotalCobradoDeVentasEnPeriodo(RangoDeFechas periodo);
+	
+	public abstract BolsaDeProveedores proveedores();
 
 	public abstract void reservar(RangoDeFechas rango);
 
 	public abstract void liberar(RangoDeFechas rango);
 
-	public boolean tieneDisponibilidad() {
-
-		return calendario.tieneDisponibilidad();
-		
-	}
+	public abstract Set<Categoria> categorias();
 
 }

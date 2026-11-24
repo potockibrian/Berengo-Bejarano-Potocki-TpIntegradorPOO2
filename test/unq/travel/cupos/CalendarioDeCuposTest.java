@@ -11,23 +11,24 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import unq.travel.catalogo.SinStockException;
+import unq.travel.traslado.NoHayDisponibilidadException;
 
 class CalendarioDeCuposTest {
 
-	private static final LocalDate DIA_1 = LocalDate.of(2026, 1, 1);
-	private static final LocalDate DIA_2 = LocalDate.of(2026, 1, 2);
-	private static final LocalDate DIA_3 = LocalDate.of(2026, 1, 3);
-	private static final LocalDate DIA_4 = LocalDate.of(2026, 1, 4);
+	private LocalDate DIA_1 = LocalDate.of(2026, 1, 1);
+	private LocalDate DIA_2 = LocalDate.of(2026, 1, 2);
+	private LocalDate DIA_3 = LocalDate.of(2026, 1, 3);
+	private LocalDate DIA_4 = LocalDate.of(2026, 1, 4);
 
 	private CalendarioDeCupos calendario;
+	private CuposDeFechas cuposDeFechas;
 
 	@BeforeEach
 	void setUp() throws Exception {
 		
-		calendario = new CalendarioDeCupos(5);
-		// CalendarioDeCupos no inicializa 'periodos' en el constructor (NPE en reservar y cuposPorPeriodo):
-		// se inicializa por reflexion para poder ejercitar esos metodos
-		setCampo(calendario, "periodos", new ArrayList<RangoDeFechas>());
+		cuposDeFechas = new CuposDeFechas();
+		calendario = new CalendarioDeCupos();
+		setCampo(calendario, "cuposDeFechas", cuposDeFechas);
 		
 	}
 
@@ -65,40 +66,24 @@ class CalendarioDeCuposTest {
 		
 	}
 
-	private Map<LocalDate, Cupo> cuposConFecha() throws Exception {
+	private CuposDeFechas cuposDeFechas() throws Exception {
 		
-		return getCampo(calendario, "cuposConFecha");
+		return getCampo(calendario, "cuposDeFechas");
 		
 	}
 
 	@Test
-	void unCalendarioNuevoNoTieneCuposNiDisponibilidad() {
+	void unCalendarioNuevoNoTieneDisponibilidad() {
 		
-		assertTrue(calendario.cupos().isEmpty());
 		assertFalse(calendario.tieneDisponibilidad());
-		
-	}
-
-	@Test
-	void cuposDevuelveUnaCopiaConTodosLosCupos() throws Exception {
-		
-		Cupo cupo1 = cupo(true, 0);
-		Cupo cupo2 = cupo(true, 0);
-		cuposConFecha().put(DIA_1, cupo1);
-		cuposConFecha().put(DIA_2, cupo2);
-
-		List<Cupo> cupos = calendario.cupos();
-		cupos.clear();
-
-		assertEquals(List.of(cupo2, cupo1), calendario.cupos());
 		
 	}
 
 	@Test
 	void tieneDisponibilidadSiAlMenosUnCupoTieneDisponibilidad() throws Exception {
 		
-		cuposConFecha().put(DIA_1, cupo(false, 5));
-		cuposConFecha().put(DIA_2, cupo(true, 1));
+		cuposDeFechas().agregarCantidadDeCuposAFecha(DIA_1, 5);
+		cuposDeFechas().agregarCantidadDeCuposAFecha(DIA_2, 1);
 
 		assertTrue(calendario.tieneDisponibilidad());
 		
@@ -107,8 +92,10 @@ class CalendarioDeCuposTest {
 	@Test
 	void noTieneDisponibilidadSiTodosLosCuposEstanAgotados() throws Exception {
 		
-		cuposConFecha().put(DIA_1, cupo(false, 5));
-		cuposConFecha().put(DIA_2, cupo(false, 5));
+		cuposDeFechas().agregarCantidadDeCuposAFecha(DIA_1, 5);
+		cuposDeFechas().agregarCantidadDeCuposAFecha(DIA_2, 5);
+		
+		for(int i=0; i<5; i++) calendario.reservar(new RangoDeFechas(DIA_1, DIA_2));
 
 		assertFalse(calendario.tieneDisponibilidad());
 		
@@ -117,223 +104,91 @@ class CalendarioDeCuposTest {
 	@Test
 	void cuposEnPeriodoDevuelveSoloLosCuposDeLasFechasDelRango() throws Exception {
 		
-		Cupo cupo1 = cupo(true, 0);
-		Cupo cupo2 = cupo(true, 0);
-		Cupo fueraDelRango = cupo(true, 0);
-		cuposConFecha().put(DIA_1, cupo1);
-		cuposConFecha().put(DIA_2, cupo2);
-		cuposConFecha().put(DIA_4, fueraDelRango);
+		calendario.agregarCupoParaPeriodo(new RangoDeFechas(DIA_1, DIA_2), 1);
+		calendario.agregarCupoParaPeriodo(new RangoDeFechas(DIA_2, DIA_3), 0);
 
-		assertEquals(List.of(cupo1, cupo2), calendario.cuposEnPeriodo(rango(DIA_1, DIA_2, DIA_3)));
+		Cupo cupo = calendario.cuposEnPeriodo(new RangoDeFechas(DIA_2, DIA_3));
+		
+		assertEquals(1, cupo.cantidadDeCuposDisponibles());
 		
 	}
 
 	@Test
 	void cuposEnPeriodoEsVacioSiNoHayCuposEnEsasFechas() {
 		
-		assertTrue(calendario.cuposEnPeriodo(rango(DIA_1, DIA_2)).isEmpty());
+		Cupo cupo = calendario.cuposEnPeriodo(new RangoDeFechas(DIA_1, DIA_2));
 		
-	}
-
-	@Test
-	void cuposEnPeriodoConFechaDevuelveCadaCupoConSuFecha() throws Exception {
-		
-		Cupo cupo1 = cupo(true, 0);
-		Cupo cupo2 = cupo(true, 0);
-		cuposConFecha().put(DIA_1, cupo1);
-		cuposConFecha().put(DIA_2, cupo2);
-		cuposConFecha().put(DIA_4, cupo(true, 0));
-
-		List<Map.Entry<LocalDate, Cupo>> entradas = calendario.cuposEnPeriodoConFecha(rango(DIA_1, DIA_2, DIA_3));
-
-		assertEquals(2, entradas.size());
-		assertEquals(DIA_1, entradas.get(0).getKey());
-		assertEquals(cupo1, entradas.get(0).getValue());
-		assertEquals(DIA_2, entradas.get(1).getKey());
-		assertEquals(cupo2, entradas.get(1).getValue());
-		
-	}
-
-	@Test
-	void cuposEnPeriodoConFechaEsVacioSiNoHayCuposEnEsasFechas() {
-		
-		assertTrue(calendario.cuposEnPeriodoConFecha(rango(DIA_1, DIA_2)).isEmpty());
-		
-	}
-
-	@Test
-	void cantidadDeVentasEnPeriodoSumaLasVentasDeLosCuposDelRango() throws Exception {
-		
-		cuposConFecha().put(DIA_1, cupo(true, 2));
-		cuposConFecha().put(DIA_2, cupo(true, 3));
-		cuposConFecha().put(DIA_4, cupo(true, 100));
-
-		assertEquals(5, calendario.cantidadDeVentasEnPeriodo(rango(DIA_1, DIA_2, DIA_3)));
-		
-	}
-
-	@Test
-	void cantidadDeVentasEnPeriodoSinCuposEsCero() {
-		
-		assertEquals(0, calendario.cantidadDeVentasEnPeriodo(rango(DIA_1, DIA_2)));
+		assertEquals(0, cupo.cantidadDeCuposDisponibles());
+		assertEquals(0, cupo.cantidadDeVentas());
+		assertEquals(0, cupo.getTopeMaximo());
+		assertFalse(cupo.tieneDisponibilidad());
 		
 	}
 
 	@Test
 	void tieneDisponibilidadEnUnRangoSiTodosSusCuposTienenDisponibilidad() throws Exception {
 		
-		cuposConFecha().put(DIA_1, cupo(true, 1));
-		cuposConFecha().put(DIA_2, cupo(true, 1));
+		calendario.agregarCupoParaPeriodo(rango(DIA_1, DIA_2), 1);
+		calendario.agregarCupoParaPeriodo(rango(DIA_3, DIA_4), 0);
 
 		assertTrue(calendario.tieneDisponibilidad(rango(DIA_1, DIA_2)));
+		assertFalse(calendario.tieneDisponibilidad(rango(DIA_3, DIA_4)));
 		
 	}
 
 	@Test
 	void noTieneDisponibilidadEnUnRangoSiAlgunCupoEstaAgotado() throws Exception {
 	
-		cuposConFecha().put(DIA_1, cupo(true, 1));
-		cuposConFecha().put(DIA_2, cupo(false, 5));
+		calendario.agregarCupoParaPeriodo(rango(DIA_1, DIA_2), 1);
+		
+		calendario.reservar(new RangoDeFechas(DIA_1, DIA_1));
 
 		assertFalse(calendario.tieneDisponibilidad(rango(DIA_1, DIA_2)));
 	
 	}
 
 	@Test
-	void unRangoSinCuposTieneDisponibilidad() {
+	void unRangoSinCuposNoTieneDisponibilidad() {
 		
-		assertTrue(calendario.tieneDisponibilidad(rango(DIA_1, DIA_2)));
+		assertFalse(calendario.tieneDisponibilidad(rango(DIA_1, DIA_2)));
 		
 	}
 
+	@Test
+	void testReservarSinDisponibilidadLevantaExcepcion() {
+		
+		assertThrows(SinStockException.class, () -> calendario.reservar(new RangoDeFechas(DIA_1, DIA_2)));
+		
+	}
+	
 	@Test
 	void unCupoAgotadoFueraDelRangoNoAfectaLaDisponibilidadDelRango() throws Exception {
 		
-		cuposConFecha().put(DIA_1, cupo(true, 1));
-		cuposConFecha().put(DIA_4, cupo(false, 5));
+		calendario.agregarCupoParaPeriodo(new RangoDeFechas(DIA_1, DIA_4), 1);
 
-		assertTrue(calendario.tieneDisponibilidad(rango(DIA_1, DIA_2)));
+		calendario.reservar(new RangoDeFechas(DIA_4, DIA_4));
 		
-	}
-
-	@Test
-	void reservarCreaUnCupoNuevoPorCadaFechaSinCupoPrevio() throws Exception {
-		
-		calendario.reservar(rango(DIA_1, DIA_2, DIA_3));
-
-		assertEquals(3, calendario.cupos().size());
-		assertEquals(List.of(DIA_3, DIA_2, DIA_1), new ArrayList<LocalDate>(cuposConFecha().keySet()));
-		
-	}
-
-	@Test
-	void reservarSobreFechasConCuposPrevioReservaEsosCuposYCreaSoloLosFaltantes() throws Exception {
-		
-		Cupo existente1 = cupo(true, 1);
-		Cupo existente2 = cupo(true, 1);
-		cuposConFecha().put(DIA_1, existente1);
-		cuposConFecha().put(DIA_2, existente2);
-
-		calendario.reservar(rango(DIA_1, DIA_2, DIA_3));
-
-		verify(existente1).reservar();
-		verify(existente2).reservar();
-		assertEquals(3, calendario.cupos().size());
-		assertTrue(cuposConFecha().containsKey(DIA_3));
-		assertEquals(existente1, cuposConFecha().get(DIA_1));
-		assertEquals(existente2, cuposConFecha().get(DIA_2));
-		
-	}
-
-	@Test
-	void reservarConTodasLasFechasConCupoPrevioNoCreaCuposNuevos() throws Exception {
-		
-		Cupo existente = cupo(true, 1);
-		cuposConFecha().put(DIA_1, existente);
-
-		calendario.reservar(rango(DIA_1));
-
-		verify(existente).reservar();
-		assertEquals(List.of(existente), calendario.cupos());
-		
-	}
-
-	@Test
-	void reservarRegistraElPeriodoReservado() {
-		
-		RangoDeFechas reservado = rango(DIA_1, DIA_2);
-
-		calendario.reservar(reservado);
-
-		assertEquals(List.of(reservado), new ArrayList<RangoDeFechas>(calendario.cuposPorPeriodo().keySet()));
-		
-	}
-
-	@Test
-	void reservarSinDisponibilidadLanzaSinStockYNoModificaNada() throws Exception {
-		
-		Cupo disponible = cupo(true, 1);
-		Cupo agotado = cupo(false, 5);
-		cuposConFecha().put(DIA_1, disponible);
-		cuposConFecha().put(DIA_2, agotado);
-
-		assertThrows(SinStockException.class, () -> calendario.reservar(rango(DIA_1, DIA_2, DIA_3)));
-
-		verify(disponible, never()).reservar();
-		verify(agotado, never()).reservar();
-		assertEquals(2, calendario.cupos().size());
-		assertFalse(cuposConFecha().containsKey(DIA_3));
-		assertTrue(calendario.cuposPorPeriodo().isEmpty());
-		
-	}
-
-	@Test
-	void cuposPorPeriodoSinReservasEsVacio() {
-		
-		assertTrue(calendario.cuposPorPeriodo().isEmpty());
-	
-	}
-
-	@Test
-	void cuposPorPeriodoAsociaCadaPeriodoConSusCupos() throws Exception {
-		
-		Cupo cupo1 = cupo(true, 0);
-		Cupo cupo2 = cupo(true, 0);
-		Cupo cupo4 = cupo(true, 0);
-		cuposConFecha().put(DIA_1, cupo1);
-		cuposConFecha().put(DIA_2, cupo2);
-		cuposConFecha().put(DIA_4, cupo4);
-		RangoDeFechas primero = rango(DIA_1, DIA_2);
-		RangoDeFechas segundo = rango(DIA_4);
-		List<RangoDeFechas> periodos = getCampo(calendario, "periodos");
-		periodos.add(segundo);
-		periodos.add(primero);
-
-		Map<RangoDeFechas, List<Cupo>> porPeriodo = calendario.cuposPorPeriodo();
-
-		assertEquals(2, porPeriodo.size());
-		assertEquals(List.of(cupo1, cupo2), porPeriodo.get(primero));
-		assertEquals(List.of(cupo4), porPeriodo.get(segundo));
+		assertTrue(calendario.tieneDisponibilidad(new RangoDeFechas(DIA_1, DIA_3)));
 		
 	}
 
 	@Test
 	void liberarEnUnCalendarioSinCuposNoHaceNada() {
 		
-		calendario.liberar(rango(DIA_1));
+		calendario.liberar(new RangoDeFechas(DIA_1, DIA_2));
 
-		assertTrue(calendario.cupos().isEmpty());
+		assertFalse(calendario.tieneDisponibilidad());
 		
 	}
 	
 	@Test
 	void liberarLiberaElCupoAsociadoAlRango() throws Exception {
 		
-		RangoDeFechas rango = rango(DIA_1);
+		RangoDeFechas rango = new RangoDeFechas(DIA_1, DIA_1);
 		Cupo cupo = cupo(true, 1);
 		Map<LocalDate, Cupo> mapaConClaveRango = new HashMap<LocalDate, Cupo>();
 		mapaConClaveRango.put(DIA_1, cupo);
-		setCampo(calendario, "cuposConFecha", mapaConClaveRango);
+		setCampo(cuposDeFechas, "cuposConFecha", mapaConClaveRango);
 
 		calendario.liberar(rango);
 

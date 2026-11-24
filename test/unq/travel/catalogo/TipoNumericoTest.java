@@ -1,5 +1,6 @@
 package unq.travel.catalogo;
 
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
@@ -26,14 +27,14 @@ class TipoNumericoTest {
 	@Test
 	void testNoAceptaUnTextoAunqueSeaUnNumero() {
 
-		assertFalse(tipo.esValorValido("4"));
+		assertThrows(ClassCastException.class, () -> tipo.esValorValido("4"));
 
 	}
 
 	@Test
 	void testNoAceptaUnBooleano() {
 
-		assertFalse(tipo.esValorValido(true));
+		assertThrows(ClassCastException.class, () -> tipo.esValorValido(true));
 
 	}
 

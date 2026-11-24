@@ -2,12 +2,12 @@ package unq.travel.catalogo;
 
 import java.time.LocalDate;
 
-public class TipoFecha implements TipoAtributo {
+public class TipoFecha implements TipoAtributo<LocalDate> {
 
 	@Override
-	public boolean esValorValido(Object valor) {
+	public boolean esValorValido(LocalDate valor) throws ClassCastException {
 
-		return valor instanceof LocalDate;
+		return true;
 
 	}
 

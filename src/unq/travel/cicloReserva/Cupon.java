@@ -9,5 +9,17 @@ public class Cupon {
 		this.descuento = descuento;
 		
 	}
+	
+	public void setDescuento(int descuento) {
+		
+		this.descuento = descuento;
+		
+	}
+	
+	public int getDescuento() {
+		
+		return this.descuento;
+		
+	}
 
 }

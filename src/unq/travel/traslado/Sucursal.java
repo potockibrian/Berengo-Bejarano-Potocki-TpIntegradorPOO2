@@ -1,19 +1,42 @@
 package unq.travel.traslado;
 
+import unq.travel.catalogo.SinStockException;
+import unq.travel.cupos.CalendarioDeCupos;
+import unq.travel.cupos.Cupo;
+import unq.travel.cupos.RangoDeFechas;
+
 public class Sucursal {
 
-	public int cantidadDeGuias;
+	private CalendarioDeCupos calendario;
 
-	public Sucursal(int cantidadDeGuias) {
+	public Sucursal(CalendarioDeCupos calendario) {
 
-		this.cantidadDeGuias = cantidadDeGuias;
+		this.calendario = calendario;
 		
 	}
 
-	public boolean hayDisponibilidad() {
+	public boolean hayDisponibilidad(RangoDeFechas periodo) {
 
-		return cantidadDeGuias > 0;
+		return calendario.tieneDisponibilidad(periodo);
 
+	}
+	
+	public void agregarCupoParaPeriodo(RangoDeFechas periodo, int cantidad) {
+		
+		calendario.agregarCupoParaPeriodo(periodo, cantidad);
+		
+	}
+
+	public void reservar(RangoDeFechas periodo) {
+
+		calendario.reservar(periodo);
+		
+	}
+	
+	public void liberar(RangoDeFechas periodo) {
+		
+		calendario.liberar(periodo);
+		
 	}
 
 }

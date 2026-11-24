@@ -20,7 +20,7 @@ class TipoFechaTest {
 	@Test
 	void testNoAceptaUnTextoConFormatoDeFecha() {
 
-		assertFalse(tipo.esValorValido("12/11/2026"));
+		assertThrows(ClassCastException.class, () -> tipo.esValorValido("12/11/2026"));
 
 	}
 

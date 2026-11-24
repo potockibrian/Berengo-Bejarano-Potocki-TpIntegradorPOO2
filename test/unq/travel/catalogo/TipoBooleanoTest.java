@@ -19,7 +19,7 @@ class TipoBooleanoTest {
 	@Test
 	void testNoAceptaUnTextoAunqueParezcaBooleano() {
 
-		assertFalse(tipo.esValorValido("si"));
+		assertThrows(ClassCastException.class, () -> tipo.esValorValido("si"));
 
 	}
 

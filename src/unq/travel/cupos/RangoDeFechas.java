@@ -1,6 +1,8 @@
 package unq.travel.cupos;
 
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -31,8 +33,7 @@ public class RangoDeFechas {
 	
 	public List<LocalDate> fechas() {
 		
-		return Stream.iterate(fechaInicio, fecha -> !fecha.isAfter(fechaFinal), fecha -> fecha.plusDays(1))
-		        .toList();
+		return fechaInicio.datesUntil(fechaFinal.plusDays(1)).toList();
 				
 	}
 	
@@ -50,30 +51,26 @@ public class RangoDeFechas {
 		
 	}
 	
+	public boolean contieneA(RangoDeFechas rango) {
+
+		return this.fechas().containsAll(rango.fechas());
+		
+	}
+	
+	public RangoDeFechas union(RangoDeFechas rango) {
+
+		return new RangoDeFechas(
+				Collections.min(List.of(this.fechaInicio, rango.getFechaInicio())),
+				Collections.max(List.of(fechaFinal, rango.getFechaFinal())));
+		
+	}
+	
 	/*
 	public boolean interseccion(RangoDeFechas rango) {
 		
 		return (fechaInicio.compareTo(rango.getFechaFinal()) <= 0)
 			&& (rango.getFechaInicio().compareTo(fechaFinal) <= 0);
 				
-	}
-	
-	public RangoDeFechas union(RangoDeFechas rango) {
-
-		return new RangoDeFechas(min(this.fechaInicio, rango.getFechaInicio()), max(this.fechaFinal, rango.getFechaFinal()));
-		
-	}
-	
-	private LocalDate min(LocalDate fecha1, LocalDate fecha2) {
-		
-		return (fecha1.compareTo(fecha2) <= 0) ? fecha1 : fecha2;
-		
-	}
-	
-	private LocalDate max(LocalDate fecha1, LocalDate fecha2) {
-		
-		return (fecha1.compareTo(fecha2) >= 0)? fecha1 : fecha2;
-		
 	}
 	*/
 	

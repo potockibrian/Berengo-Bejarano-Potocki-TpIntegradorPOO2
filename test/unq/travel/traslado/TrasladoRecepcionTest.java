@@ -6,34 +6,41 @@ import static org.mockito.Mockito.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import unq.travel.cupos.CalendarioDeCupos;
+import unq.travel.cupos.RangoDeFechas;
+
 class TrasladoRecepcionTest {
 	
 	private TrasladoRecepcion estrategia;
 	private Reserva reserva;
+	private Sucursal sucursal;
+	private RangoDeFechas periodo;
 	
 	@BeforeEach
 	void setUp() {
 		
+		periodo = mock(RangoDeFechas.class);
+		sucursal = mock(Sucursal.class);
 		reserva = mock(Reserva.class);
-		estrategia = new TrasladoRecepcion(2);
+		estrategia = new TrasladoRecepcion(sucursal);
 		
 	}
 	
 	@Test
 	void testHayDisponibilidadCuandoSucursalNoTieneDisponibilidad() {
 		
-		estrategia.cantidadDeGuias = 0;
+		when(sucursal.hayDisponibilidad(periodo)).thenReturn(false);
 		
-		assertFalse(estrategia.hayDisponibilidad());
+		assertFalse(estrategia.hayDisponibilidad(periodo));
 		
 	}
 	
 	@Test
 	void testHayDisponibilidadCuandoSucursalTieneDisponibilidad() {
 		
-		estrategia.cantidadDeGuias = 1;
+		when(sucursal.hayDisponibilidad(periodo)).thenReturn(true);
 		
-		assertTrue(estrategia.hayDisponibilidad());
+		assertTrue(estrategia.hayDisponibilidad(periodo));
 		
 	}
 	
@@ -41,6 +48,24 @@ class TrasladoRecepcionTest {
 	void testCostoTraslado() {
 		
 		assertEquals(0, estrategia.costoTasasTraslado(reserva));
+		
+	}
+	
+	@Test
+	void testReservar() {
+		
+		estrategia.reservar(periodo);
+		
+		verify(sucursal).reservar(periodo);
+		
+	}
+	
+	@Test
+	void testLiberar() {
+		
+		estrategia.liberar(periodo);
+		
+		verify(sucursal).liberar(periodo);
 		
 	}
 	

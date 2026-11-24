@@ -8,102 +8,67 @@ import unq.travel.catalogo.SinStockException;
 
 public class CalendarioDeCupos {
 
-	private Map<LocalDate, Cupo> cuposConFecha;
-	private int topeMaximo;
-	private List<RangoDeFechas> periodos;
+	private CuposDeFechas cuposDeFechas = new CuposDeFechas();
 	
-	public CalendarioDeCupos(int topeMaximo) {
+	/*
+	public RegistroVentaPeriodo cantidadYTotalCobradoDeVentasEnPeriodo(RangoDeFechas periodo) {
 		
-		this.topeMaximo = topeMaximo;
-		this.cuposConFecha = new HashMap();
+		return registrosDeVenta.stream()
+				.filter(r -> r.periodoContiene(periodo))
+				.reduce(new RegistroVentaPeriodo(periodo), (nuevo, acumulador) -> nuevo.combinarConRegistro(acumulador));
 		
 	}
+	*/
 	
-	public List<Cupo> cupos() {
-
-		return new ArrayList<Cupo>(cuposConFecha.values());
-		
-	}
-
-	public Map<RangoDeFechas, List<Cupo>> cuposPorPeriodo() {
-
-		Map<RangoDeFechas, List<Cupo>> cuposPorPeriodo = new HashMap();
-		
-		periodos.stream()
-				.forEach(p -> cuposPorPeriodo.put(p, this.cuposEnPeriodo(p)));
-		
-		return cuposPorPeriodo;
-		
-	}
-	
-	public List<Cupo> cuposEnPeriodo(RangoDeFechas periodo) {
-		
-		return periodo.fechas().stream()
-			    .filter(cuposConFecha::containsKey)
-			    .map(cuposConFecha::get)
-			    .toList();
-		
-	}
-	
-	public List<Map.Entry<LocalDate, Cupo>> cuposEnPeriodoConFecha(RangoDeFechas periodo) {
-		
-		return periodo.fechas().stream()
-			    .filter(cuposConFecha::containsKey)
-			    .map(fecha -> Map.entry(fecha, cuposConFecha.get(fecha)))
-			    .toList();
-		
-	}
-	
+	/*
 	public Integer cantidadDeVentasEnPeriodo(RangoDeFechas periodo) {
-
-		List<Cupo> cupos = this.cuposEnPeriodo(periodo);
 		
-		return cupos.stream().mapToInt(c -> c.cantidadDeVentas()).sum();
+		return periodo.fechas().stream()
+					  .mapToInt(f -> cuposDeFechas.cantidadDeVentasEnFecha(f))
+					  .max()
+					  .orElse(0);
 		
 	}
-
+	*/
+	
+	public Cupo cuposEnPeriodo(RangoDeFechas periodo) {
+		
+		return cuposDeFechas.cuposEnFechas(periodo.fechas());
+		
+	}
+	
 	public void reservar(RangoDeFechas rango) {
 		
-		List<Map.Entry<LocalDate, Cupo>> cupos = this.cuposEnPeriodoConFecha(rango);
+		if(!rango.fechas().stream().allMatch(f -> cuposDeFechas.tieneDisponibilidad(f))) throw new SinStockException();
 		
-		if(!cupos.stream().allMatch((kv -> kv.getValue().tieneDisponibilidad()))) throw new SinStockException();
-		
-		cupos.stream().forEach(kv -> kv.getValue().reservar());
-		
-		List<LocalDate> fechasNuevas = rango.fechas().stream()
-												     .filter(fecha -> cupos.stream().allMatch(kv -> !kv.getKey().equals(fecha)))
-												     .toList();
-		
-		fechasNuevas.stream().forEach(fecha -> { 
-			Cupo cupoNuevo = new Cupo(topeMaximo);
-			cupoNuevo.reservar();
-			cuposConFecha.put(fecha, cupoNuevo);
-		});
-		
-		periodos.add(rango);
+		rango.fechas().stream().forEach(f -> cuposDeFechas.reservar(f));
 		
 	}
 	
 	public void liberar(RangoDeFechas rango) {
 		
-		List<Cupo> cupos = this.cuposEnPeriodo(rango);
-		
-		cupos.forEach(c -> c.liberar());
+		rango.fechas().stream()
+			 .forEach(f -> cuposDeFechas.liberar(f));
 		
 	}
 
 	public boolean tieneDisponibilidad(RangoDeFechas rango) {
-
-		List<Cupo> cupos = this.cuposEnPeriodo(rango);
 		
-		return cupos.stream().allMatch(c -> c.tieneDisponibilidad());
+		return rango.fechas().stream()
+					.allMatch(f -> cuposDeFechas.tieneDisponibilidad(f));
 
 	}
 	
 	public boolean tieneDisponibilidad() {
-
-		return cuposConFecha.values().stream()
-							 .anyMatch(c -> c.tieneDisponibilidad());
+		
+		return cuposDeFechas.tieneDisponibilidad();
+		
+	}
+	
+	public void agregarCupoParaPeriodo(RangoDeFechas periodo, int cantidad) {
+		
+		periodo.fechas().stream()
+			   .forEach(f -> cuposDeFechas.agregarCantidadDeCuposAFecha(f, cantidad));
 		
 	}
 	
