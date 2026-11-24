@@ -11,20 +11,12 @@ public class AtributoDinamico {
 
 	public AtributoDinamico(String nombre, boolean obligatorio, TipoAtributo tipo, Object valor) {
 
-		try {
-			
-			List.of(nombre, obligatorio, tipo, valor);
-			tipo.esValorValido(valor);
-			
-		} catch (Exception e) {
-			
-			throw new ValorDeAtributoInvalidoException();
-			
-		}
-		
-		this.nombre = nombre;
 		this.obligatorio = obligatorio;
 		this.tipo = tipo;
+		
+		validarValor(valor);
+		
+		this.nombre = nombre;
 		this.valor = valor;
 
 	}
@@ -37,8 +29,17 @@ public class AtributoDinamico {
 
 	public void asignarValor(Object valor) {
 
+		validarValor(valor);
+			
+		this.valor = valor;
+
+	}
+
+	private void validarValor(Object valor) {
+		
 		try { 
 			
+			if(obligatorio && valor == null) throw new Exception();
 			tipo.esValorValido(valor); 
 		
 		} catch(Exception e) { 
@@ -47,10 +48,6 @@ public class AtributoDinamico {
 		
 		}
 		
-		if (valor == null) throw new ValorDeAtributoInvalidoException();
-			
-		this.valor = valor;
-
 	}
 
 	public Object getValor() {
@@ -67,10 +64,12 @@ public class AtributoDinamico {
 
 	}
 
+	/*
 	public boolean esValido() {
 			
 		return !obligatorio || valor != null;
 		
 	}
+	*/
 
 }

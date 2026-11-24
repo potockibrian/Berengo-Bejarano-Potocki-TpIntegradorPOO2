@@ -43,6 +43,7 @@ class AtributoDinamicoTest {
 
 	}
 
+	/*
 	@Test
 	void testObligatorioSinValorNoCumpleConLaValidacion() throws Exception {
 		
@@ -51,7 +52,9 @@ class AtributoDinamicoTest {
 		assertFalse(obligatorio.esValido());
 
 	}
+	*/
 
+	/*
 	@Test
 	void testOpcionalSinValorCumpleConLaValidacion() throws Exception {
 		
@@ -60,7 +63,9 @@ class AtributoDinamicoTest {
 		assertTrue(opcional.esValido());
 
 	}
+	*/
 	
+	/*
 	@Test
 	void testObligatorioConValorDelTipoCorrectoCumpleConLaValidacion() {
 
@@ -69,6 +74,7 @@ class AtributoDinamicoTest {
 		assertTrue(obligatorio.esValido());
 
 	}
+	*/
 
 	@Test
 	void testObligatorioConValorDelTipoEquivocadoNoCumpleConLaValidacion() {
@@ -77,13 +83,16 @@ class AtributoDinamicoTest {
 
 	}
 
+	/*
 	@Test
 	void testOpcionalSinValorCumpleConLaValidacionSinConsultarAlTipo() {
 
 		assertTrue(opcional.esValido());
 
 	}
+	*/
 
+	/*
 	@Test
 	void testOpcionalConValorDelTipoCorrectoCumpleConLaValidacion() {
 
@@ -92,6 +101,7 @@ class AtributoDinamicoTest {
 		assertTrue(opcional.esValido());
 
 	}
+	*/
 
 	@Test
 	void testOpcionalConValorDelTipoEquivocadoNoCumpleConLaValidacion() {
@@ -118,8 +128,12 @@ class AtributoDinamicoTest {
 	void testAsignarValorNullLevantaExcepcion() {
 		
 		assertThrows(ValorDeAtributoInvalidoException.class, () -> obligatorio.asignarValor(null));
-		assertThrows(ValorDeAtributoInvalidoException.class, () -> opcional.asignarValor(null));
-		
+
+		opcional.asignarValor(null);
+
+		assertFalse(opcional.tieneValor());
+		assertThrows(AtributoSinValorException.class, () -> opcional.getValor());
+				
 	}
 	
 	@Test

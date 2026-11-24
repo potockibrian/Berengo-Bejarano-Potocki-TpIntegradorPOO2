@@ -45,6 +45,20 @@ class PaqueteTuristicoTest {
 	}
 
 	@Test
+	void testValidarAtributosConNombreNullLevantaExcepcion() {
+		
+		assertThrows(AtributoSinValorException.class, () -> new PaqueteTuristico(null, "descripción", 0.1f));
+		
+	}
+	
+	@Test
+	void testValidarAtributosConDescripcionNullLevantaExcepcion() {
+		
+		assertThrows(AtributoSinValorException.class, () -> new PaqueteTuristico("nombre", null, 0.1f));
+		
+	}
+	
+	@Test
 	void testElPrecioBaseEsLaSumaDeLosPreciosDeSusItems() {
 
 		assertEquals(21000f, packEscapadaUrbana.getPrecioBase(), 0.01f);
@@ -169,12 +183,14 @@ class PaqueteTuristicoTest {
 
 	}
 
+	/*
 	@Test
 	void testCumpleConLaValidacionSiTieneNombreYTodosSusItemsSonValidos() {
 
 		assertTrue(packEscapadaUrbana.esValido());
 
 	}
+	*/
 
 	/*
 	@Test
@@ -188,7 +204,6 @@ class PaqueteTuristicoTest {
 		assertFalse(packEscapadaUrbana.esValido());
 
 	}
-	*/
 
 	@Test
 	void testNoCumpleConLaValidacionSinNombre() {
@@ -223,6 +238,7 @@ class PaqueteTuristicoTest {
 		assertFalse(kitGranTour.esValido());
 
 	}
+	*/
 
 	@Test
 	void testAlDecrementarElCupoDecrementaElDeCadaItem() {

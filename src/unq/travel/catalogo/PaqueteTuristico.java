@@ -20,14 +20,31 @@ public class PaqueteTuristico extends ItemCatalogo {
 	private float descuento;
 
 	public PaqueteTuristico(String nombre, String descripcion, float descuento) {
-
+		
 		super(nombre, descripcion);
+		
+		validarAtributos(nombre, descripcion, descuento);
 		validarDescuento(descuento);
+		
 		this.descuento = descuento;
 		this.items = new ArrayList<ItemCatalogo>();
 
 	}
 
+	private void validarAtributos(String nombre, String descripcion, float descuento) {
+		
+		try {
+			
+			List.of(nombre, descripcion, descuento);
+			
+		} catch (Exception e) {
+			
+			throw new AtributoSinValorException("Atributo sin valor");
+			
+		}
+		
+	}
+	
 	public void agregarItem(ItemCatalogo item) {
 
 		items.add(item);
@@ -48,12 +65,14 @@ public class PaqueteTuristico extends ItemCatalogo {
 
 	}
 
+	/*
 	@Override
 	protected boolean validarServicio() {
 
 		return !items.isEmpty() && items.stream().allMatch(i -> i.esValido());
 
 	}
+	*/
 
 	@Override
 	public boolean esDeCategoria(Categoria categoria) {

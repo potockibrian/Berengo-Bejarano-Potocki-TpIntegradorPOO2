@@ -39,12 +39,16 @@ public abstract class ItemCatalogo {
 
 	}
 
+	/*
 	public final boolean esValido() {
 
 		return this.nombre != null && this.validarServicio();
 
 	}
 
+	protected abstract boolean validarServicio();
+	*/
+	
 	protected static void validarDescuento(float descuento) {
 
 		if (descuento < 0 || descuento > 1) {
@@ -54,8 +58,6 @@ public abstract class ItemCatalogo {
 	}
 
 	protected abstract float descuento();
-
-	protected abstract boolean validarServicio();
 
 	public abstract boolean esDeCategoria(Categoria categoria);
 

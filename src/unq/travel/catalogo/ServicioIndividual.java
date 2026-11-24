@@ -25,17 +25,8 @@ public class ServicioIndividual extends ItemCatalogo {
 
 		super(nombre, descripcion);
 		
+		validarAtributos(nombre, descripcion, codigoReserva, proveedor, categoria, precioBase, descuentoPromocional, calendario);
 		validarDescuento(descuentoPromocional);
-		
-		try {	
-		
-			List.of(nombre, descripcion, codigoReserva, proveedor, categoria, precioBase, descuentoPromocional, calendario);
-		
-		} catch(Exception e) {
-			
-			throw new AtributoSinValorException("Atributo sin valor");
-			
-		}
 		
 		if (precioBase < 0) {
 			
@@ -51,6 +42,22 @@ public class ServicioIndividual extends ItemCatalogo {
 		this.atributosDinamicos = new ArrayList<AtributoDinamico>();
 		this.calendario = calendario;
 
+	}
+
+	private void validarAtributos(String nombre, String descripcion, String codigoReserva, String proveedor,
+			Categoria categoria, float precioBase, float descuentoPromocional, CalendarioDeCupos calendario) {
+		
+		try {
+			
+			List.of(nombre, descripcion, codigoReserva, proveedor,
+					categoria, precioBase, descuentoPromocional, calendario);
+			
+		} catch (Exception e) {
+			
+			throw new AtributoSinValorException("Atributo sin valor");
+			
+		}
+		
 	}
 
 	public String getProveedor() {
@@ -73,12 +80,14 @@ public class ServicioIndividual extends ItemCatalogo {
 
 	}
 
+	/*
 	@Override
 	protected boolean validarServicio() {
 
 		return codigoReserva != null && atributosDinamicos.stream().allMatch(a -> a.esValido());
 		
 	}
+	*/
 
 	@Override
 	public boolean esDeCategoria(Categoria categoria) {
