@@ -65,6 +65,13 @@ public class RangoDeFechas {
 		
 	}
 	
+	@Override
+	public String toString() {
+		
+		return fechaInicio.toString() + "/" + fechaFinal.toString();
+		
+	}
+	
 	/*
 	public boolean interseccion(RangoDeFechas rango) {
 		

@@ -108,15 +108,16 @@ public class ExportadorHTML implements Exportador {
 		
 		abrirDocumento(resultado, "Ocupacion y cupo disponible");
 		
-		resultado.append("<h2>Por categoria</h2>\n");
+		resultado.append("<h2>Por categoria y periodo " + reporte.periodo().toString() + " </h2>\n");
 		abrirTablaDeCupos(resultado, "Categoria");
 		
-		for(Entry<Categoria, List<Cupo>> entrada : reporte.getCuposPorCategoria()) {
+		for(Entry<Categoria, Cupo> entrada : reporte.getCuposPorCategoria()) {
 			
 			filaDeCupos(resultado, entrada.getKey().toString(), entrada.getValue());
 			
 		}
 		
+		/*
 		resultado.append("</table>\n");
 		
 		resultado.append("<h2>Por periodo</h2>\n");
@@ -129,6 +130,7 @@ public class ExportadorHTML implements Exportador {
 		}
 		
 		resultado.append("</table>\n");
+		*/
 		
 		cerrarDocumento(resultado);
 		
@@ -167,13 +169,13 @@ public class ExportadorHTML implements Exportador {
 		
 	}
 	
-	private void filaDeCupos(StringBuilder resultado, String clave, List<Cupo> cupos) {
+	private void filaDeCupos(StringBuilder resultado, String clave, Cupo cupos) {
 		
 		resultado.append("<tr>");
 		resultado.append("<td>" + escapar(clave) + "</td>");
-		resultado.append("<td>" + cupos.stream().mapToInt(c -> c.getTopeMaximo()).sum() + "</td>");
-		resultado.append("<td>" + cupos.stream().mapToInt(c -> c.cantidadDeVentas()).sum() + "</td>");
-		resultado.append("<td>" + cupos.stream().mapToInt(c -> c.cantidadDeCuposDisponibles()).sum() + "</td>");
+		resultado.append("<td>" + cupos.getTopeMaximo());
+		resultado.append("<td>" + cupos.cantidadDeVentas());
+		resultado.append("<td>" + cupos.cantidadDeCuposDisponibles());
 		resultado.append("</tr>\n");
 		
 	}

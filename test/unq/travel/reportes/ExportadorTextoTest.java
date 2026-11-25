@@ -69,6 +69,7 @@ public class ExportadorTextoTest {
 		registroDeVentas = mock(RegistroDeVentas.class);
 		
 	}
+	
 	@Test
 	public void exportaLaExposicionDeCadaProveedorEnTexto() {
 		

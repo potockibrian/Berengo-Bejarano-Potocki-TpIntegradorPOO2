@@ -61,8 +61,8 @@ class VisitanteServiciosMasReservadosTest {
 
 	    visitante.procesar(catalogo, periodo);
 
-	    verify(servicio1).aceptar(visitante);
-	    verify(paquete).aceptar(visitante);
+	    verify(servicio1).exportar(visitante);
+	    verify(paquete).exportar(visitante);
 	}
 	
 	@Test
@@ -96,13 +96,13 @@ class VisitanteServiciosMasReservadosTest {
 	        Visitor visitor = invocation.getArgument(0);
 	        visitor.visitar(servicio1);
 	        return null;
-	    }).when(servicio1).aceptar(any(Visitor.class));
+	    }).when(servicio1).exportar(any(Visitor.class));
 
 	    doAnswer(invocation -> {
 	        Visitor visitor = invocation.getArgument(0);
 	        visitor.visitar(paquete);
 	        return null;
-	    }).when(paquete).aceptar(any(Visitor.class));
+	    }).when(paquete).exportar(any(Visitor.class));
 
 	    ReporteServiciosMasReservados reporte =
 	        visitante.procesar(catalogo, periodo);

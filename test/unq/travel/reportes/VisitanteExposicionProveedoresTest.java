@@ -26,7 +26,7 @@ public class VisitanteExposicionProveedoresTest {
 		VisitanteExposicionProveedores visitor = 
 				new VisitanteExposicionProveedores();
 		
-		servicio.aceptar(visitor);
+		servicio.exportar(visitor);
 		
 		assertEquals(100.0, visitor.getPorcentajePorProveedor("Proveedor A"), 0.01);
 	}
@@ -81,7 +81,7 @@ public class VisitanteExposicionProveedoresTest {
 		VisitanteExposicionProveedores visitor = 
 				new VisitanteExposicionProveedores();
 		
-		paquetePrincipal.aceptar(visitor);
+		paquetePrincipal.exportar(visitor);
 		
 		// Exposicion = (Servicios proveedor/Total de servicios) x 100
 		// 3 servicios: 2 de PrA (66.67%) y 1 de PrB (33.33%)

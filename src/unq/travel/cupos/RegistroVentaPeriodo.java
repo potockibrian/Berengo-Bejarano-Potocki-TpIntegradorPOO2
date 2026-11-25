@@ -63,6 +63,12 @@ public class RegistroVentaPeriodo {
 		
 	}
 	
+	public float precioPromedio() {
+		
+		return precioPagado / cantidadVentas;
+		
+	}
+	
 	public RangoDeFechas periodo() { return periodo; }
 	
 	public float precioPagado() { return precioPagado; }

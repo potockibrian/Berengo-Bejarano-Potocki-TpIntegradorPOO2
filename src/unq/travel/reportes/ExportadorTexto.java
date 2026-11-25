@@ -64,20 +64,9 @@ public class ExportadorTexto implements Exportador {
 		
 		resultado.append("Ocupacion y cupo disponible\n");
 		
-		resultado.append("Por categoria\n");
+		resultado.append("Por categoria y periodo " + reporte.periodo().toString()  + "\n");
 		
-		for(Map.Entry<Categoria, List<Cupo>> entrada : reporte.getCuposPorCategoria()) {
-			
-			resultado.append(entrada.getKey());
-			resultado.append(": ");
-			resultado.append(describirCupos(entrada.getValue()));
-			resultado.append("\n");
-			
-		}
-		
-		resultado.append("Por periodo\n");
-		
-		for(Entry<RangoDeFechas, List<Cupo>> entrada : reporte.getCuposPorPeriodo()) {
+		for(Map.Entry<Categoria, Cupo> entrada : reporte.getCuposPorCategoria()) {
 			
 			resultado.append(entrada.getKey());
 			resultado.append(": ");
@@ -90,11 +79,11 @@ public class ExportadorTexto implements Exportador {
 		
 	}
 	
-	public String describirCupos(List<Cupo> cupos) {
+	public String describirCupos(Cupo cupo) {
 		
-		return "totales " + cupos.stream().mapToInt(c -> c.getTopeMaximo()).sum()
-			 + ", reservados " + cupos.stream().mapToInt(c -> c.cantidadDeVentas()).sum()
-			 + ", libres " + cupos.stream().mapToInt(c -> c.cantidadDeCuposDisponibles()).sum();
+		return "totales " + cupo.getTopeMaximo()
+			 + ", reservados " + cupo.cantidadDeVentas()
+			 + ", libres " + cupo.cantidadDeCuposDisponibles();
 		
 	}
 	

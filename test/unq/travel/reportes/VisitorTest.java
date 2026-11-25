@@ -26,7 +26,7 @@ public class VisitorTest {
 		
 		Visitor visitor = mock(Visitor.class);
 		
-		servicio.aceptar(visitor);
+		servicio.exportar(visitor);
 		
 		verify(visitor).visitar(servicio);
 	}
@@ -41,7 +41,7 @@ public class VisitorTest {
 		
 		Visitor visitor = mock(Visitor.class);
 		
-		paquete.aceptar(visitor);
+		paquete.exportar(visitor);
 		
 		verify(visitor).visitar(paquete);
 	}

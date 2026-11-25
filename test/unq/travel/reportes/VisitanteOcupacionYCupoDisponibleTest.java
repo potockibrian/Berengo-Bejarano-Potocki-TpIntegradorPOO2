@@ -65,8 +65,8 @@ class VisitanteOcupacionYCupoDisponibleTest {
 		
 		ReporteOcupacionYCupoDisponible reporte = visitante.procesar(catalogo, periodo);
 
-		verify(servicio1).aceptar(visitante);
-		verify(paquete).aceptar(visitante);		
+		verify(servicio1).exportar(visitante);
+		verify(paquete).exportar(visitante);		
 		
 	}
 	
