@@ -12,7 +12,6 @@ import unq.travel.cupos.Cupo;
 import unq.travel.cupos.RangoDeFechas;
 import unq.travel.cupos.RegistroVentaPeriodo;
 import unq.travel.reportes.BolsaDeProveedores;
-import unq.travel.reportes.Visitor;
 
 public class PaqueteTuristico extends ItemCatalogo {
 

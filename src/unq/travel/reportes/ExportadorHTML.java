@@ -39,7 +39,7 @@ public class ExportadorHTML implements Exportador {
 			resultado.append("</td>");
 			
 			resultado.append("<td>");
-			resultado.append(String.format("%.2f", entrada.getValue()));
+			resultado.append(String.format(Locale.US, "%.2f", entrada.getValue()));
 			resultado.append("%");
 			resultado.append("</td>");
 			

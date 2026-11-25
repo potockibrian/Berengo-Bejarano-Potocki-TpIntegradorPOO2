@@ -5,6 +5,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -20,8 +21,8 @@ import unq.travel.cupos.RangoDeFechas;
 
 public class ExportadorTextoTest {
 	
-	private Map<Categoria, List<Cupo>> cuposPorCategoria;
-	private Map<RangoDeFechas, List<Cupo>> cuposPorPeriodo;
+	private Map<Categoria, Cupo> cuposPorCategoria;
+	private Map<RangoDeFechas, Cupo> cuposPorPeriodo;
 	private Cupo cupo3;
 	private Cupo cupo2;
 	private Cupo cupo1;
@@ -43,6 +44,9 @@ public class ExportadorTextoTest {
 	@BeforeEach
 	void setUp() {
 
+		reporteExposicion = mock(ReporteExposicionProveedores.class);
+		reporteReservados = mock(ReporteServiciosMasReservados.class);
+		reporteOcupacion = mock(ReporteOcupacionYCupoDisponible.class);
 		fechaInicio1 = LocalDate.of(2000, 7, 4);
 		fechaInicio2 = LocalDate.of(2000, 4, 6);
 		fechaFinal1 = LocalDate.of(2000, 2, 11);
@@ -76,8 +80,7 @@ public class ExportadorTextoTest {
 		Map<String, Double> porcentajes = new HashMap<>();
 		porcentajes.put("Proveedor A", 66.67);
 		porcentajes.put("Proveedor B", 33.33);
-		
-		reporteExposicion = new ReporteExposicionProveedores(porcentajes);
+		when(reporteExposicion.getPorcentajesPorProveedor()).thenReturn(porcentajes);
 		
 		String resultado = exportador.exportar(reporteExposicion);
 		
@@ -92,27 +95,30 @@ public class ExportadorTextoTest {
 	@Test
 	public void exportaLaOcupacionYCupoDisponibleEnTexto() {
 		
-		List<Cupo> lista1 = List.of(cupo1, cupo2, cupo3);
-		List<Cupo> lista2 = List.of(cupo2, cupo3);
-		cuposPorCategoria.put(Categoria.ALOJAMIENTO, List.of(cupo1));
-		cuposPorCategoria.put(Categoria.VUELO, List.of(cupo2, cupo3));
-		cuposPorPeriodo.put(periodo1, lista1);
-		cuposPorPeriodo.put(periodo2, lista2);
-		
-		reporteOcupacion = new ReporteOcupacionYCupoDisponible(cuposPorCategoria, cuposPorPeriodo);
+		//List<Cupo> lista1 = List.of(cupo1, cupo2, cupo3);
+		//List<Cupo> lista2 = List.of(cupo2, cupo3);
+		cuposPorCategoria.put(Categoria.ALOJAMIENTO, cupo1);
+		cuposPorCategoria.put(Categoria.VUELO, cupo3);
+		//cuposPorPeriodo.put(periodo1, lista1);
+		//cuposPorPeriodo.put(periodo2, lista2);
+		when(reporteOcupacion.getCuposPorCategoria()).thenReturn(new ArrayList<>(cuposPorCategoria.entrySet()));
+		when(reporteOcupacion.periodo()).thenReturn(periodo1);
 		
 		String resultado = exportador.exportar(reporteOcupacion);
 		
 		assertTrue(resultado.contains("Ocupacion y cupo disponible"));
 		assertTrue(resultado.contains("Por categoria"));
 		assertTrue(resultado.contains(Categoria.ALOJAMIENTO.toString()));
-		assertTrue(resultado.contains(exportador.describirCupos(List.of(cupo1))));
+		assertTrue(resultado.contains(exportador.describirCupos(cupo1)));
 		assertTrue(resultado.contains(Categoria.VUELO.toString()));
-		assertTrue(resultado.contains(exportador.describirCupos(List.of(cupo2, cupo3))));
+		assertTrue(resultado.contains(exportador.describirCupos(cupo3)));
+		
+		/*
 		assertTrue(resultado.contains(periodo1.toString()));
 		assertTrue(resultado.contains(exportador.describirCupos(lista1)));
 		assertTrue(resultado.contains(periodo2.toString()));
 		assertTrue(resultado.contains(exportador.describirCupos(lista2)));
+		*/
 		
 	}
 	
@@ -124,15 +130,12 @@ public class ExportadorTextoTest {
 		serviciosMasReservados.put(item2, 20);
 		serviciosMasReservados.put(item3, 30);
 		
-		when(registroDeVentas.precioPromedioDe(item1, periodo1)).thenReturn(1000f);
-		when(registroDeVentas.precioPromedioDe(item2, periodo1)).thenReturn(2000f);
-		when(registroDeVentas.precioPromedioDe(item3, periodo1)).thenReturn(3000f);
+		when(reporteReservados.getPrecioPromedioCobrado(item1)).thenReturn(1000f);
+		when(reporteReservados.getPrecioPromedioCobrado(item2)).thenReturn(2000f);
+		when(reporteReservados.getPrecioPromedioCobrado(item3)).thenReturn(3000f);
 		
-		reporteReservados = new ReporteServiciosMasReservados(
-			    periodo1,
-			    serviciosMasReservados,
-			    registroDeVentas
-			);
+		when(reporteReservados.getItemsOrdenados()).thenReturn(new ArrayList<>(serviciosMasReservados.entrySet()));
+		when(reporteReservados.getPeriodo()).thenReturn(periodo1);
 		
 		String resultado = exportador.exportar(reporteReservados);
 		

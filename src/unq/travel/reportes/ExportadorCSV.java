@@ -21,7 +21,7 @@ public class ExportadorCSV implements Exportador {
 		
 			resultado.append(entrada.getKey());
 			resultado.append(";");
-			resultado.append(String.format("%.2f", entrada.getValue()));
+			resultado.append(String.format(Locale.US, "%.2f", entrada.getValue()));
 			resultado.append("\n");
 			
 		}
