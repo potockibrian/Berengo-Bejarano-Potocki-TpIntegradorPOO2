@@ -40,7 +40,6 @@ public class ExportadorCSVTest {
 	private ItemCatalogo item1;
 	private ItemCatalogo item2;
 	private ItemCatalogo item3;
-	private RegistroDeVentas registroDeVentas;
 	
 	
 	@BeforeEach
@@ -72,7 +71,6 @@ public class ExportadorCSVTest {
 		when(item3.getPrecioFinal()).thenReturn(3000f);
 		
 		exportador = new ExportadorCSV();
-		registroDeVentas = mock(RegistroDeVentas.class);
 		
 	}
 	

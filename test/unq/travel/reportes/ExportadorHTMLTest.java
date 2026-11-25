@@ -39,7 +39,6 @@ public class ExportadorHTMLTest {
 	private ItemCatalogo item1;
 	private ItemCatalogo item2;
 	private ItemCatalogo item3;
-	private RegistroDeVentas registroDeVentas;
 	
 	@BeforeEach
 	void setUp() {
@@ -70,7 +69,6 @@ public class ExportadorHTMLTest {
 		when(item3.getPrecioFinal()).thenReturn(3000f);
 		
 		exportador = new ExportadorHTML();
-		registroDeVentas = mock(RegistroDeVentas.class);
 		
 	}
 	

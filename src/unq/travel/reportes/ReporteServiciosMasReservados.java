@@ -35,6 +35,7 @@ public class ReporteServiciosMasReservados implements Reporte {
 	public ReporteServiciosMasReservados(Catalogo catalogo, RangoDeFechas periodo) {
 
 		catalogo.getItems().stream().forEach(i -> this.items.put(i, i.cantidadYTotalCobradoDeVentasEnPeriodo(periodo)));
+		
 		this.periodo = periodo;
 		
 	}

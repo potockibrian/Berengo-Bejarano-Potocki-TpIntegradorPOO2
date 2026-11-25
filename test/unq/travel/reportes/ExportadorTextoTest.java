@@ -39,7 +39,6 @@ public class ExportadorTextoTest {
 	private ItemCatalogo item1;
 	private ItemCatalogo item2;
 	private ItemCatalogo item3;
-	private RegistroDeVentas registroDeVentas;
 	
 	@BeforeEach
 	void setUp() {
@@ -70,7 +69,6 @@ public class ExportadorTextoTest {
 		when(item3.getPrecioFinal()).thenReturn(3000f);
 		
 		exportador = new ExportadorTexto();
-		registroDeVentas = mock(RegistroDeVentas.class);
 		
 	}
 	
