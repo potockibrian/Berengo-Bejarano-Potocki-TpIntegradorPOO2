@@ -77,4 +77,6 @@ public abstract class ItemCatalogo {
 
 	public abstract Set<Categoria> categorias();
 
+	public abstract void agregarCupoEnPeriodo(RangoDeFechas periodo, int cantidad);
+
 }

@@ -166,5 +166,12 @@ public class PaqueteTuristico extends ItemCatalogo {
 				.reduce(new HashSet<>(), (nuevo, acumulador) -> {acumulador.addAll(nuevo); return acumulador;});
 		
 	}
+
+	@Override
+	public void agregarCupoEnPeriodo(RangoDeFechas periodo, int cantidad) {
+
+		items.forEach(i -> i.agregarCupoEnPeriodo(periodo, cantidad));
+		
+	}
 	
 }

@@ -19,9 +19,9 @@ import unq.travel.cupos.RangoDeFechas;
 
 class ReporteOcupacionYCupoDisponibleTest {
 
-	private LocalDate fecha1 = LocalDate.of(2026, 1, 1);;
-	private LocalDate fecha2 = LocalDate.of(2026, 1, 2);;
-	private LocalDate fecha3 = LocalDate.of(2026, 1, 3);;
+	private LocalDate fecha1 = LocalDate.of(2026, 1, 1);
+	private LocalDate fecha2 = LocalDate.of(2026, 1, 2);
+	private LocalDate fecha3 = LocalDate.of(2026, 1, 3);
 	private LocalDate fecha4 = LocalDate.of(2026, 1, 4);
 	
 	private ReporteOcupacionYCupoDisponible reporte;
@@ -76,7 +76,7 @@ class ReporteOcupacionYCupoDisponibleTest {
 		
 		assertEquals(2, cupos.size());
 		
-		assertTrue(Categoria.ALOJAMIENTO == cupos.getLast().getKey()
+		assertTrue(Categoria.ALOJAMIENTO == cupos.getLast().getKey()	// Usa un set internamente
 				|| Categoria.ALOJAMIENTO == cupos.getFirst().getKey());
 		assertTrue(Categoria.TRASLADO == cupos.getFirst().getKey()
 				|| Categoria.TRASLADO == cupos.getLast().getKey());

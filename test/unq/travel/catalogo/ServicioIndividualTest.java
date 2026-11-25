@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Field;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,14 +23,25 @@ import unq.travel.cupos.RangoDeFechas;
 
 class ServicioIndividualTest {
 
+	private LocalDate fecha1 = LocalDate.of(2026, 1, 1);
+	private LocalDate fecha2 = LocalDate.of(2026, 1, 2);
+	private LocalDate fecha3 = LocalDate.of(2026, 1, 3);
+	private LocalDate fecha4 = LocalDate.of(2026, 1, 4);
+	
+	private RangoDeFechas periodo1 = new RangoDeFechas(fecha2, fecha3);
+	private RangoDeFechas periodo2 = new RangoDeFechas(fecha1, fecha4);
+
 	private ServicioIndividual hotelSinDescuento;
 	private ServicioIndividual hotelConDescuento;
+	private ServicioIndividual hotelConOtraCategoria;
 	private RangoDeFechas periodo;
 	private CalendarioDeCupos calendario;
 	private AtributoDinamico obligatorio;
 	private AtributoDinamico opcional;
 	private int valor;
 	private TipoAtributo tipo;
+	private Cupo cupo1;
+	private Cupo cupo2;
 	
 	@BeforeEach
 	void setUp() {
@@ -47,9 +59,36 @@ class ServicioIndividualTest {
 
 		hotelConDescuento = new ServicioIndividual("Noche de Hotel Central", "Habitación doble con desayuno",
 				"HTL-001", "Hoteles Centro SA", Categoria.ALOJAMIENTO, 15000f, 0.20f, calendario);
+		
+		hotelConOtraCategoria = new ServicioIndividual("Noche de Hotel Central", "Habitación doble con desayuno",
+				"HTL-001", "Hoteles Centro SA", Categoria.TRASLADO, 15000f, 0f, calendario);
 	
 	}
 
+	@Test
+	void testCuposEnPeriodoDeCategoria() {
+		
+		when(calendario.cuposEnPeriodo(periodo1)).thenReturn(cupo1);
+		
+		assertEquals(cupo1, hotelConDescuento.cuposEnPeriodoDeCategoria(periodo1, Categoria.ALOJAMIENTO));
+		
+		assertEquals(0, hotelConOtraCategoria.cuposEnPeriodoDeCategoria(periodo1, Categoria.ALOJAMIENTO).getTopeMaximo());
+		
+	}
+	
+	@Test
+	void testCantidadYTotalCobradoDeVentasEnPeriodo() {
+		
+		hotelConDescuento.agregarCupoEnPeriodo(periodo1, 1);
+		
+		hotelConDescuento.reservar(periodo1);
+		
+		assertEquals(1, hotelConDescuento.cantidadYTotalCobradoDeVentasEnPeriodo(periodo1).cantidadVentas());
+		assertEquals(hotelConDescuento.getPrecioFinal(), hotelConDescuento.cantidadYTotalCobradoDeVentasEnPeriodo(periodo1).precioPagado());
+		assertEquals(periodo1.fechas(), hotelConDescuento.cantidadYTotalCobradoDeVentasEnPeriodo(periodo1).periodo().fechas());
+		
+	}
+	
 	@Test
 	void testElPrecioFinalSinDescuentoEsIgualAlPrecioBase() {
 

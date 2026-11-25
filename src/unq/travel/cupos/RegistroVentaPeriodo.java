@@ -53,7 +53,7 @@ public class RegistroVentaPeriodo {
 		
 		return new RegistroVentaPeriodo(this.periodo.union(registro.periodo())
 				, this.precioPagado + registro.precioPagado()
-				, this.cantidadVentas);
+				, Math.max(this.cantidadVentas, registro.cantidadVentas()));
 		
 	}
 	

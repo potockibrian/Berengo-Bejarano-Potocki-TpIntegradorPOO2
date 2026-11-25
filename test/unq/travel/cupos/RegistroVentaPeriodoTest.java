@@ -27,6 +27,15 @@ class RegistroVentaPeriodoTest {
 	}
 
 	@Test
+	void testPrecioPromedio() {
+		
+		for(int i=0; i<10; i++) registro.agregarVenta(1000f);
+		
+		assertEquals((1000f * 10) / 10, registro.precioPromedio());
+		
+	}
+	
+	@Test
 	void testPeriodo() {
 
 		assertEquals(periodo, registro.periodo());

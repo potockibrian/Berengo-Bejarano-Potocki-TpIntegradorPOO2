@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Field;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +21,14 @@ import unq.travel.cupos.RangoDeFechas;
 
 class PaqueteTuristicoTest {
 
+	private LocalDate fecha1 = LocalDate.of(2026, 1, 1);
+	private LocalDate fecha2 = LocalDate.of(2026, 1, 2);
+	private LocalDate fecha3 = LocalDate.of(2026, 1, 3);
+	private LocalDate fecha4 = LocalDate.of(2026, 1, 4);
+	
+	private RangoDeFechas periodo1 = new RangoDeFechas(fecha2, fecha3);
+	private RangoDeFechas periodo2 = new RangoDeFechas(fecha1, fecha4);
+
 	private ServicioIndividual hotel;
 	private ServicioIndividual museo;
 	private ServicioIndividual traslado;
@@ -27,20 +36,55 @@ class PaqueteTuristicoTest {
 	private RangoDeFechas periodo;
 	private CalendarioDeCupos calendario1;
 	private CalendarioDeCupos calendario2;
+	private CalendarioDeCupos calendario3;
+	private Cupo cupo;
 
 	@BeforeEach
 	void setUp() {
 		calendario1 = mock(CalendarioDeCupos.class);
 		calendario2 = mock(CalendarioDeCupos.class);
+		calendario3 = new CalendarioDeCupos();
 		hotel = this.crearServicio("Noche de Hotel Central", Categoria.ALOJAMIENTO, 15000f, 0f);
 		museo = this.crearServicio("Excursion Guiada Museo", Categoria.EXCURSION, 4000f, 0f);
 		traslado = this.crearServicio("Traslado Aeropuerto-Hotel", Categoria.TRASLADO, 2000f, 0f);
 		periodo = mock(RangoDeFechas.class);
+		cupo = new Cupo(10, 5);
 
 		packEscapadaUrbana = new PaqueteTuristico("Pack Escapada Urbana", "Hotel, museo y traslado", 0.10f);
 		packEscapadaUrbana.agregarItem(hotel);
 		packEscapadaUrbana.agregarItem(museo);
 		packEscapadaUrbana.agregarItem(traslado);
+		
+	}
+
+	@Test
+	void testCuposEnPeriodoDeCategoria() {
+		
+		// periodo1 es un periodo de 2 días
+		packEscapadaUrbana.agregarCupoEnPeriodo(periodo1, 1);
+		
+		when(calendario1.cuposEnPeriodo(periodo1)).thenReturn(cupo);
+		
+		assertEquals(5, packEscapadaUrbana.cuposEnPeriodoDeCategoria(periodo1, Categoria.ALOJAMIENTO).cantidadDeCuposDisponibles());
+		
+		assertEquals(5, packEscapadaUrbana.cuposEnPeriodoDeCategoria(periodo1, Categoria.EXCURSION).cantidadDeCuposDisponibles());
+		
+		assertEquals(5, packEscapadaUrbana.cuposEnPeriodoDeCategoria(periodo1, Categoria.TRASLADO).cantidadDeCuposDisponibles());
+		
+	}
+	
+	@Test
+	void testCantidadYTotalCobradoDeVentasEnPeriodo() {
+
+		packEscapadaUrbana.agregarCupoEnPeriodo(periodo1, 1);
+		
+		when(calendario1.tieneDisponibilidad(periodo1)).thenReturn(true);
+		
+		packEscapadaUrbana.reservar(periodo1);
+		
+		assertEquals(1, packEscapadaUrbana.cantidadYTotalCobradoDeVentasEnPeriodo(periodo1).cantidadVentas());
+		assertEquals(packEscapadaUrbana.getPrecioFinal(), packEscapadaUrbana.cantidadYTotalCobradoDeVentasEnPeriodo(periodo1).precioPagado());
+		assertEquals(periodo1.fechas(), packEscapadaUrbana.cantidadYTotalCobradoDeVentasEnPeriodo(periodo1).periodo().fechas());
 		
 	}
 
@@ -385,6 +429,11 @@ class PaqueteTuristicoTest {
 	private ServicioIndividual crearServicio(String nombre, Categoria categoria, float precio, float descuento) {
 		return new ServicioIndividual(nombre, "Descripcion de " + nombre, "COD-" + nombre,
 				"Operador SA", categoria, precio, descuento, calendario1);
+	}
+
+	private ServicioIndividual crearServicioImplementado(String nombre, Categoria categoria, float precio, float descuento) {
+		return new ServicioIndividual(nombre, "Descripcion de " + nombre, "COD-" + nombre,
+				"Operador SA", categoria, precio, descuento, calendario3);
 	}
 
 	private static void setCampo(Object objeto, String nombre, Object valor) throws Exception {
