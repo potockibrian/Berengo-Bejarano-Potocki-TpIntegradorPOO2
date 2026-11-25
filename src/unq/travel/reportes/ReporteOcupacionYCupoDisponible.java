@@ -9,7 +9,7 @@ import unq.travel.cupos.*;
 public class ReporteOcupacionYCupoDisponible implements Reporte {
 	
 	// Asocia c/proveedor con su porcentaje de exposicion
-	private Map<Categoria, Cupo> cuposPorCategoria;
+	private Map<Categoria, Cupo> cuposPorCategoria = new HashMap<>();
 	private RangoDeFechas periodo;
 	
 	//private Map<RangoDeFechas, List<Cupo>> cuposPorPeriodo;
