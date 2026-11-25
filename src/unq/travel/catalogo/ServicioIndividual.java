@@ -200,5 +200,12 @@ public class ServicioIndividual extends ItemCatalogo {
 		return calendario.tieneDisponibilidad();
 		
 	}
+	
+	@Override
+	public void agregarCupoEnPeriodo(RangoDeFechas periodo, int cantidad) {
+		
+		calendario.agregarCupoParaPeriodo(periodo, cantidad);
+		
+	}
 
 }

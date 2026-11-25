@@ -34,12 +34,11 @@ class RangoDeFechasTest {
 		periodo = new RangoDeFechas(fechaInicio, fechaFinal);
 		
 	}
-
-	private static void setCampo(Object objeto, String nombre, Object valor) throws Exception {
+	
+	@Test
+	void testToString() {
 		
-		Field campo = objeto.getClass().getDeclaredField(nombre);
-		campo.setAccessible(true);
-		campo.set(objeto, valor);
+		assertEquals(fechaInicio.toString() + "/" + fechaFinal.toString(), periodo.toString());
 		
 	}
 	
@@ -122,6 +121,14 @@ class RangoDeFechasTest {
 	private LocalDate max(LocalDate fecha1, LocalDate fecha2) {
 		
 		return (fecha1.compareTo(fecha2) >= 0) ? fecha1 : fecha2;
+		
+	}
+
+	private static void setCampo(Object objeto, String nombre, Object valor) throws Exception {
+		
+		Field campo = objeto.getClass().getDeclaredField(nombre);
+		campo.setAccessible(true);
+		campo.set(objeto, valor);
 		
 	}
 

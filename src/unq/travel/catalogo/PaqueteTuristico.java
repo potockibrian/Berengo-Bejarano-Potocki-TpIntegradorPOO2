@@ -12,7 +12,6 @@ import unq.travel.cupos.Cupo;
 import unq.travel.cupos.RangoDeFechas;
 import unq.travel.cupos.RegistroVentaPeriodo;
 import unq.travel.reportes.BolsaDeProveedores;
-import unq.travel.reportes.Visitor;
 
 public class PaqueteTuristico extends ItemCatalogo {
 
@@ -165,6 +164,13 @@ public class PaqueteTuristico extends ItemCatalogo {
 		return items.stream()
 				.map(i -> i.categorias())
 				.reduce(new HashSet<>(), (nuevo, acumulador) -> {acumulador.addAll(nuevo); return acumulador;});
+		
+	}
+
+	@Override
+	public void agregarCupoEnPeriodo(RangoDeFechas periodo, int cantidad) {
+
+		items.forEach(i -> i.agregarCupoEnPeriodo(periodo, cantidad));
 		
 	}
 	

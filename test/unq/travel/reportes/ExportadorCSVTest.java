@@ -6,6 +6,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -21,7 +22,7 @@ import unq.travel.cupos.RangoDeFechas;
 
 public class ExportadorCSVTest {
 	
-	private Map<Categoria, List<Cupo>> cuposPorCategoria;
+	private Map<Categoria, Cupo> cuposPorCategoria;
 	private Map<RangoDeFechas, List<Cupo>> cuposPorPeriodo;
 	private Cupo cupo3;
 	private Cupo cupo2;
@@ -39,12 +40,14 @@ public class ExportadorCSVTest {
 	private ItemCatalogo item1;
 	private ItemCatalogo item2;
 	private ItemCatalogo item3;
-	private RegistroDeVentas registroDeVentas;
 	
 	
 	@BeforeEach
 	void setUp() {
 
+		reporteExposicion = mock(ReporteExposicionProveedores.class);
+		reporteReservados = mock(ReporteServiciosMasReservados.class);
+		reporteOcupacion = mock(ReporteOcupacionYCupoDisponible.class);
 		fechaInicio1 = LocalDate.of(2000, 7, 4);
 		fechaInicio2 = LocalDate.of(2000, 4, 6);
 		fechaFinal1 = LocalDate.of(2000, 2, 11);
@@ -68,7 +71,6 @@ public class ExportadorCSVTest {
 		when(item3.getPrecioFinal()).thenReturn(3000f);
 		
 		exportador = new ExportadorCSV();
-		registroDeVentas = mock(RegistroDeVentas.class);
 		
 	}
 	
@@ -78,42 +80,41 @@ public class ExportadorCSVTest {
 		Map<String, Double> porcentajes = new HashMap<>();
 		porcentajes.put("Proveedor A", 66.67);
 		porcentajes.put("Proveedor B", 33.33);
-		
-		reporteExposicion = new ReporteExposicionProveedores(porcentajes);
+		when(reporteExposicion.getPorcentajesPorProveedor()).thenReturn(porcentajes);
 		
 		String resultado = exportador.exportar(reporteExposicion);
 		
 		assertTrue(resultado.contains("Proveedor;Exposicion (%)"));
         assertTrue(resultado.contains("Proveedor A"));
-        assertTrue(resultado.contains("66,67"));
+        assertTrue(resultado.contains("66.67"));
         assertTrue(resultado.contains("Proveedor B"));
-        assertTrue(resultado.contains("33,33"));
+        assertTrue(resultado.contains("33.33"));
         
 	}
 	
 	@Test
 	public void exportaLaOcupacionYCupoDisponibleEnCSV() {
 		
-		List<Cupo> lista1 = List.of(cupo1, cupo2, cupo3);
-		List<Cupo> lista2 = List.of(cupo2, cupo3);
-		cuposPorCategoria.put(Categoria.ALOJAMIENTO, List.of(cupo1));
-		cuposPorCategoria.put(Categoria.VUELO, List.of(cupo2, cupo3));
-		cuposPorPeriodo.put(periodo1, lista1);
-		cuposPorPeriodo.put(periodo2, lista2);
-		
-		reporteOcupacion = new ReporteOcupacionYCupoDisponible(cuposPorCategoria, cuposPorPeriodo);
+		//List<Cupo> lista1 = List.of(cupo1, cupo2, cupo3);
+		//List<Cupo> lista2 = List.of(cupo2, cupo3);
+		cuposPorCategoria.put(Categoria.ALOJAMIENTO, cupo1);
+		cuposPorCategoria.put(Categoria.VUELO, cupo3);
+		//cuposPorPeriodo.put(periodo1, lista1);
+		//cuposPorPeriodo.put(periodo2, lista2);
+		when(reporteOcupacion.getCuposPorCategoria()).thenReturn(new ArrayList<>(cuposPorCategoria.entrySet()));
+		when(reporteOcupacion.periodo()).thenReturn(periodo1);
 		
 		String resultado = exportador.exportar(reporteOcupacion);
 		
 		assertTrue(resultado.contains("Agrupacion;Valor;Cupos totales;Cupos reservados;Cupos libres\n"));
-		assertTrue(resultado.contains(Categoria.VUELO.toString()));
 		assertTrue(resultado.contains(Categoria.ALOJAMIENTO.toString()));
-		assertTrue(resultado.contains(String.valueOf(lista1.stream().mapToInt(c -> c.getTopeMaximo()).sum())));
-		assertTrue(resultado.contains(String.valueOf(lista1.stream().mapToInt(c -> c.cantidadDeVentas()).sum())));
-		assertTrue(resultado.contains(String.valueOf(lista1.stream().mapToInt(c -> c.cantidadDeCuposDisponibles()).sum())));
-		assertTrue(resultado.contains(String.valueOf(lista2.stream().mapToInt(c -> c.getTopeMaximo()).sum())));
-		assertTrue(resultado.contains(String.valueOf(lista2.stream().mapToInt(c -> c.cantidadDeVentas()).sum())));
-		assertTrue(resultado.contains(String.valueOf(lista2.stream().mapToInt(c -> c.cantidadDeCuposDisponibles()).sum())));
+		assertTrue(resultado.contains(String.valueOf(cupo1.getTopeMaximo())));
+		assertTrue(resultado.contains(String.valueOf(cupo1.cantidadDeVentas())));
+		assertTrue(resultado.contains(String.valueOf(cupo1.cantidadDeCuposDisponibles())));
+		assertTrue(resultado.contains(Categoria.VUELO.toString()));
+		assertTrue(resultado.contains(String.valueOf(cupo3.getTopeMaximo())));
+		assertTrue(resultado.contains(String.valueOf(cupo3.cantidadDeVentas())));
+		assertTrue(resultado.contains(String.valueOf(cupo3.cantidadDeCuposDisponibles())));
 		
 	}
 	
@@ -125,8 +126,12 @@ public class ExportadorCSVTest {
 		serviciosMasReservados.put(item2, 20);
 		serviciosMasReservados.put(item3, 30);
 		
-		reporteReservados = new ReporteServiciosMasReservados(
-				periodo1, serviciosMasReservados, registroDeVentas);
+		when(reporteReservados.getPrecioPromedioCobrado(item1)).thenReturn(1000f);
+		when(reporteReservados.getPrecioPromedioCobrado(item2)).thenReturn(2000f);
+		when(reporteReservados.getPrecioPromedioCobrado(item3)).thenReturn(3000f);
+		
+		when(reporteReservados.getItemsOrdenados()).thenReturn(new ArrayList<>(serviciosMasReservados.entrySet()));
+		when(reporteReservados.getPeriodo()).thenReturn(periodo1);
 		
 		String resultado = exportador.exportar(reporteReservados);
 		

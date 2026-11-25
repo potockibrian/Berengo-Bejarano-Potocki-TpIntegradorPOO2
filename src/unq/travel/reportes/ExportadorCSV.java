@@ -21,7 +21,7 @@ public class ExportadorCSV implements Exportador {
 		
 			resultado.append(entrada.getKey());
 			resultado.append(";");
-			resultado.append(String.format("%.2f", entrada.getValue()));
+			resultado.append(String.format(Locale.US, "%.2f", entrada.getValue()));
 			resultado.append("\n");
 			
 		}
@@ -61,29 +61,31 @@ public class ExportadorCSV implements Exportador {
 		
 		resultado.append("Agrupacion;Valor;Cupos totales;Cupos reservados;Cupos libres\n");
 		
-		for(Entry<Categoria, List<Cupo>> entrada : reporte.getCuposPorCategoria()) {
+		for(Entry<Categoria, Cupo> entrada : reporte.getCuposPorCategoria()) {
 			
 			resultado.append(filaDeCupos("Categoria", entrada.getKey().toString(), entrada.getValue()));
 			
 		}
 		
+		/*
 		for(Entry<RangoDeFechas, List<Cupo>> entrada : reporte.getCuposPorPeriodo()) {
 			
 			resultado.append(filaDeCupos("Periodo", entrada.getKey().toString(), entrada.getValue()));
 			
 		}
+		*/
 		
 		return resultado.toString();
 		
 	}
 	
-	private String filaDeCupos(String agrupacion, String valor, List<Cupo> cupos) {
+	private String filaDeCupos(String agrupacion, String valor, Cupo cupos) {
 		
 		return agrupacion
 			 + ";" + escapar(valor)
-			 + ";" + cupos.stream().mapToInt(c -> c.getTopeMaximo()).sum()
-			 + ";" + cupos.stream().mapToInt(c -> c.cantidadDeVentas()).sum()
-			 + ";" + cupos.stream().mapToInt(c -> c.cantidadDeCuposDisponibles()).sum()
+			 + ";" + cupos.getTopeMaximo()
+			 + ";" + cupos.cantidadDeVentas()
+			 + ";" + cupos.cantidadDeCuposDisponibles()
 			 + "\n";
 		
 	}

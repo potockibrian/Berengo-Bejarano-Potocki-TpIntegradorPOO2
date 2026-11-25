@@ -69,7 +69,7 @@ public class Cupo {
 	
 	public Cupo combinarConCupo(Cupo cupo) {
 		
-		return new Cupo(this.topeMaximo + cupo.topeMaximo, this.cantidadDeVentas + cupo.cantidadDeVentas);
+		return new Cupo(this.topeMaximo + cupo.getTopeMaximo(), this.cantidadDeVentas + cupo.cantidadDeVentas());
 		
 	}
 		
