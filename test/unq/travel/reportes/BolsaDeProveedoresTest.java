@@ -17,16 +17,12 @@ class BolsaDeProveedoresTest {
 	private BolsaDeProveedores bolsa1;
 	private BolsaDeProveedores bolsa2;
 	private BolsaDeProveedores bolsaIdentidad;
-	private Map<String, Integer> proveedores1;
 	private Map<String, Integer> proveedores2;
 	
 	@BeforeEach
 	void setUp() throws Exception {
 	
-		//proveedores1 = new HashMap<>();
 		proveedores2 = new HashMap<>();
-	
-		//proveedores1.put(proveedor1, 10);
 		
 		proveedores2.put(proveedor1, 7);
 		proveedores2.put(proveedor2, 5);
@@ -94,6 +90,12 @@ class BolsaDeProveedoresTest {
 		assertEquals(58.333333333333336, bolsa2.getPorcentajePorProveedor(proveedor1));
 		assertEquals(41.66666666666667, bolsa2.getPorcentajePorProveedor(proveedor2));
 		assertEquals(0, bolsaIdentidad.getPorcentajePorProveedor(proveedor1));
+
+		BolsaDeProveedores bolsa = bolsa2.combinarConBolsaDeProveedores(bolsa1);
+		bolsa = new BolsaDeProveedores().combinarConBolsaDeProveedores(bolsa);
+		
+		assertEquals(78.26086956521739, bolsa.getPorcentajePorProveedor(proveedor1));
+		assertEquals(21.73913043478261, bolsa.getPorcentajePorProveedor(proveedor2));
 		
 	}
 	

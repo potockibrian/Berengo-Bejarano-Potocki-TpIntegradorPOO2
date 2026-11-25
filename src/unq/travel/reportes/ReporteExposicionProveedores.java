@@ -8,7 +8,6 @@ import unq.travel.catalogo.Catalogo;
 public class ReporteExposicionProveedores implements Reporte{
 	
 	// Asocia c/proveedor con su porcentaje de exposicion
-	private Map<String, Double> porcentajesPorProveedor;
 	private BolsaDeProveedores proveedores;
 	
 	public ReporteExposicionProveedores(Catalogo catalogo) {
